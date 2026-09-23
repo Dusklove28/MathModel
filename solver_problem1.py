@@ -1,4 +1,4 @@
-"""Deterministic B0 solver for problem 1.
+"""Deterministic B0/B1 solvers for problem 1.
 
 The submitted plan contains exactly the two fields required by the official
 evaluator.  Graph validation, op-DAG construction, COPY-node contraction and
@@ -15,7 +15,17 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Sequence, Set, Tuple
 
 
-OFFICIAL_CODE_DIR = Path(__file__).resolve().parent / "code"
+MODULE_DIR = Path(__file__).resolve().parent
+if (MODULE_DIR / "evaluation_validation.py").is_file():
+    # The solver may be copied directly into the official code directory.
+    OFFICIAL_CODE_DIR = MODULE_DIR
+elif (MODULE_DIR / "code" / "evaluation_validation.py").is_file():
+    # Repository layout used here: runner/solver at root, official modules in code/.
+    OFFICIAL_CODE_DIR = MODULE_DIR / "code"
+else:
+    raise RuntimeError(
+        "cannot locate official evaluator modules beside solver_problem1.py "
+        "or in its code/ child directory")
 if str(OFFICIAL_CODE_DIR) not in sys.path:
     sys.path.insert(0, str(OFFICIAL_CODE_DIR))
 
@@ -317,10 +327,19 @@ class SubgraphInfo:
     nodes: Mapping[int, Tuple[int, ...]]
     preds: Mapping[int, Tuple[int, ...]]
     succs: Mapping[int, Tuple[int, ...]]
+    pipe_m_cycles: Mapping[int, int]
+    pipe_v_cycles: Mapping[int, int]
     workload: Mapping[int, int]
     edge_tensor_ids: Mapping[Dependency, Tuple[int, ...]]
     edge_bytes: Mapping[Dependency, int]
     rank: Mapping[int, float]
+
+
+@dataclass(frozen=True)
+class ReadyListResult:
+    core_schedules: List[List[int]]
+    max_ready_size: int
+    mean_ready_size: float
 
 
 def _partition_by_cumulative_work(
@@ -388,8 +407,126 @@ def build_b0_subgraphs(graph: GraphInfo, num_cores: int) -> SubgraphInfo:
 
     ranges = _partition_by_cumulative_work(
         graph.topo_order, graph.op_workload, requested_parts=4 * num_cores)
+    return _build_subgraph_info(graph, ranges)
+
+
+def _block_aware_topological_partition(
+    graph: GraphInfo,
+    requested_parts: int,
+) -> List[Tuple[int, ...]]:
+    """Build B1 blocks while generating a deterministic Kahn topological order.
+
+    Each block starts from the ready op with greatest b-level.  Subsequent ops
+    maximize tensor affinity to the current block, then b-level, then prefer
+    the smaller op id.  No weighted score is used.
+    """
+
+    node_count = len(graph.eligible_ops)
+    if node_count == 0:
+        return []
+    parts = min(requested_parts, node_count)
+    indegree = {node_id: len(graph.preds[node_id])
+                for node_id in graph.eligible_ops}
+    ready = {
+        node_id for node_id in graph.eligible_ops if indegree[node_id] == 0
+    }
+    scheduled: Set[int] = set()
+    blocks: List[Tuple[int, ...]] = []
+    remaining_work = sum(graph.op_workload.values())
+
+    for block_index in range(parts):
+        remaining_parts = parts - block_index
+        remaining_nodes = node_count - len(scheduled)
+        max_block_nodes = remaining_nodes - (remaining_parts - 1)
+        target_work = (
+            remaining_work / remaining_parts if remaining_work > 0 else 0.0
+        )
+        zero_work_target_nodes = max(1, remaining_nodes // remaining_parts)
+        block: List[int] = []
+        block_work = 0
+        affinity_tensors: Dict[int, Set[int]] = defaultdict(set)
+
+        def choose_seed() -> int:
+            if not ready:
+                raise Problem1SolverError(
+                    "B1 topological construction has no ready seed")
+            return min(ready, key=lambda node_id: (-graph.b_level[node_id], node_id))
+
+        def affinity_bytes(node_id: int) -> int:
+            return sum(
+                graph.tensor_size[tid]
+                for tid in affinity_tensors.get(node_id, ())
+            )
+
+        def choose_affinity_candidate() -> int:
+            if not ready:
+                raise Problem1SolverError(
+                    "B1 topological construction has no legal ready candidate")
+            return min(
+                ready,
+                key=lambda node_id: (
+                    -affinity_bytes(node_id),
+                    -graph.b_level[node_id],
+                    node_id,
+                ),
+            )
+
+        def append_node(node_id: int) -> None:
+            nonlocal block_work
+            ready.remove(node_id)
+            scheduled.add(node_id)
+            block.append(node_id)
+            block_work += graph.op_workload[node_id]
+            for successor in graph.succs[node_id]:
+                if successor not in scheduled:
+                    affinity_tensors[successor].update(
+                        graph.dependency_tensors[(node_id, successor)])
+                indegree[successor] -= 1
+                if indegree[successor] == 0:
+                    ready.add(successor)
+
+        append_node(choose_seed())
+        while len(block) < max_block_nodes:
+            if remaining_parts == 1:
+                should_continue = True
+            elif remaining_work == 0:
+                should_continue = len(block) < zero_work_target_nodes
+            else:
+                should_continue = block_work < target_work
+            if not should_continue:
+                break
+            append_node(choose_affinity_candidate())
+
+        blocks.append(tuple(block))
+        remaining_work -= block_work
+
+    if len(scheduled) != node_count or any(not block for block in blocks):
+        unresolved = sorted(set(graph.eligible_ops) - scheduled)
+        raise Problem1SolverError(
+            "B1 failed to cover eligible ops; unresolved={}".format(
+                unresolved[:20]))
+    return blocks
+
+
+def build_b1_subgraphs(graph: GraphInfo, num_cores: int) -> SubgraphInfo:
+    """Build about 4*k critical-path/locality-aware topological blocks."""
+
+    require_integer(num_cores, "num_cores", 1)
+    if not graph.eligible_ops:
+        raise Problem1SolverError("problem 1 requires at least one eligible op")
+    blocks = _block_aware_topological_partition(
+        graph, requested_parts=4 * num_cores)
+    return _build_subgraph_info(graph, blocks)
+
+
+def _build_subgraph_info(
+    graph: GraphInfo,
+    ranges: Sequence[Sequence[int]],
+) -> SubgraphInfo:
+    """Construct the quotient DAG and corrected two-pipe proxy features."""
+
     nodes = {subgraph_id: node_ids
-             for subgraph_id, node_ids in enumerate(ranges)}
+             for subgraph_id, node_ids in enumerate(map(tuple, ranges))}
     node_to_subgraph = {
         node_id: subgraph_id
         for subgraph_id, node_ids in nodes.items()
@@ -407,6 +544,10 @@ def build_b0_subgraphs(graph: GraphInfo, num_cores: int) -> SubgraphInfo:
             dst_subgraph = node_to_subgraph[dst]
             if src_subgraph == dst_subgraph:
                 continue
+            if dst_subgraph <= src_subgraph:
+                raise Problem1SolverError(
+                    "subgraph order is not topological: {} -> {}".format(
+                        src_subgraph, dst_subgraph))
             pair = (src_subgraph, dst_subgraph)
             succ_sets[src_subgraph].add(dst_subgraph)
             pred_sets[dst_subgraph].add(src_subgraph)
@@ -428,9 +569,18 @@ def build_b0_subgraphs(graph: GraphInfo, num_cores: int) -> SubgraphInfo:
             edge_tensors.setdefault(pair, set())
             edge_bytes.setdefault(pair, edge_direct_bytes[pair])
 
-    subgraph_workload = {
-        subgraph_id: sum(graph.op_workload[node_id] for node_id in node_ids)
+    pipe_m_cycles = {
+        subgraph_id: sum(graph.pipe_m_cycles[node_id] for node_id in node_ids)
         for subgraph_id, node_ids in nodes.items()
+    }
+    pipe_v_cycles = {
+        subgraph_id: sum(graph.pipe_v_cycles[node_id] for node_id in node_ids)
+        for subgraph_id, node_ids in nodes.items()
+    }
+    subgraph_workload = {
+        subgraph_id: max(
+            pipe_m_cycles[subgraph_id], pipe_v_cycles[subgraph_id])
+        for subgraph_id in subgraph_ids
     }
     rank: Dict[int, float] = {}
     for subgraph_id in reversed(subgraph_ids):
@@ -446,6 +596,8 @@ def build_b0_subgraphs(graph: GraphInfo, num_cores: int) -> SubgraphInfo:
         nodes=nodes,
         preds={sg: tuple(sorted(pred_sets[sg])) for sg in subgraph_ids},
         succs={sg: tuple(sorted(succ_sets[sg])) for sg in subgraph_ids},
+        pipe_m_cycles=pipe_m_cycles,
+        pipe_v_cycles=pipe_v_cycles,
         workload=subgraph_workload,
         edge_tensor_ids={
             pair: tuple(sorted(tids)) for pair, tids in edge_tensors.items()
@@ -458,7 +610,7 @@ def build_b0_subgraphs(graph: GraphInfo, num_cores: int) -> SubgraphInfo:
 def ready_list_eft_schedule(
     subgraphs: SubgraphInfo,
     num_cores: int,
-) -> List[List[int]]:
+) -> ReadyListResult:
     """Schedule ready subgraphs by descending b-level and minimum EFT."""
 
     subgraph_ids = tuple(sorted(subgraphs.nodes))
@@ -471,8 +623,10 @@ def ready_list_eft_schedule(
     assigned_core: Dict[int, int] = {}
     finish_time: Dict[int, float] = {}
     scheduled_count = 0
+    ready_sizes: List[int] = []
 
     while ready:
+        ready_sizes.append(len(ready))
         _, subgraph_id = heapq.heappop(ready)
         best: Tuple[float, int, float] | None = None
         for core_id in range(num_cores):
@@ -519,31 +673,93 @@ def ready_list_eft_schedule(
 
     if scheduled_count != len(subgraph_ids):
         raise Problem1SolverError("subgraph DAG contains a cycle")
-    return core_schedules
+    return ReadyListResult(
+        core_schedules=core_schedules,
+        max_ready_size=max(ready_sizes, default=0),
+        mean_ready_size=(
+            sum(ready_sizes) / len(ready_sizes) if ready_sizes else 0.0),
+    )
 
 
-def solve_problem1(graph_json: Mapping[str, Any], num_cores: int) -> Dict[str, Any]:
-    """Build and officially validate a deterministic B0 problem-1 plan."""
+def _plan_diagnostics(
+    subgraphs: SubgraphInfo,
+    schedule: ReadyListResult,
+) -> Dict[str, Any]:
+    subgraph_ids = tuple(sorted(subgraphs.nodes))
+    longest_to: Dict[int, int] = {}
+    for subgraph_id in subgraph_ids:
+        longest_to[subgraph_id] = 1 + max(
+            (longest_to[pred] for pred in subgraphs.preds[subgraph_id]),
+            default=0,
+        )
+    longest_path_node_count = max(longest_to.values(), default=0)
+    num_subgraphs = len(subgraph_ids)
+    return {
+        "num_subgraphs": num_subgraphs,
+        "quotient_dag_edge_count": sum(
+            len(subgraphs.succs[sg]) for sg in subgraph_ids),
+        "quotient_dag_longest_path_node_count": longest_path_node_count,
+        "longest_path_ratio": (
+            longest_path_node_count / num_subgraphs if num_subgraphs else 0.0),
+        "max_ready_size": schedule.max_ready_size,
+        "mean_ready_size": schedule.mean_ready_size,
+        "core_distribution": [
+            len(order) for order in schedule.core_schedules
+        ],
+        "core_proxy_workload": [
+            sum(subgraphs.workload[sg] for sg in order)
+            for order in schedule.core_schedules
+        ],
+        "total_cross_subgraph_bytes": sum(subgraphs.edge_bytes.values()),
+    }
 
+
+def solve_problem1_with_diagnostics(
+    graph_json: Mapping[str, Any],
+    num_cores: int,
+    method: str = "B0",
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Build an officially valid B0 or B1 plan plus non-submission diagnostics."""
+
+    normalized_method = method.upper()
     graph = GraphInfo.from_graph(graph_json)
-    subgraphs = build_b0_subgraphs(graph, num_cores)
-    core_schedules = ready_list_eft_schedule(subgraphs, num_cores)
+    if normalized_method == "B0":
+        subgraphs = build_b0_subgraphs(graph, num_cores)
+    elif normalized_method == "B1":
+        subgraphs = build_b1_subgraphs(graph, num_cores)
+    else:
+        raise Problem1SolverError("method must be B0 or B1")
+    schedule = ready_list_eft_schedule(subgraphs, num_cores)
     plan = {
         "node_to_subgraph": dict(subgraphs.node_to_subgraph),
-        "core_schedules": core_schedules,
+        "core_schedules": schedule.core_schedules,
     }
-    # This is the same official validator used by the evaluator.  It checks
-    # exact eligible-node coverage, unique subgraph scheduling, quotient-DAG
-    # acyclicity and same-core dependency order.
     derive_multicore_plan(graph_json, plan)
+    diagnostics = _plan_diagnostics(subgraphs, schedule)
+    diagnostics["method"] = normalized_method
+    return plan, diagnostics
+
+
+def solve_problem1(
+    graph_json: Mapping[str, Any],
+    num_cores: int,
+    method: str = "B0",
+) -> Dict[str, Any]:
+    """Build and officially validate a deterministic B0 or B1 plan."""
+
+    plan, _ = solve_problem1_with_diagnostics(
+        graph_json, num_cores, method=method)
     return plan
 
 
 __all__ = [
     "GraphInfo",
     "Problem1SolverError",
+    "ReadyListResult",
     "SubgraphInfo",
     "build_b0_subgraphs",
+    "build_b1_subgraphs",
     "ready_list_eft_schedule",
     "solve_problem1",
+    "solve_problem1_with_diagnostics",
 ]
