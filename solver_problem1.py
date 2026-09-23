@@ -1037,8 +1037,22 @@ def solve_problem1_with_diagnostics(
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Build an officially valid B0/B1/B2A plan and separate diagnostics."""
 
-    normalized_method = method.upper()
     graph = GraphInfo.from_graph(graph_json)
+    plan, diagnostics = generate_problem1_plan_from_graph_info(
+        graph, num_cores, method=method, windows=windows)
+    derive_multicore_plan(graph_json, plan)
+    return plan, diagnostics
+
+
+def generate_problem1_plan_from_graph_info(
+    graph: GraphInfo,
+    num_cores: int,
+    method: str = "B0",
+    windows: int | None = None,
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Generate a plan from shared features; caller performs official validation."""
+
+    normalized_method = method.upper()
     b2a_result: B2APartitionResult | None = None
     if normalized_method == "B0":
         subgraphs = build_b0_subgraphs(graph, num_cores)
@@ -1056,7 +1070,6 @@ def solve_problem1_with_diagnostics(
         "node_to_subgraph": dict(subgraphs.node_to_subgraph),
         "core_schedules": schedule.core_schedules,
     }
-    derive_multicore_plan(graph_json, plan)
     diagnostics = _plan_diagnostics(subgraphs, schedule)
     diagnostics["method"] = normalized_method
     diagnostics["windows"] = windows if normalized_method == "B2A" else None
@@ -1073,6 +1086,33 @@ def solve_problem1_with_diagnostics(
             "groups_per_window": list(b2a_result.groups_per_window),
         })
     return plan, diagnostics
+
+
+def generate_single_plan_from_graph_info(
+    graph: GraphInfo,
+    num_cores: int,
+) -> Dict[str, Any]:
+    """Place every eligible non-COPY op in one task on core zero."""
+
+    require_integer(num_cores, "num_cores", 1)
+    if not graph.eligible_ops:
+        raise Problem1SolverError("Single requires at least one eligible op")
+    return {
+        "node_to_subgraph": {op_id: 0 for op_id in graph.eligible_ops},
+        "core_schedules": [[0]] + [[] for _ in range(num_cores - 1)],
+    }
+
+
+def build_single_candidate(
+    graph_json: Mapping[str, Any],
+    num_cores: int,
+) -> Dict[str, Any]:
+    """Build and officially validate the deterministic Single safety plan."""
+
+    graph = GraphInfo.from_graph(graph_json)
+    plan = generate_single_plan_from_graph_info(graph, num_cores)
+    derive_multicore_plan(graph_json, plan)
+    return plan
 
 
 def solve_problem1(
@@ -1100,7 +1140,10 @@ __all__ = [
     "build_b0_subgraphs",
     "build_b1_subgraphs",
     "build_b2a_subgraphs",
+    "build_single_candidate",
     "build_level_windows",
+    "generate_problem1_plan_from_graph_info",
+    "generate_single_plan_from_graph_info",
     "ready_list_eft_schedule",
     "solve_problem1",
     "solve_problem1_with_diagnostics",

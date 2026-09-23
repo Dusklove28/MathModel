@@ -15,3 +15,12 @@ data/*_multicore_res.json
 data/*_problem_*_res.json
 data/*_problem_*_trace.json
 data/*_problem_*_log.txt
+
+# Local Problem 1 experiment outputs and content-addressed evaluator cache
+artifacts/problem1_b05_b1/
+artifacts/problem1_b2a/
+artifacts/problem1_candidate_cache/
+artifacts/problem1_candidates/
+artifacts/problem1_devrun/
+artifacts/problem1_development_summary.json
+artifacts/problem1_development_summary.csv

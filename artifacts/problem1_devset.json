@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "selection_locked": true,
+  "selection_uses_performance_results": false,
+  "source_case_count": 100,
+  "selected_count": 12,
+  "primary_features": [
+    "eligible_ops",
+    "num_levels",
+    "mean_level_width",
+    "dependency_edges",
+    "tensor_bytes"
+  ],
+  "normalization": "log1p then per-feature min-max over all source cases",
+  "selection_rule": "deterministic min/max anchors for every primary feature, nearest normalized centroid, then farthest-point fill; case id breaks ties",
+  "cases": [
+    {
+      "case": "case_093",
+      "eligible_ops": 552,
+      "num_levels": 4,
+      "mean_level_width": 138.0,
+      "max_level_width": 276,
+      "dependency_edges": 483,
+      "tensor_bytes": 2418688,
+      "tensor_count": 1181,
+      "selection_reasons": [
+        "minimum eligible_ops"
+      ],
+      "normalized_primary_features": [
+        0.0,
+        0.034790788746828,
+        0.5070317253335022,
+        0.04121631674533355,
+        0.2860369884633984
+      ]
+    },
+    {
+      "case": "case_014",
+      "eligible_ops": 35705,
+      "num_levels": 124,
+      "mean_level_width": 287.94354838709677,
+      "max_level_width": 15921,
+      "dependency_edges": 34509,
+      "tensor_bytes": 193330034,
+      "tensor_count": 40287,
+      "selection_reasons": [
+        "maximum eligible_ops"
+      ],
+      "normalized_primary_features": [
+        1.0,
+        0.5366526089325766,
+        0.6230853199808404,
+        0.9760635063505944,
+        0.9110704992737093
+      ]
+    },
+    {
+      "case": "case_001",
+      "eligible_ops": 600,
+      "num_levels": 3,
+      "mean_level_width": 200.0,
+      "max_level_width": 200,
+      "dependency_edges": 400,
+      "tensor_bytes": 4917504,
+      "tensor_count": 1202,
+      "selection_reasons": [
+        "minimum num_levels",
+        "minimum dependency_edges"
+      ],
+      "normalized_primary_features": [
+        0.01997183412363179,
+        0.0,
+        0.5655267407089284,
+        0.0,
+        0.3872675350698367
+      ]
+    },
+    {
+      "case": "case_016",
+      "eligible_ops": 17995,
+      "num_levels": 2440,
+      "mean_level_width": 7.375,
+      "max_level_width": 12,
+      "dependency_edges": 21338,
+      "tensor_bytes": 360593104,
+      "tensor_count": 18020,
+      "selection_reasons": [
+        "maximum num_levels",
+        "maximum tensor_bytes"
+      ],
+      "normalized_primary_features": [
+        0.8356007876422901,
+        1.0,
+        0.061500993667938916,
+        0.8707432712553153,
+        1.0
+      ]
+    },
+    {
+      "case": "case_048",
+      "eligible_ops": 1728,
+      "num_levels": 369,
+      "mean_level_width": 4.682926829268292,
+      "max_level_width": 57,
+      "dependency_edges": 2448,
+      "tensor_bytes": 2436332,
+      "tensor_count": 2069,
+      "selection_reasons": [
+        "minimum mean_level_width"
+      ],
+      "normalized_primary_features": [
+        0.27351683244929564,
+        0.7058467907166563,
+        0.0,
+        0.39644088284820467,
+        0.28707392134125614
+      ]
+    },
+    {
+      "case": "case_025",
+      "eligible_ops": 18662,
+      "num_levels": 6,
+      "mean_level_width": 3110.3333333333335,
+      "max_level_width": 5332,
+      "dependency_edges": 18662,
+      "tensor_bytes": 61479936,
+      "tensor_count": 26666,
+      "selection_reasons": [
+        "maximum mean_level_width"
+      ],
+      "normalized_primary_features": [
+        0.8443330148509323,
+        0.08725089541142915,
+        1.0,
+        0.8413864058656366,
+        0.747622653246813
+      ]
+    },
+    {
+      "case": "case_087",
+      "eligible_ops": 27556,
+      "num_levels": 382,
+      "mean_level_width": 72.13612565445027,
+      "max_level_width": 3066,
+      "dependency_edges": 38493,
+      "tensor_bytes": 54425176,
+      "tensor_count": 29569,
+      "selection_reasons": [
+        "maximum dependency_edges"
+      ],
+      "normalized_primary_features": [
+        0.9378407372579616,
+        0.7112307461899653,
+        0.4051892445332094,
+        1.0,
+        0.7302342496366905
+      ]
+    },
+    {
+      "case": "case_064",
+      "eligible_ops": 906,
+      "num_levels": 123,
+      "mean_level_width": 7.365853658536586,
+      "max_level_width": 32,
+      "dependency_edges": 1308,
+      "tensor_bytes": 325708,
+      "tensor_count": 1034,
+      "selection_reasons": [
+        "minimum tensor_bytes"
+      ],
+      "normalized_primary_features": [
+        0.11871836907685956,
+        0.535400295849577,
+        0.06132769655691819,
+        0.259198193381692,
+        0.0
+      ]
+    },
+    {
+      "case": "case_074",
+      "eligible_ops": 3609,
+      "num_levels": 39,
+      "mean_level_width": 92.53846153846153,
+      "max_level_width": 1474,
+      "dependency_edges": 3597,
+      "tensor_bytes": 22558598,
+      "tensor_count": 4833,
+      "selection_reasons": [
+        "nearest normalized feature centroid"
+      ],
+      "normalized_primary_features": [
+        0.45015184362223737,
+        0.3590009707658975,
+        0.44421176442742166,
+        0.480725148726421,
+        0.6045889975590312
+      ]
+    },
+    {
+      "case": "case_036",
+      "eligible_ops": 2400,
+      "num_levels": 3,
+      "mean_level_width": 800.0,
+      "max_level_width": 800,
+      "dependency_edges": 1600,
+      "tensor_bytes": 19663104,
+      "tensor_count": 4802,
+      "selection_reasons": [
+        "farthest-point structural diversity fill"
+      ],
+      "normalized_primary_features": [
+        0.35229909808675275,
+        0.0,
+        0.7847942162102458,
+        0.30331560746824815,
+        0.5849909856511427
+      ]
+    },
+    {
+      "case": "case_056",
+      "eligible_ops": 7678,
+      "num_levels": 300,
+      "mean_level_width": 25.593333333333334,
+      "max_level_width": 162,
+      "dependency_edges": 11483,
+      "tensor_bytes": 5660336,
+      "tensor_count": 8157,
+      "selection_reasons": [
+        "farthest-point structural diversity fill"
+      ],
+      "normalized_primary_features": [
+        0.6312538079833382,
+        0.6736676566799719,
+        0.24474399628280893,
+        0.7349980018788242,
+        0.40733774271132583
+      ]
+    },
+    {
+      "case": "case_055",
+      "eligible_ops": 1236,
+      "num_levels": 28,
+      "mean_level_width": 44.142857142857146,
+      "max_level_width": 200,
+      "dependency_edges": 1288,
+      "tensor_bytes": 3505018,
+      "tensor_count": 1641,
+      "selection_reasons": [
+        "farthest-point structural diversity fill"
+      ],
+      "normalized_primary_features": [
+        0.19317207965517857,
+        0.3088621795457838,
+        0.32866833432946396,
+        0.25582488845748064,
+        0.33896090942420665
+      ]
+    }
+  ]
+}

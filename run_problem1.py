@@ -1,4 +1,4 @@
-"""Command-line runner for deterministic problem-1 B0/B1/B2A solvers."""
+"""Command-line runner for deterministic Problem-1 candidates and AUTO."""
 
 from __future__ import annotations
 
@@ -12,6 +12,10 @@ from solver_problem1 import (
     OFFICIAL_CODE_DIR,
     solve_problem1_with_diagnostics,
 )
+from candidate_manager_problem1 import (
+    CandidateManagerError,
+    run_candidate_manager,
+)
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
@@ -23,11 +27,12 @@ from contest_io import _read_json, _write_json, run_problem_cli  # noqa: E402
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="生成确定性 B0/B1/B2A 多核方案并调用官方 problem 1 evaluator")
+        description="生成确定性 Problem 1 方案并调用官方 evaluator")
     parser.add_argument("graph", help="原始计算图 JSON")
     parser.add_argument("-n", "--num-cores", type=int, default=4)
     parser.add_argument(
-        "--method", type=str.upper, choices=("B0", "B1", "B2A"), default="B0")
+        "--method", type=str.upper,
+        choices=("B0", "B1", "B2A", "AUTO"), default="B0")
     parser.add_argument(
         "--windows", type=int, choices=B2A_WINDOW_CHOICES,
         help="B2A dependency-level window 数量")
@@ -41,6 +46,10 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--evaluation-output", help="官方评估结果 JSON 路径")
     parser.add_argument("--trace-output", help="官方 Perfetto Trace JSON 路径")
     parser.add_argument("--log-output", help="官方简短日志路径")
+    parser.add_argument(
+        "--artifacts-dir", help="AUTO 运行产物根目录")
+    parser.add_argument(
+        "--cache-dir", help="AUTO 官方评估缓存目录")
     return parser
 
 
@@ -52,12 +61,75 @@ def main(argv: list[str] | None = None) -> int:
     if args.method != "B2A" and args.windows is not None:
         parser.error("--windows is only valid with --method B2A")
     graph_path = Path(args.graph)
+    config_path = Path(args.config) if args.config else graph_path.parent / "config.txt"
+    if args.method == "AUTO":
+        if args.diagnostics_output or args.evaluation_output or args.trace_output or args.log_output:
+            parser.error(
+                "AUTO writes its manifest/results/logs under --artifacts-dir; "
+                "single-candidate output options are not applicable")
+        try:
+            auto = run_candidate_manager(
+                graph_path,
+                args.num_cores,
+                config_path=config_path,
+                output_root=(Path(args.artifacts_dir)
+                             if args.artifacts_dir else None),
+                cache_dir=Path(args.cache_dir) if args.cache_dir else None,
+            )
+        except (CandidateManagerError, ValueError, OSError) as error:
+            print("[AUTO ERROR] {}".format(error), file=sys.stderr)
+            return 1
+        final_output = auto.final_plan_path
+        if args.output:
+            final_output = Path(args.output)
+            _write_json(final_output, auto.final_plan)
+        manifest = auto.manifest
+        print("Problem 1 AUTO\n")
+        print("case: {}".format(manifest["case"]))
+        print("cores: {}\n".format(manifest["cores"]))
+        print("Generated candidates: {}".format(
+            manifest["generated_candidates"]))
+        print("Unique plans: {}".format(manifest["unique_plans"]))
+        print("Official evaluations: {}".format(
+            manifest["official_evaluations"]))
+        print("Cache hits: {}\n".format(manifest["cache_hits"]))
+        print("Candidates:")
+        for candidate in manifest["candidates"]:
+            if candidate["status"] == "evaluated":
+                suffix = ""
+                if candidate["deduplicated"]:
+                    suffix = " -> same plan as {}".format(
+                        candidate["canonical_candidate"])
+                elif candidate["cache_hit"]:
+                    suffix = " [cache hit]"
+                print(
+                    "{:<10} makespan={} added={}{}".format(
+                        candidate["name"], candidate["makespan"],
+                        candidate["added_copy_bytes"], suffix))
+            else:
+                print("{:<10} FAILED {}".format(
+                    candidate["name"], candidate["error"]))
+        timing = manifest["timing"]
+        print("\nWinner:")
+        print("method={}".format(auto.winner_name))
+        print("makespan={}".format(auto.winner_makespan))
+        print("added_copy_bytes={}".format(
+            auto.winner_added_copy_bytes))
+        print("\ngeneration_time={:.6f}s".format(
+            timing["candidate_generation_time"]))
+        print("evaluation_time={:.6f}s".format(
+            timing["evaluation_time"]))
+        print("total_wall_time={:.6f}s".format(
+            timing["total_wall_time"]))
+        print("final_plan={}".format(final_output))
+        print("manifest={}".format(auto.manifest_path))
+        return 0
+
     plan_path = (
         Path(args.output)
         if args.output
         else Path(str(graph_path.with_suffix("")) + "_multicore_res.json")
     )
-    config_path = Path(args.config) if args.config else graph_path.parent / "config.txt"
     diagnostics_path = (
         Path(args.diagnostics_output)
         if args.diagnostics_output
