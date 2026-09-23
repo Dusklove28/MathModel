@@ -1,4 +1,4 @@
-"""Deterministic B0/B1 solvers for problem 1.
+"""Deterministic B0/B1/B2A solvers for problem 1.
 
 The submitted plan contains exactly the two fields required by the official
 evaluator.  Graph validation, op-DAG construction, COPY-node contraction and
@@ -43,10 +43,11 @@ PIPE_V = "PIPE_V"
 TASK_SAME_CORE_WAIT = 100
 TASK_CROSS_CORE_WAIT = 1000
 COMMUNICATION_BYTES_PER_CYCLE = 60.0
+B2A_WINDOW_CHOICES = (4, 8, 16)
 
 
 class Problem1SolverError(RuntimeError):
-    """The validated graph cannot be transformed into a B0 plan."""
+    """The validated graph cannot be transformed into a requested plan."""
 
 
 Dependency = Tuple[int, int]
@@ -66,6 +67,8 @@ class GraphInfo:
     topo_order: Tuple[int, ...]
     preds: Mapping[int, Tuple[int, ...]]
     succs: Mapping[int, Tuple[int, ...]]
+    level: Mapping[int, int]
+    nodes_by_level: Mapping[int, Tuple[int, ...]]
     op_pipe: Mapping[int, str]
     op_cycles: Mapping[int, int]
     pipe_m_cycles: Mapping[int, int]
@@ -170,6 +173,14 @@ class GraphInfo:
         }
         topo_order = tuple(_deterministic_topological_order(
             eligible_ops, preds, succs))
+        level = _dependency_levels(topo_order, preds, succs)
+        nodes_at_level: Dict[int, List[int]] = defaultdict(list)
+        for op_id in eligible_ops:
+            nodes_at_level[level[op_id]].append(op_id)
+        nodes_by_level = {
+            level_id: tuple(sorted(node_ids))
+            for level_id, node_ids in sorted(nodes_at_level.items())
+        }
 
         op_pipe = {op_id: op_by_id[op_id]["pipe"] for op_id in eligible_ops}
         op_cycles = {op_id: op_by_id[op_id]["cycles"] for op_id in eligible_ops}
@@ -199,6 +210,8 @@ class GraphInfo:
             topo_order=topo_order,
             preds=preds,
             succs=succs,
+            level=level,
+            nodes_by_level=nodes_by_level,
             op_pipe=op_pipe,
             op_cycles=op_cycles,
             pipe_m_cycles=pipe_m_cycles,
@@ -307,6 +320,26 @@ def _deterministic_topological_order(
     return order
 
 
+def _dependency_levels(
+    topo_order: Sequence[int],
+    preds: Mapping[int, Sequence[int]],
+    succs: Mapping[int, Sequence[int]],
+) -> Dict[int, int]:
+    """Return deterministic longest-predecessor-depth levels for the op DAG."""
+
+    level: Dict[int, int] = {}
+    for node_id in topo_order:
+        level[node_id] = 1 + max(
+            (level[pred] for pred in preds[node_id]), default=-1)
+    for source in topo_order:
+        for target in succs[source]:
+            if level[source] >= level[target]:
+                raise Problem1SolverError(
+                    "invalid dependency levels: {}(level {}) -> {}(level {})".format(
+                        source, level[source], target, level[target]))
+    return level
+
+
 def _reverse_critical_path(
     topo_order: Sequence[int],
     succs: Mapping[int, Sequence[int]],
@@ -340,6 +373,38 @@ class ReadyListResult:
     core_schedules: List[List[int]]
     max_ready_size: int
     mean_ready_size: float
+
+
+@dataclass(frozen=True)
+class LevelWindow:
+    index: int
+    levels: Tuple[int, ...]
+    nodes: Tuple[int, ...]
+    pipe_m_cycles: int
+    pipe_v_cycles: int
+    workload: int
+
+
+@dataclass(frozen=True)
+class BranchComponent:
+    nodes: Tuple[int, ...]
+    pipe_m_cycles: int
+    pipe_v_cycles: int
+    workload: int
+    boundary_pred_tensors: Tuple[int, ...]
+    boundary_succ_tensors: Tuple[int, ...]
+
+
+@dataclass(frozen=True)
+class B2APartitionResult:
+    subgraphs: SubgraphInfo
+    requested_windows: int
+    actual_windows: int
+    num_levels: int
+    components_before_packing: int
+    components_after_packing: int
+    components_per_window: Tuple[int, ...]
+    groups_per_window: Tuple[int, ...]
 
 
 def _partition_by_cumulative_work(
@@ -394,6 +459,252 @@ def _partition_by_cumulative_work(
     if start != len(topo_order) or any(not nodes for nodes in ranges):
         raise Problem1SolverError("internal error while partitioning topological order")
     return ranges
+
+
+def build_level_windows(
+    graph: GraphInfo,
+    num_windows: int,
+) -> List[LevelWindow]:
+    """Partition complete dependency levels into deterministic work-balanced windows."""
+
+    require_integer(num_windows, "num_windows", 1)
+    if not graph.nodes_by_level:
+        return []
+    level_ids = tuple(sorted(graph.nodes_by_level))
+    level_pipe_m = {
+        level_id: sum(
+            graph.pipe_m_cycles[node_id]
+            for node_id in graph.nodes_by_level[level_id])
+        for level_id in level_ids
+    }
+    level_pipe_v = {
+        level_id: sum(
+            graph.pipe_v_cycles[node_id]
+            for node_id in graph.nodes_by_level[level_id])
+        for level_id in level_ids
+    }
+    level_workload = {
+        level_id: max(level_pipe_m[level_id], level_pipe_v[level_id])
+        for level_id in level_ids
+    }
+    level_ranges = _partition_by_cumulative_work(
+        level_ids, level_workload, requested_parts=num_windows)
+    windows: List[LevelWindow] = []
+    for window_index, levels in enumerate(level_ranges):
+        nodes = tuple(sorted(
+            node_id
+            for level_id in levels
+            for node_id in graph.nodes_by_level[level_id]
+        ))
+        pipe_m = sum(level_pipe_m[level_id] for level_id in levels)
+        pipe_v = sum(level_pipe_v[level_id] for level_id in levels)
+        windows.append(LevelWindow(
+            index=window_index,
+            levels=tuple(levels),
+            nodes=nodes,
+            pipe_m_cycles=pipe_m,
+            pipe_v_cycles=pipe_v,
+            workload=max(pipe_m, pipe_v),
+        ))
+    return windows
+
+
+def _weak_components_in_window(
+    graph: GraphInfo,
+    window_nodes: Sequence[int],
+) -> List[Tuple[int, ...]]:
+    """Find weak components using only contracted edges internal to one window."""
+
+    node_set = set(window_nodes)
+    adjacency: Dict[int, Set[int]] = {node_id: set() for node_id in node_set}
+    for source in node_set:
+        for target in graph.succs[source]:
+            if target in node_set:
+                adjacency[source].add(target)
+                adjacency[target].add(source)
+
+    visited: Set[int] = set()
+    components: List[Tuple[int, ...]] = []
+    for root in sorted(node_set):
+        if root in visited:
+            continue
+        stack = [root]
+        visited.add(root)
+        component: List[int] = []
+        while stack:
+            node_id = stack.pop()
+            component.append(node_id)
+            for neighbor in sorted(adjacency[node_id], reverse=True):
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    stack.append(neighbor)
+        components.append(tuple(sorted(component)))
+    components.sort(key=lambda component: component[0])
+    if visited != node_set or sum(map(len, components)) != len(node_set):
+        raise Problem1SolverError("weak component construction lost window nodes")
+    return components
+
+
+def _build_branch_component(
+    graph: GraphInfo,
+    node_ids: Sequence[int],
+) -> BranchComponent:
+    """Compute corrected work and deduplicated external tensor interfaces."""
+
+    nodes = tuple(sorted(node_ids))
+    node_set = set(nodes)
+    boundary_pred: Set[int] = set()
+    boundary_succ: Set[int] = set()
+    for node_id in nodes:
+        for tensor_id in graph.op_input_tensors[node_id]:
+            if set(graph.tensor_producer[tensor_id]) - node_set:
+                boundary_pred.add(tensor_id)
+        for tensor_id in graph.op_output_tensors[node_id]:
+            if set(graph.tensor_consumers[tensor_id]) - node_set:
+                boundary_succ.add(tensor_id)
+    pipe_m = sum(graph.pipe_m_cycles[node_id] for node_id in nodes)
+    pipe_v = sum(graph.pipe_v_cycles[node_id] for node_id in nodes)
+    return BranchComponent(
+        nodes=nodes,
+        pipe_m_cycles=pipe_m,
+        pipe_v_cycles=pipe_v,
+        workload=max(pipe_m, pipe_v),
+        boundary_pred_tensors=tuple(sorted(boundary_pred)),
+        boundary_succ_tensors=tuple(sorted(boundary_succ)),
+    )
+
+
+def _tensor_set_bytes(graph: GraphInfo, tensor_ids: Iterable[int]) -> int:
+    return sum(graph.tensor_size[tensor_id] for tensor_id in set(tensor_ids))
+
+
+def _restricted_pack_components(
+    graph: GraphInfo,
+    components: Sequence[BranchComponent],
+    num_cores: int,
+) -> List[Tuple[int, ...]]:
+    """Keep large components as anchors and attach only smaller fragments."""
+
+    if not components:
+        return []
+    group_count = min(len(components), 2 * num_cores)
+    ordered = sorted(
+        components,
+        key=lambda component: (-component.workload, component.nodes[0]),
+    )
+    if len(components) <= group_count:
+        return [component.nodes for component in sorted(
+            components, key=lambda component: component.nodes[0])]
+
+    groups = []
+    for group_id, component in enumerate(ordered[:group_count]):
+        groups.append({
+            "id": group_id,
+            "nodes": set(component.nodes),
+            "pipe_m": component.pipe_m_cycles,
+            "pipe_v": component.pipe_v_cycles,
+            "pred_tensors": set(component.boundary_pred_tensors),
+            "succ_tensors": set(component.boundary_succ_tensors),
+        })
+
+    for component in ordered[group_count:]:
+        component_pred = set(component.boundary_pred_tensors)
+        component_succ = set(component.boundary_succ_tensors)
+
+        def placement_key(group: Mapping[str, Any]) -> Tuple[int, int, int, int]:
+            shared_pred_bytes = _tensor_set_bytes(
+                graph, component_pred & group["pred_tensors"])
+            shared_succ_bytes = _tensor_set_bytes(
+                graph, component_succ & group["succ_tensors"])
+            resulting_workload = max(
+                group["pipe_m"] + component.pipe_m_cycles,
+                group["pipe_v"] + component.pipe_v_cycles,
+            )
+            return (
+                -shared_pred_bytes,
+                -shared_succ_bytes,
+                resulting_workload,
+                group["id"],
+            )
+
+        selected = min(groups, key=placement_key)
+        selected["nodes"].update(component.nodes)
+        selected["pipe_m"] += component.pipe_m_cycles
+        selected["pipe_v"] += component.pipe_v_cycles
+        selected["pred_tensors"].update(component_pred)
+        selected["succ_tensors"].update(component_succ)
+
+    packed = [tuple(sorted(group["nodes"])) for group in groups]
+    packed.sort(key=lambda nodes: nodes[0])
+    return packed
+
+
+def build_b2a_subgraphs(
+    graph: GraphInfo,
+    num_cores: int,
+    num_windows: int,
+) -> B2APartitionResult:
+    """Build dependency-level windows and branch-preserving subgraphs."""
+
+    require_integer(num_cores, "num_cores", 1)
+    require_integer(num_windows, "num_windows", 1)
+    if num_windows not in B2A_WINDOW_CHOICES:
+        raise Problem1SolverError(
+            "B2A num_windows must be one of {}".format(B2A_WINDOW_CHOICES))
+    windows = build_level_windows(graph, num_windows)
+    all_groups: List[Tuple[int, ...]] = []
+    components_per_window: List[int] = []
+    groups_per_window: List[int] = []
+    window_by_node: Dict[int, int] = {}
+
+    for window in windows:
+        for node_id in window.nodes:
+            window_by_node[node_id] = window.index
+        raw_components = _weak_components_in_window(graph, window.nodes)
+        branch_components = [
+            _build_branch_component(graph, component)
+            for component in raw_components
+        ]
+        packed_groups = _restricted_pack_components(
+            graph, branch_components, num_cores)
+        components_per_window.append(len(raw_components))
+        groups_per_window.append(len(packed_groups))
+        all_groups.extend(sorted(packed_groups, key=lambda nodes: nodes[0]))
+
+    covered = [node_id for group in all_groups for node_id in group]
+    if (len(covered) != len(set(covered))
+            or set(covered) != set(graph.eligible_ops)):
+        raise Problem1SolverError(
+            "B2A groups must cover every eligible op exactly once")
+
+    group_by_node = {
+        node_id: group_id
+        for group_id, group in enumerate(all_groups)
+        for node_id in group
+    }
+    for source in graph.eligible_ops:
+        for target in graph.succs[source]:
+            source_window = window_by_node[source]
+            target_window = window_by_node[target]
+            if source_window > target_window:
+                raise Problem1SolverError(
+                    "B2A dependency points to an earlier window")
+            if (source_window == target_window
+                    and group_by_node[source] != group_by_node[target]):
+                raise Problem1SolverError(
+                    "internal window edge crosses weak components")
+
+    subgraphs = _build_subgraph_info(graph, all_groups)
+    return B2APartitionResult(
+        subgraphs=subgraphs,
+        requested_windows=num_windows,
+        actual_windows=len(windows),
+        num_levels=len(graph.nodes_by_level),
+        components_before_packing=sum(components_per_window),
+        components_after_packing=len(all_groups),
+        components_per_window=tuple(components_per_window),
+        groups_per_window=tuple(groups_per_window),
+    )
 
 
 def build_b0_subgraphs(graph: GraphInfo, num_cores: int) -> SubgraphInfo:
@@ -694,11 +1005,14 @@ def _plan_diagnostics(
         )
     longest_path_node_count = max(longest_to.values(), default=0)
     num_subgraphs = len(subgraph_ids)
+    quotient_edges = sum(len(subgraphs.succs[sg]) for sg in subgraph_ids)
+    cross_subgraph_bytes = sum(subgraphs.edge_bytes.values())
     return {
         "num_subgraphs": num_subgraphs,
-        "quotient_dag_edge_count": sum(
-            len(subgraphs.succs[sg]) for sg in subgraph_ids),
+        "quotient_dag_edge_count": quotient_edges,
         "quotient_dag_longest_path_node_count": longest_path_node_count,
+        "quotient_edges": quotient_edges,
+        "longest_path_nodes": longest_path_node_count,
         "longest_path_ratio": (
             longest_path_node_count / num_subgraphs if num_subgraphs else 0.0),
         "max_ready_size": schedule.max_ready_size,
@@ -710,7 +1024,8 @@ def _plan_diagnostics(
             sum(subgraphs.workload[sg] for sg in order)
             for order in schedule.core_schedules
         ],
-        "total_cross_subgraph_bytes": sum(subgraphs.edge_bytes.values()),
+        "total_cross_subgraph_bytes": cross_subgraph_bytes,
+        "cross_subgraph_bytes": cross_subgraph_bytes,
     }
 
 
@@ -718,17 +1033,24 @@ def solve_problem1_with_diagnostics(
     graph_json: Mapping[str, Any],
     num_cores: int,
     method: str = "B0",
+    windows: int | None = None,
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-    """Build an officially valid B0 or B1 plan plus non-submission diagnostics."""
+    """Build an officially valid B0/B1/B2A plan and separate diagnostics."""
 
     normalized_method = method.upper()
     graph = GraphInfo.from_graph(graph_json)
+    b2a_result: B2APartitionResult | None = None
     if normalized_method == "B0":
         subgraphs = build_b0_subgraphs(graph, num_cores)
     elif normalized_method == "B1":
         subgraphs = build_b1_subgraphs(graph, num_cores)
+    elif normalized_method == "B2A":
+        if windows is None:
+            raise Problem1SolverError("B2A requires windows=4, 8, or 16")
+        b2a_result = build_b2a_subgraphs(graph, num_cores, windows)
+        subgraphs = b2a_result.subgraphs
     else:
-        raise Problem1SolverError("method must be B0 or B1")
+        raise Problem1SolverError("method must be B0, B1, or B2A")
     schedule = ready_list_eft_schedule(subgraphs, num_cores)
     plan = {
         "node_to_subgraph": dict(subgraphs.node_to_subgraph),
@@ -737,6 +1059,19 @@ def solve_problem1_with_diagnostics(
     derive_multicore_plan(graph_json, plan)
     diagnostics = _plan_diagnostics(subgraphs, schedule)
     diagnostics["method"] = normalized_method
+    diagnostics["windows"] = windows if normalized_method == "B2A" else None
+    diagnostics["num_levels"] = len(graph.nodes_by_level)
+    if b2a_result is not None:
+        diagnostics.update({
+            "actual_windows": b2a_result.actual_windows,
+            "components_before_packing": (
+                b2a_result.components_before_packing),
+            "components_after_packing": (
+                b2a_result.components_after_packing),
+            "components_per_window": list(
+                b2a_result.components_per_window),
+            "groups_per_window": list(b2a_result.groups_per_window),
+        })
     return plan, diagnostics
 
 
@@ -744,21 +1079,28 @@ def solve_problem1(
     graph_json: Mapping[str, Any],
     num_cores: int,
     method: str = "B0",
+    windows: int | None = None,
 ) -> Dict[str, Any]:
-    """Build and officially validate a deterministic B0 or B1 plan."""
+    """Build and officially validate a deterministic B0, B1, or B2A plan."""
 
     plan, _ = solve_problem1_with_diagnostics(
-        graph_json, num_cores, method=method)
+        graph_json, num_cores, method=method, windows=windows)
     return plan
 
 
 __all__ = [
+    "B2A_WINDOW_CHOICES",
+    "B2APartitionResult",
+    "BranchComponent",
     "GraphInfo",
+    "LevelWindow",
     "Problem1SolverError",
     "ReadyListResult",
     "SubgraphInfo",
     "build_b0_subgraphs",
     "build_b1_subgraphs",
+    "build_b2a_subgraphs",
+    "build_level_windows",
     "ready_list_eft_schedule",
     "solve_problem1",
     "solve_problem1_with_diagnostics",

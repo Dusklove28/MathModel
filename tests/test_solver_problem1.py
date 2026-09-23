@@ -15,11 +15,45 @@ if str(PROJECT_DIR) not in sys.path:
 from solver_problem1 import (
     OFFICIAL_CODE_DIR,
     GraphInfo,
+    _build_branch_component,
     build_b0_subgraphs,
     build_b1_subgraphs,
+    build_b2a_subgraphs,
+    build_level_windows,
     solve_problem1,
     solve_problem1_with_diagnostics,
 )
+from multicore_cut_evaluate_problem_1 import evaluate_scene_a
+
+
+def _make_tensor_graph(op_ids, tensor_specs):
+    """Build a small valid graph from (producer, consumers, size) tensors."""
+
+    ops = [
+        {"id": op_id, "op": "ADD", "pipe": "PIPE_V", "cycles": 10}
+        for op_id in sorted(op_ids)
+    ]
+    tensors = []
+    edges = []
+    for offset, (producer, consumers, size) in enumerate(tensor_specs):
+        tensor_id = 10000 + offset
+        tensors.append({"id": tensor_id, "pos": "UB", "size": size})
+        if producer is not None:
+            edges.append({"source": producer, "target": tensor_id})
+        for consumer in consumers:
+            edges.append({"source": tensor_id, "target": consumer})
+    return {"ops": ops, "tensors": tensors, "edges": edges}
+
+
+def _chain_graph(chains):
+    specs = []
+    op_ids = {op_id for chain in chains for op_id in chain}
+    for chain in chains:
+        specs.append((None, [chain[0]], 32))
+        specs.extend((source, [target], 32)
+                     for source, target in zip(chain, chain[1:]))
+        specs.append((chain[-1], [], 32))
+    return _make_tensor_graph(op_ids, specs)
 
 
 class GraphInfoTests(unittest.TestCase):
@@ -86,6 +120,95 @@ class GraphInfoTests(unittest.TestCase):
     def test_official_code_directory_is_resolved_without_duplication(self) -> None:
         self.assertTrue((OFFICIAL_CODE_DIR / "evaluation_validation.py").is_file())
         self.assertTrue((OFFICIAL_CODE_DIR / "contest_io.py").is_file())
+
+
+class B2ATests(unittest.TestCase):
+    def test_interleaved_independent_chains_preserve_branches(self) -> None:
+        graph = _chain_graph([
+            (1, 5, 9),
+            (2, 6, 10),
+            (3, 7, 11),
+            (4, 8, 12),
+        ])
+        info = GraphInfo.from_graph(graph)
+        self.assertEqual(
+            [info.level[node_id] for node_id in (1, 2, 3, 4)], [0, 0, 0, 0])
+        self.assertEqual(
+            [info.level[node_id] for node_id in (5, 6, 7, 8)], [1, 1, 1, 1])
+        self.assertEqual(
+            [info.level[node_id] for node_id in (9, 10, 11, 12)], [2, 2, 2, 2])
+        for source in info.eligible_ops:
+            for target in info.succs[source]:
+                self.assertLess(info.level[source], info.level[target])
+
+        result = build_b2a_subgraphs(info, num_cores=2, num_windows=4)
+        self.assertEqual(result.actual_windows, 3)
+        self.assertEqual(result.components_per_window, (4, 4, 4))
+        self.assertEqual(result.components_after_packing, 12)
+        plan, diagnostics = solve_problem1_with_diagnostics(
+            graph, 2, method="B2A", windows=4)
+        self.assertEqual(diagnostics["longest_path_nodes"], 3)
+        self.assertGreaterEqual(diagnostics["max_ready_size"], 4)
+        self.assertEqual(set(plan), {"node_to_subgraph", "core_schedules"})
+
+    def test_serial_chain_does_not_invent_parallelism_and_evaluates(self) -> None:
+        graph = _chain_graph([(1, 2, 3, 4)])
+        plan, diagnostics = solve_problem1_with_diagnostics(
+            graph, 4, method="B2A", windows=4)
+        self.assertEqual(diagnostics["longest_path_ratio"], 1.0)
+        self.assertEqual(diagnostics["max_ready_size"], 1)
+        self.assertEqual(diagnostics["core_distribution"], [4, 0, 0, 0])
+        result = evaluate_scene_a(
+            graph,
+            plan,
+            bandwidth=60,
+            capacity={"L1": 524288, "UB": 131072},
+            cross_core_wait=1000,
+            same_core_wait=100,
+        )
+        self.assertGreater(result["makespan"], 0)
+
+    def test_fork_join_keeps_middle_branches_separate(self) -> None:
+        graph = _make_tensor_graph(
+            {1, 2, 3, 4},
+            [
+                (None, [1], 32),
+                (1, [2], 32),
+                (1, [3], 32),
+                (2, [4], 32),
+                (3, [4], 32),
+                (4, [], 32),
+            ],
+        )
+        info = GraphInfo.from_graph(graph)
+        windows = build_level_windows(info, 4)
+        self.assertEqual([window.levels for window in windows], [(0,), (1,), (2,)])
+        result = build_b2a_subgraphs(info, num_cores=2, num_windows=4)
+        self.assertEqual(result.components_per_window, (1, 2, 1))
+        mapping = result.subgraphs.node_to_subgraph
+        self.assertNotEqual(mapping[2], mapping[3])
+        self.assertIn(mapping[2], result.subgraphs.preds[mapping[4]])
+        self.assertIn(mapping[3], result.subgraphs.preds[mapping[4]])
+
+    def test_shared_boundary_tensor_bytes_are_deduplicated(self) -> None:
+        shared_size = 256
+        graph = _make_tensor_graph(
+            {1, 2, 3},
+            [
+                (None, [1], 32),
+                (1, [2, 3], shared_size),
+                (2, [3], 64),
+                (3, [], 32),
+            ],
+        )
+        info = GraphInfo.from_graph(graph)
+        component = _build_branch_component(info, (2, 3))
+        self.assertEqual(component.boundary_pred_tensors, (10001,))
+        self.assertEqual(
+            sum(info.tensor_size[tid]
+                for tid in component.boundary_pred_tensors),
+            shared_size,
+        )
 
 
 if __name__ == "__main__":

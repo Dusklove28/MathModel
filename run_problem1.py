@@ -1,4 +1,4 @@
-"""Command-line runner for the deterministic problem-1 B0/B1 solvers."""
+"""Command-line runner for deterministic problem-1 B0/B1/B2A solvers."""
 
 from __future__ import annotations
 
@@ -7,7 +7,11 @@ import sys
 import time
 from pathlib import Path
 
-from solver_problem1 import OFFICIAL_CODE_DIR, solve_problem1_with_diagnostics
+from solver_problem1 import (
+    B2A_WINDOW_CHOICES,
+    OFFICIAL_CODE_DIR,
+    solve_problem1_with_diagnostics,
+)
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
@@ -19,11 +23,14 @@ from contest_io import _read_json, _write_json, run_problem_cli  # noqa: E402
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="生成确定性 B0/B1 多核方案并调用官方 problem 1 evaluator")
+        description="生成确定性 B0/B1/B2A 多核方案并调用官方 problem 1 evaluator")
     parser.add_argument("graph", help="原始计算图 JSON")
     parser.add_argument("-n", "--num-cores", type=int, default=4)
     parser.add_argument(
-        "--method", type=str.upper, choices=("B0", "B1"), default="B0")
+        "--method", type=str.upper, choices=("B0", "B1", "B2A"), default="B0")
+    parser.add_argument(
+        "--windows", type=int, choices=B2A_WINDOW_CHOICES,
+        help="B2A dependency-level window 数量")
     parser.add_argument(
         "-o", "--output", help="方案 JSON；默认 <graph>_multicore_res.json")
     parser.add_argument(
@@ -38,7 +45,12 @@ def _parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = _parser().parse_args(argv)
+    parser = _parser()
+    args = parser.parse_args(argv)
+    if args.method == "B2A" and args.windows is None:
+        parser.error("--method B2A requires --windows 4, 8, or 16")
+    if args.method != "B2A" and args.windows is not None:
+        parser.error("--windows is only valid with --method B2A")
     graph_path = Path(args.graph)
     plan_path = (
         Path(args.output)
@@ -55,7 +67,7 @@ def main(argv: list[str] | None = None) -> int:
     graph = _read_json(graph_path)
     started = time.perf_counter()
     plan, diagnostics = solve_problem1_with_diagnostics(
-        graph, args.num_cores, method=args.method)
+        graph, args.num_cores, method=args.method, windows=args.windows)
     solver_time = time.perf_counter() - started
     if set(plan) != {"node_to_subgraph", "core_schedules"}:
         raise RuntimeError("solver output must contain exactly the two official fields")
@@ -85,6 +97,16 @@ def main(argv: list[str] | None = None) -> int:
             diagnostics["core_distribution"],
             diagnostics["core_proxy_workload"],
             diagnostics["total_cross_subgraph_bytes"]))
+    if args.method == "B2A":
+        print(
+            "B2A partition: windows={}/{} levels={} components={}->{} "
+            "components_per_window={} groups_per_window={}".format(
+                diagnostics["actual_windows"], diagnostics["windows"],
+                diagnostics["num_levels"],
+                diagnostics["components_before_packing"],
+                diagnostics["components_after_packing"],
+                diagnostics["components_per_window"],
+                diagnostics["groups_per_window"]))
 
     evaluator_args = [
         str(graph_path), str(plan_path), "--config", str(config_path),
