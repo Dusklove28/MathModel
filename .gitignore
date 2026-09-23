@@ -1,0 +1,17 @@
+# Python caches and local test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local IDE state
+.idea/
+.vscode/
+
+# Microsoft Office lock files
+~$*
+
+# Default evaluator outputs written beside official input cases
+data/*_multicore_res.json
+data/*_problem_*_res.json
+data/*_problem_*_trace.json
+data/*_problem_*_log.txt
