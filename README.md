@@ -93,3 +93,37 @@ Perfetto Trace。`stub_multicore_cut_and_schedule.py` 只演示方案格式，�
 |`singlecore_evaluate.py`|单核基线|计算加速比|
 
 # MathModel
+
+## Problem 1：较少核心数优胜方案回退复评
+
+冻结的六候选全量实验完成后，可在服务器上独立复评继承候选。该流程不修改
+`solver_problem1.py`、六候选管理器、官方评估器或 `config.txt`。对目标核数
+3、4、5，保持较少核数优胜方案的子图划分和已有核心执行顺序，只在
+`core_schedules` 末尾补空列表。
+
+先优先运行复评前推算会退化的组合：
+
+```bash
+python -u run_problem1_inherited_fallback.py \
+  --full-root artifacts/problem1_full_c4140 \
+  --candidate-output-root artifacts/problem1_candidates \
+  --cache-dir artifacts/problem1_candidate_cache \
+  --output-root artifacts/problem1_inherited_fallback_c4140 \
+  --workers 8 \
+  --degraded-only
+```
+
+然后用同一输出目录完成其余组合；已成功记录会自动跳过：
+
+```bash
+python -u run_problem1_inherited_fallback.py \
+  --full-root artifacts/problem1_full_c4140 \
+  --candidate-output-root artifacts/problem1_candidates \
+  --cache-dir artifacts/problem1_candidate_cache \
+  --output-root artifacts/problem1_inherited_fallback_c4140 \
+  --workers 8
+```
+
+输出同时保留旧实测分数、复评前推算、回退候选官方实测分数、最终方案、
+官方结果和哈希。`reported_value_kind` 与 `officially_measured` 用于区分尚未
+复评的推算值和官方实测值。
