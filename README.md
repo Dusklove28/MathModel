@@ -101,17 +101,17 @@ Perfetto Trace。`stub_multicore_cut_and_schedule.py` 只演示方案格式，�
 3、4、5，保持较少核数优胜方案的子图划分和已有核心执行顺序，只在
 `core_schedules` 末尾补空列表。
 
-服务器实验数据统一放在 `/media/data/yn`。也可通过环境变量固定该位置：
+服务器实验数据统一放在 `/media/dell/data/yn`。也可通过环境变量固定该位置：
 
 ```bash
-export PROBLEM1_ARTIFACT_ROOT=/media/data/yn
+export PROBLEM1_ARTIFACT_ROOT=/media/dell/data/yn
 ```
 
 先优先运行复评前推算会退化的组合：
 
 ```bash
 python -u run_problem1_inherited_fallback.py \
-  --artifact-root /media/data/yn \
+  --artifact-root /media/dell/data/yn \
   --workers 8 \
   --degraded-only
 ```
@@ -120,7 +120,7 @@ python -u run_problem1_inherited_fallback.py \
 
 ```bash
 python -u run_problem1_inherited_fallback.py \
-  --artifact-root /media/data/yn \
+  --artifact-root /media/dell/data/yn \
   --workers 8
 ```
 

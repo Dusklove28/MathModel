@@ -46,7 +46,7 @@ from stub_multicore_cut_and_schedule import derive_multicore_plan
 TARGET_CORES = (3, 4, 5)
 SOURCE_CORES = (2, 3, 4)
 DEFAULT_ARTIFACT_ROOT = Path(
-    os.environ.get("PROBLEM1_ARTIFACT_ROOT", "/media/data/yn"))
+    os.environ.get("PROBLEM1_ARTIFACT_ROOT", "/media/dell/data/yn"))
 # These released runner revisions used the same inheritance/evaluation policy.
 # They differ from the current runner only in portable storage/resume handling.
 STORAGE_COMPATIBLE_PREVIOUS_RUNNER_HASHES = frozenset({
@@ -1690,7 +1690,7 @@ def _parser() -> argparse.ArgumentParser:
         "--artifact-root", default=str(DEFAULT_ARTIFACT_ROOT),
         help=(
             "base directory for experiment artifacts; defaults to "
-            "PROBLEM1_ARTIFACT_ROOT or /media/data/yn"),
+            "PROBLEM1_ARTIFACT_ROOT or /media/dell/data/yn"),
     )
     parser.add_argument(
         "--full-root",
