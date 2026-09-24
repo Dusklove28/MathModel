@@ -1,0 +1,2112 @@
+{
+  "schema_version": 1,
+  "devset_path": "D:\\yn\\PSO\\MathModel\\artifacts\\problem1_devset.json",
+  "case_count": 12,
+  "combination_count": 48,
+  "cores": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "results": [
+    {
+      "case": "case_093",
+      "cores": 2,
+      "winner": "b0",
+      "unique_candidates": 4,
+      "evaluations": 0,
+      "cache_hits": 4,
+      "winner_makespan": 47547,
+      "winner_added_bytes": 114688,
+      "single_makespan": 74205,
+      "single_added_bytes": 0,
+      "b0_makespan": 47547,
+      "b0_added_bytes": 114688,
+      "improvement_vs_single": 0.35924802910855064,
+      "improvement_vs_b0": 0.0,
+      "total_wall_time": 0.0894732,
+      "evaluation_time": 0.0,
+      "max_memory_bytes": 20480,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 47547,
+          "added_copy_bytes": 114688
+        },
+        "b2a_w4": {
+          "winner": "b0",
+          "makespan": 47547,
+          "added_copy_bytes": 114688
+        },
+        "b2a_w8": {
+          "winner": "b0",
+          "makespan": 47547,
+          "added_copy_bytes": 114688
+        },
+        "b2a_w16": {
+          "winner": "b0",
+          "makespan": 47547,
+          "added_copy_bytes": 114688
+        }
+      }
+    },
+    {
+      "case": "case_093",
+      "cores": 3,
+      "winner": "b1",
+      "unique_candidates": 4,
+      "evaluations": 0,
+      "cache_hits": 4,
+      "winner_makespan": 33714,
+      "winner_added_bytes": 200704,
+      "single_makespan": 74205,
+      "single_added_bytes": 0,
+      "b0_makespan": 76636,
+      "b0_added_bytes": 172032,
+      "improvement_vs_single": 0.5456640388114008,
+      "improvement_vs_b0": 0.5600762043948014,
+      "total_wall_time": 0.08827890000000002,
+      "evaluation_time": 0.0,
+      "max_memory_bytes": 20480,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 51688,
+          "added_copy_bytes": 1982464
+        },
+        "b2a_w4": {
+          "winner": "b1",
+          "makespan": 33714,
+          "added_copy_bytes": 200704
+        },
+        "b2a_w8": {
+          "winner": "b1",
+          "makespan": 33714,
+          "added_copy_bytes": 200704
+        },
+        "b2a_w16": {
+          "winner": "b1",
+          "makespan": 33714,
+          "added_copy_bytes": 200704
+        }
+      }
+    },
+    {
+      "case": "case_093",
+      "cores": 4,
+      "winner": "b1",
+      "unique_candidates": 4,
+      "evaluations": 0,
+      "cache_hits": 4,
+      "winner_makespan": 26594,
+      "winner_added_bytes": 286720,
+      "single_makespan": 74205,
+      "single_added_bytes": 0,
+      "b0_makespan": 63072,
+      "b0_added_bytes": 245760,
+      "improvement_vs_single": 0.6416144464658716,
+      "improvement_vs_b0": 0.5783548959918823,
+      "total_wall_time": 0.0928388,
+      "evaluation_time": 0.0,
+      "max_memory_bytes": 20480,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 46474,
+          "added_copy_bytes": 1986560
+        },
+        "b2a_w4": {
+          "winner": "b1",
+          "makespan": 26594,
+          "added_copy_bytes": 286720
+        },
+        "b2a_w8": {
+          "winner": "b1",
+          "makespan": 26594,
+          "added_copy_bytes": 286720
+        },
+        "b2a_w16": {
+          "winner": "b1",
+          "makespan": 26594,
+          "added_copy_bytes": 286720
+        }
+      }
+    },
+    {
+      "case": "case_093",
+      "cores": 5,
+      "winner": "b1",
+      "unique_candidates": 4,
+      "evaluations": 0,
+      "cache_hits": 4,
+      "winner_makespan": 23720,
+      "winner_added_bytes": 286720,
+      "single_makespan": 74205,
+      "single_added_bytes": 0,
+      "b0_makespan": 44114,
+      "b0_added_bytes": 323584,
+      "improvement_vs_single": 0.6803449902297689,
+      "improvement_vs_b0": 0.4623022169832706,
+      "total_wall_time": 0.09718480000000002,
+      "evaluation_time": 0.0,
+      "max_memory_bytes": 20480,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 44114,
+          "added_copy_bytes": 323584
+        },
+        "b2a_w4": {
+          "winner": "b1",
+          "makespan": 23720,
+          "added_copy_bytes": 286720
+        },
+        "b2a_w8": {
+          "winner": "b1",
+          "makespan": 23720,
+          "added_copy_bytes": 286720
+        },
+        "b2a_w16": {
+          "winner": "b1",
+          "makespan": 23720,
+          "added_copy_bytes": 286720
+        }
+      }
+    },
+    {
+      "case": "case_014",
+      "cores": 2,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 0,
+      "cache_hits": 6,
+      "winner_makespan": 11873679,
+      "winner_added_bytes": 265001472,
+      "single_makespan": 17698626,
+      "single_added_bytes": 71010720,
+      "b0_makespan": 18494888,
+      "b0_added_bytes": 68660032,
+      "improvement_vs_single": 0.32911859937601934,
+      "improvement_vs_b0": 0.3580021138814142,
+      "total_wall_time": 65.8657643,
+      "evaluation_time": 0.0,
+      "max_memory_bytes": 523776,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 11873679,
+          "added_copy_bytes": 265001472
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 12877407,
+          "added_copy_bytes": 323706080
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 11873679,
+          "added_copy_bytes": 265001472
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 11873679,
+          "added_copy_bytes": 265001472
+        }
+      }
+    },
+    {
+      "case": "case_014",
+      "cores": 3,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 1,
+      "cache_hits": 5,
+      "winner_makespan": 8687186,
+      "winner_added_bytes": 262318608,
+      "single_makespan": 17698626,
+      "single_added_bytes": 71010720,
+      "b0_makespan": 18496698,
+      "b0_added_bytes": 72642880,
+      "improvement_vs_single": 0.509160428611803,
+      "improvement_vs_b0": 0.5303385501563577,
+      "total_wall_time": 120.89258279999999,
+      "evaluation_time": 52.3721582,
+      "max_memory_bytes": 321024,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 8687186,
+          "added_copy_bytes": 262318608
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 9685306,
+          "added_copy_bytes": 321026960
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 8687186,
+          "added_copy_bytes": 262318608
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 8687186,
+          "added_copy_bytes": 262318608
+        }
+      }
+    },
+    {
+      "case": "case_014",
+      "cores": 4,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 8237041,
+      "winner_added_bytes": 266032656,
+      "single_makespan": 17698626,
+      "single_added_bytes": 71010720,
+      "b0_makespan": 14947155,
+      "b0_added_bytes": 74682688,
+      "improvement_vs_single": 0.534594323875763,
+      "improvement_vs_b0": 0.448922487255936,
+      "total_wall_time": 606.0443607999999,
+      "evaluation_time": 533.5147702000002,
+      "max_memory_bytes": 523776,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 8237041,
+          "added_copy_bytes": 266032656
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 9238226,
+          "added_copy_bytes": 324741008
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 8237041,
+          "added_copy_bytes": 266032656
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 8237041,
+          "added_copy_bytes": 266032656
+        }
+      }
+    },
+    {
+      "case": "case_014",
+      "cores": 5,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 6890740,
+      "winner_added_bytes": 262318608,
+      "single_makespan": 17698626,
+      "single_added_bytes": 71010720,
+      "b0_makespan": 18391574,
+      "b0_added_bytes": 76661056,
+      "improvement_vs_single": 0.6106624322136645,
+      "improvement_vs_b0": 0.6253316872172007,
+      "total_wall_time": 566.9122229,
+      "evaluation_time": 493.0287961,
+      "max_memory_bytes": 238080,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 6890740,
+          "added_copy_bytes": 262318608
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 7891422,
+          "added_copy_bytes": 321026960
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 6890740,
+          "added_copy_bytes": 262318608
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 6890740,
+          "added_copy_bytes": 262318608
+        }
+      }
+    },
+    {
+      "case": "case_001",
+      "cores": 2,
+      "winner": "b0",
+      "unique_candidates": 3,
+      "evaluations": 3,
+      "cache_hits": 0,
+      "winner_makespan": 118572,
+      "winner_added_bytes": 8064,
+      "single_makespan": 233110,
+      "single_added_bytes": 0,
+      "b0_makespan": 118572,
+      "b0_added_bytes": 8064,
+      "improvement_vs_single": 0.49134743254257646,
+      "improvement_vs_b0": 0.0,
+      "total_wall_time": 0.4379217000000608,
+      "evaluation_time": 0.2987044000001333,
+      "max_memory_bytes": 13440,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 118572,
+          "added_copy_bytes": 8064
+        },
+        "b2a_w4": {
+          "winner": "b0",
+          "makespan": 118572,
+          "added_copy_bytes": 8064
+        },
+        "b2a_w8": {
+          "winner": "b0",
+          "makespan": 118572,
+          "added_copy_bytes": 8064
+        },
+        "b2a_w16": {
+          "winner": "b0",
+          "makespan": 118572,
+          "added_copy_bytes": 8064
+        }
+      }
+    },
+    {
+      "case": "case_001",
+      "cores": 3,
+      "winner": "b1",
+      "unique_candidates": 4,
+      "evaluations": 4,
+      "cache_hits": 0,
+      "winner_makespan": 99499,
+      "winner_added_bytes": 147840,
+      "single_makespan": 233110,
+      "single_added_bytes": 0,
+      "b0_makespan": 100128,
+      "b0_added_bytes": 98688,
+      "improvement_vs_single": 0.573167174295397,
+      "improvement_vs_b0": 0.006281959092361777,
+      "total_wall_time": 0.5671575000001212,
+      "evaluation_time": 0.3882359000001543,
+      "max_memory_bytes": 13440,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 100128,
+          "added_copy_bytes": 98688
+        },
+        "b2a_w4": {
+          "winner": "b1",
+          "makespan": 99499,
+          "added_copy_bytes": 147840
+        },
+        "b2a_w8": {
+          "winner": "b1",
+          "makespan": 99499,
+          "added_copy_bytes": 147840
+        },
+        "b2a_w16": {
+          "winner": "b1",
+          "makespan": 99499,
+          "added_copy_bytes": 147840
+        }
+      }
+    },
+    {
+      "case": "case_001",
+      "cores": 4,
+      "winner": "b0",
+      "unique_candidates": 4,
+      "evaluations": 0,
+      "cache_hits": 4,
+      "winner_makespan": 61884,
+      "winner_added_bytes": 115584,
+      "single_makespan": 233110,
+      "single_added_bytes": 0,
+      "b0_makespan": 61884,
+      "b0_added_bytes": 115584,
+      "improvement_vs_single": 0.7345287632448201,
+      "improvement_vs_b0": 0.0,
+      "total_wall_time": 0.09421169999995982,
+      "evaluation_time": 0.0,
+      "max_memory_bytes": 13440,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 61884,
+          "added_copy_bytes": 115584
+        },
+        "b2a_w4": {
+          "winner": "b0",
+          "makespan": 61884,
+          "added_copy_bytes": 115584
+        },
+        "b2a_w8": {
+          "winner": "b0",
+          "makespan": 61884,
+          "added_copy_bytes": 115584
+        },
+        "b2a_w16": {
+          "winner": "b0",
+          "makespan": 61884,
+          "added_copy_bytes": 115584
+        }
+      }
+    },
+    {
+      "case": "case_001",
+      "cores": 5,
+      "winner": "b0",
+      "unique_candidates": 3,
+      "evaluations": 3,
+      "cache_hits": 0,
+      "winner_makespan": 50628,
+      "winner_added_bytes": 21888,
+      "single_makespan": 233110,
+      "single_added_bytes": 0,
+      "b0_makespan": 50628,
+      "b0_added_bytes": 21888,
+      "improvement_vs_single": 0.7828149800523359,
+      "improvement_vs_b0": 0.0,
+      "total_wall_time": 0.4556536000000051,
+      "evaluation_time": 0.29523949999997967,
+      "max_memory_bytes": 13440,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 50628,
+          "added_copy_bytes": 21888
+        },
+        "b2a_w4": {
+          "winner": "b0",
+          "makespan": 50628,
+          "added_copy_bytes": 21888
+        },
+        "b2a_w8": {
+          "winner": "b0",
+          "makespan": 50628,
+          "added_copy_bytes": 21888
+        },
+        "b2a_w16": {
+          "winner": "b0",
+          "makespan": 50628,
+          "added_copy_bytes": 21888
+        }
+      }
+    },
+    {
+      "case": "case_016",
+      "cores": 2,
+      "winner": "single",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 7715523,
+      "winner_added_bytes": 0,
+      "single_makespan": 7715523,
+      "single_added_bytes": 0,
+      "b0_makespan": 7722257,
+      "b0_added_bytes": 3014844,
+      "improvement_vs_single": 0.0,
+      "improvement_vs_b0": 0.0008720248497298134,
+      "total_wall_time": 59.03027880000013,
+      "evaluation_time": 56.78132169999958,
+      "max_memory_bytes": 393216,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w4": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w8": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w16": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        }
+      }
+    },
+    {
+      "case": "case_016",
+      "cores": 3,
+      "winner": "single",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 7715523,
+      "winner_added_bytes": 0,
+      "single_makespan": 7715523,
+      "single_added_bytes": 0,
+      "b0_makespan": 7722673,
+      "b0_added_bytes": 4325684,
+      "improvement_vs_single": 0.0,
+      "improvement_vs_b0": 0.0009258452351925298,
+      "total_wall_time": 56.160426700000016,
+      "evaluation_time": 54.606021400000145,
+      "max_memory_bytes": 393216,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w4": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w8": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w16": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        }
+      }
+    },
+    {
+      "case": "case_016",
+      "cores": 4,
+      "winner": "single",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 7715523,
+      "winner_added_bytes": 0,
+      "single_makespan": 7715523,
+      "single_added_bytes": 0,
+      "b0_makespan": 7731823,
+      "b0_added_bytes": 6685064,
+      "improvement_vs_single": 0.0,
+      "improvement_vs_b0": 0.0021081703499937856,
+      "total_wall_time": 55.62267709999992,
+      "evaluation_time": 54.03075580000041,
+      "max_memory_bytes": 393216,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w4": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w8": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w16": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        }
+      }
+    },
+    {
+      "case": "case_016",
+      "cores": 5,
+      "winner": "single",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 7715523,
+      "winner_added_bytes": 0,
+      "single_makespan": 7715523,
+      "single_added_bytes": 0,
+      "b0_makespan": 7727509,
+      "b0_added_bytes": 7471660,
+      "improvement_vs_single": 0.0,
+      "improvement_vs_b0": 0.001551081985152007,
+      "total_wall_time": 54.89227199999982,
+      "evaluation_time": 53.29766119999999,
+      "max_memory_bytes": 393216,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w4": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w8": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        },
+        "b2a_w16": {
+          "winner": "single",
+          "makespan": 7715523,
+          "added_copy_bytes": 0
+        }
+      }
+    },
+    {
+      "case": "case_048",
+      "cores": 2,
+      "winner": "b2a_w16",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 176165,
+      "winner_added_bytes": 650944,
+      "single_makespan": 222220,
+      "single_added_bytes": 0,
+      "b0_makespan": 223464,
+      "b0_added_bytes": 230154,
+      "improvement_vs_single": 0.20724957249572495,
+      "improvement_vs_b0": 0.21166272867217986,
+      "total_wall_time": 1.8159725999998955,
+      "evaluation_time": 1.1499685999995108,
+      "max_memory_bytes": 22592,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w16",
+          "makespan": 176165,
+          "added_copy_bytes": 650944
+        },
+        "b2a_w4": {
+          "winner": "b2a_w16",
+          "makespan": 176165,
+          "added_copy_bytes": 650944
+        },
+        "b2a_w8": {
+          "winner": "b2a_w16",
+          "makespan": 176165,
+          "added_copy_bytes": 650944
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 221032,
+          "added_copy_bytes": 101388
+        }
+      }
+    },
+    {
+      "case": "case_048",
+      "cores": 3,
+      "winner": "b2a_w16",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 163641,
+      "winner_added_bytes": 651072,
+      "single_makespan": 222220,
+      "single_added_bytes": 0,
+      "b0_makespan": 224799,
+      "b0_added_bytes": 370620,
+      "improvement_vs_single": 0.2636081360813608,
+      "improvement_vs_b0": 0.2720563703575194,
+      "total_wall_time": 1.3600689999998394,
+      "evaluation_time": 1.1315448000000288,
+      "max_memory_bytes": 22592,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w16",
+          "makespan": 163641,
+          "added_copy_bytes": 651072
+        },
+        "b2a_w4": {
+          "winner": "b2a_w16",
+          "makespan": 163641,
+          "added_copy_bytes": 651072
+        },
+        "b2a_w8": {
+          "winner": "b2a_w16",
+          "makespan": 163641,
+          "added_copy_bytes": 651072
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 221067,
+          "added_copy_bytes": 101516
+        }
+      }
+    },
+    {
+      "case": "case_048",
+      "cores": 4,
+      "winner": "b2a_w16",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 163676,
+      "winner_added_bytes": 651200,
+      "single_makespan": 222220,
+      "single_added_bytes": 0,
+      "b0_makespan": 222404,
+      "b0_added_bytes": 429324,
+      "improvement_vs_single": 0.26345063450634504,
+      "improvement_vs_b0": 0.2640599989208827,
+      "total_wall_time": 1.3711350000000948,
+      "evaluation_time": 1.1440141999999014,
+      "max_memory_bytes": 22592,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w16",
+          "makespan": 163676,
+          "added_copy_bytes": 651200
+        },
+        "b2a_w4": {
+          "winner": "b2a_w16",
+          "makespan": 163676,
+          "added_copy_bytes": 651200
+        },
+        "b2a_w8": {
+          "winner": "b2a_w16",
+          "makespan": 163676,
+          "added_copy_bytes": 651200
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 221102,
+          "added_copy_bytes": 101644
+        }
+      }
+    },
+    {
+      "case": "case_048",
+      "cores": 5,
+      "winner": "b2a_w16",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 163676,
+      "winner_added_bytes": 651328,
+      "single_makespan": 222220,
+      "single_added_bytes": 0,
+      "b0_makespan": 223099,
+      "b0_added_bytes": 536816,
+      "improvement_vs_single": 0.26345063450634504,
+      "improvement_vs_b0": 0.2663526057938404,
+      "total_wall_time": 1.469983700000057,
+      "evaluation_time": 1.1669493000001694,
+      "max_memory_bytes": 22592,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w16",
+          "makespan": 163676,
+          "added_copy_bytes": 651328
+        },
+        "b2a_w4": {
+          "winner": "b2a_w16",
+          "makespan": 163676,
+          "added_copy_bytes": 651328
+        },
+        "b2a_w8": {
+          "winner": "b2a_w16",
+          "makespan": 163676,
+          "added_copy_bytes": 651328
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 220705,
+          "added_copy_bytes": 101776
+        }
+      }
+    },
+    {
+      "case": "case_025",
+      "cores": 2,
+      "winner": "b1",
+      "unique_candidates": 5,
+      "evaluations": 5,
+      "cache_hits": 0,
+      "winner_makespan": 2969082,
+      "winner_added_bytes": 20616192,
+      "single_makespan": 4863026,
+      "single_added_bytes": 0,
+      "b0_makespan": 4866152,
+      "b0_added_bytes": 256512,
+      "improvement_vs_single": 0.38945792187827083,
+      "improvement_vs_b0": 0.38985013209616143,
+      "total_wall_time": 137.43608240000003,
+      "evaluation_time": 122.48698009999998,
+      "max_memory_bytes": 26112,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 3250352,
+          "added_copy_bytes": 73755648
+        },
+        "b2a_w4": {
+          "winner": "b1",
+          "makespan": 2969082,
+          "added_copy_bytes": 20616192
+        },
+        "b2a_w8": {
+          "winner": "b1",
+          "makespan": 2969082,
+          "added_copy_bytes": 20616192
+        },
+        "b2a_w16": {
+          "winner": "b1",
+          "makespan": 2969082,
+          "added_copy_bytes": 20616192
+        }
+      }
+    },
+    {
+      "case": "case_025",
+      "cores": 3,
+      "winner": "b1",
+      "unique_candidates": 5,
+      "evaluations": 5,
+      "cache_hits": 0,
+      "winner_makespan": 2051388,
+      "winner_added_bytes": 20699136,
+      "single_makespan": 4863026,
+      "single_added_bytes": 0,
+      "b0_makespan": 2435188,
+      "b0_added_bytes": 411648,
+      "improvement_vs_single": 0.5781663515679332,
+      "improvement_vs_b0": 0.15760590147454734,
+      "total_wall_time": 145.58875080000007,
+      "evaluation_time": 130.39361760000043,
+      "max_memory_bytes": 26112,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 2307435,
+          "added_copy_bytes": 73792512
+        },
+        "b2a_w4": {
+          "winner": "b1",
+          "makespan": 2051388,
+          "added_copy_bytes": 20699136
+        },
+        "b2a_w8": {
+          "winner": "b1",
+          "makespan": 2051388,
+          "added_copy_bytes": 20699136
+        },
+        "b2a_w16": {
+          "winner": "b1",
+          "makespan": 2051388,
+          "added_copy_bytes": 20699136
+        }
+      }
+    },
+    {
+      "case": "case_025",
+      "cores": 4,
+      "winner": "b1",
+      "unique_candidates": 5,
+      "evaluations": 5,
+      "cache_hits": 0,
+      "winner_makespan": 1562605,
+      "winner_added_bytes": 20795904,
+      "single_makespan": 4863026,
+      "single_added_bytes": 0,
+      "b0_makespan": 3348942,
+      "b0_added_bytes": 562176,
+      "improvement_vs_single": 0.6786764043622222,
+      "improvement_vs_b0": 0.533403385307957,
+      "total_wall_time": 126.06444859999988,
+      "evaluation_time": 110.43924539999989,
+      "max_memory_bytes": 26112,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 1872928,
+          "added_copy_bytes": 73829376
+        },
+        "b2a_w4": {
+          "winner": "b1",
+          "makespan": 1562605,
+          "added_copy_bytes": 20795904
+        },
+        "b2a_w8": {
+          "winner": "b1",
+          "makespan": 1562605,
+          "added_copy_bytes": 20795904
+        },
+        "b2a_w16": {
+          "winner": "b1",
+          "makespan": 1562605,
+          "added_copy_bytes": 20795904
+        }
+      }
+    },
+    {
+      "case": "case_025",
+      "cores": 5,
+      "winner": "b0",
+      "unique_candidates": 5,
+      "evaluations": 5,
+      "cache_hits": 0,
+      "winner_makespan": 979918,
+      "winner_added_bytes": 694272,
+      "single_makespan": 4863026,
+      "single_added_bytes": 0,
+      "b0_makespan": 979918,
+      "b0_added_bytes": 694272,
+      "improvement_vs_single": 0.7984962449306255,
+      "improvement_vs_b0": 0.0,
+      "total_wall_time": 139.38101429999983,
+      "evaluation_time": 122.66523480000023,
+      "max_memory_bytes": 35328,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 979918,
+          "added_copy_bytes": 694272
+        },
+        "b2a_w4": {
+          "winner": "b0",
+          "makespan": 979918,
+          "added_copy_bytes": 694272
+        },
+        "b2a_w8": {
+          "winner": "b0",
+          "makespan": 979918,
+          "added_copy_bytes": 694272
+        },
+        "b2a_w16": {
+          "winner": "b0",
+          "makespan": 979918,
+          "added_copy_bytes": 694272
+        }
+      }
+    },
+    {
+      "case": "case_087",
+      "cores": 2,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 2242785,
+      "winner_added_bytes": 28326240,
+      "single_makespan": 3974071,
+      "single_added_bytes": 7902720,
+      "b0_makespan": 4076506,
+      "b0_added_bytes": 8901284,
+      "improvement_vs_single": 0.43564546280124333,
+      "improvement_vs_b0": 0.44982664075558826,
+      "total_wall_time": 189.65922170000022,
+      "evaluation_time": 169.57548739999993,
+      "max_memory_bytes": 271360,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 2242785,
+          "added_copy_bytes": 28326240
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 2503723,
+          "added_copy_bytes": 33146286
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 2242785,
+          "added_copy_bytes": 28326240
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 2242785,
+          "added_copy_bytes": 28326240
+        }
+      }
+    },
+    {
+      "case": "case_087",
+      "cores": 3,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 1591733,
+      "winner_added_bytes": 28326240,
+      "single_makespan": 3974071,
+      "single_added_bytes": 7902720,
+      "b0_makespan": 4029956,
+      "b0_added_bytes": 10516762,
+      "improvement_vs_single": 0.5994704171113199,
+      "improvement_vs_b0": 0.6050247198728721,
+      "total_wall_time": 181.03534760000002,
+      "evaluation_time": 160.9503824000003,
+      "max_memory_bytes": 271360,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 1591733,
+          "added_copy_bytes": 28326240
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 1651239,
+          "added_copy_bytes": 34157764
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 1591733,
+          "added_copy_bytes": 28326240
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 1591733,
+          "added_copy_bytes": 28326240
+        }
+      }
+    },
+    {
+      "case": "case_087",
+      "cores": 4,
+      "winner": "b2a_w8",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 1387347,
+      "winner_added_bytes": 35818216,
+      "single_makespan": 3974071,
+      "single_added_bytes": 7902720,
+      "b0_makespan": 4031118,
+      "b0_added_bytes": 11996580,
+      "improvement_vs_single": 0.6509002984596903,
+      "improvement_vs_b0": 0.6558406377585573,
+      "total_wall_time": 173.0281587999998,
+      "evaluation_time": 152.6818776999994,
+      "max_memory_bytes": 156864,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w8",
+          "makespan": 1387347,
+          "added_copy_bytes": 35818216
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 1387347,
+          "added_copy_bytes": 35818216
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 1399002,
+          "added_copy_bytes": 28326240
+        },
+        "b2a_w16": {
+          "winner": "b2a_w8",
+          "makespan": 1387347,
+          "added_copy_bytes": 35818216
+        }
+      }
+    },
+    {
+      "case": "case_087",
+      "cores": 5,
+      "winner": "b2a_w8",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 1221168,
+      "winner_added_bytes": 37435656,
+      "single_makespan": 3974071,
+      "single_added_bytes": 7902720,
+      "b0_makespan": 3114782,
+      "b0_added_bytes": 12328560,
+      "improvement_vs_single": 0.6927161089975493,
+      "improvement_vs_b0": 0.6079443119935841,
+      "total_wall_time": 168.76150320000033,
+      "evaluation_time": 148.36503250000032,
+      "max_memory_bytes": 155328,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w8",
+          "makespan": 1221168,
+          "added_copy_bytes": 37435656
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 1221168,
+          "added_copy_bytes": 37435656
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 1254778,
+          "added_copy_bytes": 28326240
+        },
+        "b2a_w16": {
+          "winner": "b2a_w8",
+          "makespan": 1221168,
+          "added_copy_bytes": 37435656
+        }
+      }
+    },
+    {
+      "case": "case_064",
+      "cores": 2,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 17926,
+      "winner_added_bytes": 57174,
+      "single_makespan": 19116,
+      "single_added_bytes": 0,
+      "b0_makespan": 19632,
+      "b0_added_bytes": 73690,
+      "improvement_vs_single": 0.06225151705377694,
+      "improvement_vs_b0": 0.08689894050529748,
+      "total_wall_time": 0.6644447000003311,
+      "evaluation_time": 0.51741119999906,
+      "max_memory_bytes": 8480,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 17926,
+          "added_copy_bytes": 57174
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 18186,
+          "added_copy_bytes": 121732
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 17926,
+          "added_copy_bytes": 57174
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 17926,
+          "added_copy_bytes": 57174
+        }
+      }
+    },
+    {
+      "case": "case_064",
+      "cores": 3,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 16935,
+      "winner_added_bytes": 57242,
+      "single_makespan": 19116,
+      "single_added_bytes": 0,
+      "b0_makespan": 20528,
+      "b0_added_bytes": 93572,
+      "improvement_vs_single": 0.11409290646578782,
+      "improvement_vs_b0": 0.17502922837100546,
+      "total_wall_time": 0.6577621000001272,
+      "evaluation_time": 0.5187117000000399,
+      "max_memory_bytes": 8480,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 16935,
+          "added_copy_bytes": 57242
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 17433,
+          "added_copy_bytes": 121800
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 16935,
+          "added_copy_bytes": 57242
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 16935,
+          "added_copy_bytes": 57242
+        }
+      }
+    },
+    {
+      "case": "case_064",
+      "cores": 4,
+      "winner": "b2a_w8",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 16072,
+      "winner_added_bytes": 121864,
+      "single_makespan": 19116,
+      "single_added_bytes": 0,
+      "b0_makespan": 20548,
+      "b0_added_bytes": 120776,
+      "improvement_vs_single": 0.15923833437957732,
+      "improvement_vs_b0": 0.2178314191162157,
+      "total_wall_time": 0.6858534000002692,
+      "evaluation_time": 0.5425725000004604,
+      "max_memory_bytes": 5152,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w8",
+          "makespan": 16072,
+          "added_copy_bytes": 121864
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 16072,
+          "added_copy_bytes": 121864
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 16758,
+          "added_copy_bytes": 57306
+        },
+        "b2a_w16": {
+          "winner": "b2a_w8",
+          "makespan": 16072,
+          "added_copy_bytes": 121864
+        }
+      }
+    },
+    {
+      "case": "case_064",
+      "cores": 5,
+      "winner": "b2a_w8",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 16081,
+      "winner_added_bytes": 121928,
+      "single_makespan": 19116,
+      "single_added_bytes": 0,
+      "b0_makespan": 20892,
+      "b0_added_bytes": 145200,
+      "improvement_vs_single": 0.15876752458673363,
+      "improvement_vs_b0": 0.23027953283553512,
+      "total_wall_time": 0.7029169000002184,
+      "evaluation_time": 0.5600684999994883,
+      "max_memory_bytes": 5152,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w8",
+          "makespan": 16081,
+          "added_copy_bytes": 121928
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 16081,
+          "added_copy_bytes": 121928
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 16767,
+          "added_copy_bytes": 57370
+        },
+        "b2a_w16": {
+          "winner": "b2a_w8",
+          "makespan": 16081,
+          "added_copy_bytes": 121928
+        }
+      }
+    },
+    {
+      "case": "case_074",
+      "cores": 2,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 1056450,
+      "winner_added_bytes": 18104624,
+      "single_makespan": 1682239,
+      "single_added_bytes": 6070280,
+      "b0_makespan": 1635041,
+      "b0_added_bytes": 9474180,
+      "improvement_vs_single": 0.3719976769056002,
+      "improvement_vs_b0": 0.3538694136721954,
+      "total_wall_time": 8.11265000000003,
+      "evaluation_time": 6.8223752000003515,
+      "max_memory_bytes": 524288,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 1056450,
+          "added_copy_bytes": 18104624
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 1111398,
+          "added_copy_bytes": 21706376
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 1056450,
+          "added_copy_bytes": 18104624
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 1056450,
+          "added_copy_bytes": 18104624
+        }
+      }
+    },
+    {
+      "case": "case_074",
+      "cores": 3,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 693574,
+      "winner_added_bytes": 14942512,
+      "single_makespan": 1682239,
+      "single_added_bytes": 6070280,
+      "b0_makespan": 1640725,
+      "b0_added_bytes": 10657968,
+      "improvement_vs_single": 0.5877078108401957,
+      "improvement_vs_b0": 0.5772758993737525,
+      "total_wall_time": 7.378498000000036,
+      "evaluation_time": 6.1014593000004425,
+      "max_memory_bytes": 315392,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 693574,
+          "added_copy_bytes": 14942512
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 751703,
+          "added_copy_bytes": 18544264
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 693574,
+          "added_copy_bytes": 14942512
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 693574,
+          "added_copy_bytes": 14942512
+        }
+      }
+    },
+    {
+      "case": "case_074",
+      "cores": 4,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 568390,
+      "winner_added_bytes": 14958896,
+      "single_makespan": 1682239,
+      "single_added_bytes": 6070280,
+      "b0_makespan": 1250291,
+      "b0_added_bytes": 11309194,
+      "improvement_vs_single": 0.6621229207027063,
+      "improvement_vs_b0": 0.5453938323158368,
+      "total_wall_time": 7.866215099999863,
+      "evaluation_time": 6.513962299999548,
+      "max_memory_bytes": 438272,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 568390,
+          "added_copy_bytes": 14958896
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 634448,
+          "added_copy_bytes": 18560648
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 568390,
+          "added_copy_bytes": 14958896
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 568390,
+          "added_copy_bytes": 14958896
+        }
+      }
+    },
+    {
+      "case": "case_074",
+      "cores": 5,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 491359,
+      "winner_added_bytes": 14975280,
+      "single_makespan": 1682239,
+      "single_added_bytes": 6070280,
+      "b0_makespan": 1584553,
+      "b0_added_bytes": 12005508,
+      "improvement_vs_single": 0.7079136793285615,
+      "improvement_vs_b0": 0.6899068696345279,
+      "total_wall_time": 7.6771748999999545,
+      "evaluation_time": 6.275918699999693,
+      "max_memory_bytes": 253952,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 491359,
+          "added_copy_bytes": 14975280
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 533608,
+          "added_copy_bytes": 18577032
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 491359,
+          "added_copy_bytes": 14975280
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 491359,
+          "added_copy_bytes": 14975280
+        }
+      }
+    },
+    {
+      "case": "case_036",
+      "cores": 2,
+      "winner": "b0",
+      "unique_candidates": 3,
+      "evaluations": 3,
+      "cache_hits": 0,
+      "winner_makespan": 467772,
+      "winner_added_bytes": 8064,
+      "single_makespan": 931510,
+      "single_added_bytes": 0,
+      "b0_makespan": 467772,
+      "b0_added_bytes": 8064,
+      "improvement_vs_single": 0.4978346985002845,
+      "improvement_vs_b0": 0.0,
+      "total_wall_time": 3.1087947000000895,
+      "evaluation_time": 2.475235800000519,
+      "max_memory_bytes": 13440,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 467772,
+          "added_copy_bytes": 8064
+        },
+        "b2a_w4": {
+          "winner": "b0",
+          "makespan": 467772,
+          "added_copy_bytes": 8064
+        },
+        "b2a_w8": {
+          "winner": "b0",
+          "makespan": 467772,
+          "added_copy_bytes": 8064
+        },
+        "b2a_w16": {
+          "winner": "b0",
+          "makespan": 467772,
+          "added_copy_bytes": 8064
+        }
+      }
+    },
+    {
+      "case": "case_036",
+      "cores": 3,
+      "winner": "b1",
+      "unique_candidates": 4,
+      "evaluations": 4,
+      "cache_hits": 0,
+      "winner_makespan": 390499,
+      "winner_added_bytes": 147840,
+      "single_makespan": 931510,
+      "single_added_bytes": 0,
+      "b0_makespan": 391128,
+      "b0_added_bytes": 98688,
+      "improvement_vs_single": 0.5807892561539866,
+      "improvement_vs_b0": 0.001608169192693952,
+      "total_wall_time": 3.731502299999647,
+      "evaluation_time": 3.023204199999782,
+      "max_memory_bytes": 13440,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 391128,
+          "added_copy_bytes": 98688
+        },
+        "b2a_w4": {
+          "winner": "b1",
+          "makespan": 390499,
+          "added_copy_bytes": 147840
+        },
+        "b2a_w8": {
+          "winner": "b1",
+          "makespan": 390499,
+          "added_copy_bytes": 147840
+        },
+        "b2a_w16": {
+          "winner": "b1",
+          "makespan": 390499,
+          "added_copy_bytes": 147840
+        }
+      }
+    },
+    {
+      "case": "case_036",
+      "cores": 4,
+      "winner": "b0",
+      "unique_candidates": 3,
+      "evaluations": 3,
+      "cache_hits": 0,
+      "winner_makespan": 236236,
+      "winner_added_bytes": 17280,
+      "single_makespan": 931510,
+      "single_added_bytes": 0,
+      "b0_makespan": 236236,
+      "b0_added_bytes": 17280,
+      "improvement_vs_single": 0.7463945636654464,
+      "improvement_vs_b0": 0.0,
+      "total_wall_time": 2.9295114000001377,
+      "evaluation_time": 2.235954500000389,
+      "max_memory_bytes": 13440,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 236236,
+          "added_copy_bytes": 17280
+        },
+        "b2a_w4": {
+          "winner": "b0",
+          "makespan": 236236,
+          "added_copy_bytes": 17280
+        },
+        "b2a_w8": {
+          "winner": "b0",
+          "makespan": 236236,
+          "added_copy_bytes": 17280
+        },
+        "b2a_w16": {
+          "winner": "b0",
+          "makespan": 236236,
+          "added_copy_bytes": 17280
+        }
+      }
+    },
+    {
+      "case": "case_036",
+      "cores": 5,
+      "winner": "b0",
+      "unique_candidates": 3,
+      "evaluations": 3,
+      "cache_hits": 0,
+      "winner_makespan": 190308,
+      "winner_added_bytes": 21888,
+      "single_makespan": 931510,
+      "single_added_bytes": 0,
+      "b0_makespan": 190308,
+      "b0_added_bytes": 21888,
+      "improvement_vs_single": 0.7956994557224292,
+      "improvement_vs_b0": 0.0,
+      "total_wall_time": 2.939342399999987,
+      "evaluation_time": 2.206307900000411,
+      "max_memory_bytes": 13440,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b0",
+          "makespan": 190308,
+          "added_copy_bytes": 21888
+        },
+        "b2a_w4": {
+          "winner": "b0",
+          "makespan": 190308,
+          "added_copy_bytes": 21888
+        },
+        "b2a_w8": {
+          "winner": "b0",
+          "makespan": 190308,
+          "added_copy_bytes": 21888
+        },
+        "b2a_w16": {
+          "winner": "b0",
+          "makespan": 190308,
+          "added_copy_bytes": 21888
+        }
+      }
+    },
+    {
+      "case": "case_056",
+      "cores": 2,
+      "winner": "b2a_w16",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 210518,
+      "winner_added_bytes": 2913858,
+      "single_makespan": 277285,
+      "single_added_bytes": 0,
+      "b0_makespan": 278301,
+      "b0_added_bytes": 477448,
+      "improvement_vs_single": 0.24078835854806427,
+      "improvement_vs_b0": 0.2435600303268763,
+      "total_wall_time": 13.184600800000226,
+      "evaluation_time": 12.220847299999605,
+      "max_memory_bytes": 125826,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w16",
+          "makespan": 210518,
+          "added_copy_bytes": 2913858
+        },
+        "b2a_w4": {
+          "winner": "b2a_w16",
+          "makespan": 210518,
+          "added_copy_bytes": 2913858
+        },
+        "b2a_w8": {
+          "winner": "b2a_w16",
+          "makespan": 210518,
+          "added_copy_bytes": 2913858
+        },
+        "b2a_w16": {
+          "winner": "b2a_w8",
+          "makespan": 245563,
+          "added_copy_bytes": 1554564
+        }
+      }
+    },
+    {
+      "case": "case_056",
+      "cores": 3,
+      "winner": "b2a_w16",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 182132,
+      "winner_added_bytes": 3059426,
+      "single_makespan": 277285,
+      "single_added_bytes": 0,
+      "b0_makespan": 280123,
+      "b0_added_bytes": 650860,
+      "improvement_vs_single": 0.34315956506843137,
+      "improvement_vs_b0": 0.3498141887670773,
+      "total_wall_time": 12.89386790000026,
+      "evaluation_time": 11.908680900000036,
+      "max_memory_bytes": 125826,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w16",
+          "makespan": 182132,
+          "added_copy_bytes": 3059426
+        },
+        "b2a_w4": {
+          "winner": "b2a_w16",
+          "makespan": 182132,
+          "added_copy_bytes": 3059426
+        },
+        "b2a_w8": {
+          "winner": "b2a_w16",
+          "makespan": 182132,
+          "added_copy_bytes": 3059426
+        },
+        "b2a_w16": {
+          "winner": "b2a_w8",
+          "makespan": 234744,
+          "added_copy_bytes": 1595540
+        }
+      }
+    },
+    {
+      "case": "case_056",
+      "cores": 4,
+      "winner": "b2a_w16",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 164272,
+      "winner_added_bytes": 3187008,
+      "single_makespan": 277285,
+      "single_added_bytes": 0,
+      "b0_makespan": 279593,
+      "b0_added_bytes": 762860,
+      "improvement_vs_single": 0.4075698288764268,
+      "improvement_vs_b0": 0.4124602547274073,
+      "total_wall_time": 12.973250100000314,
+      "evaluation_time": 11.950376099999175,
+      "max_memory_bytes": 125826,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w16",
+          "makespan": 164272,
+          "added_copy_bytes": 3187008
+        },
+        "b2a_w4": {
+          "winner": "b2a_w16",
+          "makespan": 164272,
+          "added_copy_bytes": 3187008
+        },
+        "b2a_w8": {
+          "winner": "b2a_w16",
+          "makespan": 164272,
+          "added_copy_bytes": 3187008
+        },
+        "b2a_w16": {
+          "winner": "b2a_w8",
+          "makespan": 225520,
+          "added_copy_bytes": 1631396
+        }
+      }
+    },
+    {
+      "case": "case_056",
+      "cores": 5,
+      "winner": "b2a_w16",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 160648,
+      "winner_added_bytes": 3267474,
+      "single_makespan": 277285,
+      "single_added_bytes": 0,
+      "b0_makespan": 282797,
+      "b0_added_bytes": 926772,
+      "improvement_vs_single": 0.4206394143210055,
+      "improvement_vs_b0": 0.43193173902127674,
+      "total_wall_time": 12.99701849999974,
+      "evaluation_time": 11.987890099999731,
+      "max_memory_bytes": 125826,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w16",
+          "makespan": 160648,
+          "added_copy_bytes": 3267474
+        },
+        "b2a_w4": {
+          "winner": "b2a_w16",
+          "makespan": 160648,
+          "added_copy_bytes": 3267474
+        },
+        "b2a_w8": {
+          "winner": "b2a_w16",
+          "makespan": 160648,
+          "added_copy_bytes": 3267474
+        },
+        "b2a_w16": {
+          "winner": "b2a_w8",
+          "makespan": 222194,
+          "added_copy_bytes": 1651884
+        }
+      }
+    },
+    {
+      "case": "case_055",
+      "cores": 2,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 71645,
+      "winner_added_bytes": 1977060,
+      "single_makespan": 118835,
+      "single_added_bytes": 69632,
+      "b0_makespan": 125181,
+      "b0_added_bytes": 434852,
+      "improvement_vs_single": 0.39710522994067404,
+      "improvement_vs_b0": 0.42766873567074876,
+      "total_wall_time": 1.3880608999998003,
+      "evaluation_time": 1.1103901999999835,
+      "max_memory_bytes": 69654,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 71645,
+          "added_copy_bytes": 1977060
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 88892,
+          "added_copy_bytes": 3523196
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 71645,
+          "added_copy_bytes": 1977060
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 71645,
+          "added_copy_bytes": 1977060
+        }
+      }
+    },
+    {
+      "case": "case_055",
+      "cores": 3,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 60780,
+      "winner_added_bytes": 2001636,
+      "single_makespan": 118835,
+      "single_added_bytes": 69632,
+      "b0_makespan": 125450,
+      "b0_added_bytes": 692402,
+      "improvement_vs_single": 0.4885345226574662,
+      "improvement_vs_b0": 0.5155041849342368,
+      "total_wall_time": 1.452100900000005,
+      "evaluation_time": 1.150742799999989,
+      "max_memory_bytes": 46592,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 60780,
+          "added_copy_bytes": 2001636
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 85413,
+          "added_copy_bytes": 3569796
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 60780,
+          "added_copy_bytes": 2001636
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 60780,
+          "added_copy_bytes": 2001636
+        }
+      }
+    },
+    {
+      "case": "case_055",
+      "cores": 4,
+      "winner": "b2a_w4",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 52781,
+      "winner_added_bytes": 2018020,
+      "single_makespan": 118835,
+      "single_added_bytes": 69632,
+      "b0_makespan": 120590,
+      "b0_added_bytes": 851682,
+      "improvement_vs_single": 0.555846341566037,
+      "improvement_vs_b0": 0.5623103076540343,
+      "total_wall_time": 1.491736100000253,
+      "evaluation_time": 1.1799928000004911,
+      "max_memory_bytes": 57356,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 52781,
+          "added_copy_bytes": 2018020
+        },
+        "b2a_w4": {
+          "winner": "b2a_w8",
+          "makespan": 79506,
+          "added_copy_bytes": 3602568
+        },
+        "b2a_w8": {
+          "winner": "b2a_w4",
+          "makespan": 52781,
+          "added_copy_bytes": 2018020
+        },
+        "b2a_w16": {
+          "winner": "b2a_w4",
+          "makespan": 52781,
+          "added_copy_bytes": 2018020
+        }
+      }
+    },
+    {
+      "case": "case_055",
+      "cores": 5,
+      "winner": "b1",
+      "unique_candidates": 6,
+      "evaluations": 6,
+      "cache_hits": 0,
+      "winner_makespan": 46207,
+      "winner_added_bytes": 894358,
+      "single_makespan": 118835,
+      "single_added_bytes": 69632,
+      "b0_makespan": 129836,
+      "b0_added_bytes": 869626,
+      "improvement_vs_single": 0.6111667438044347,
+      "improvement_vs_b0": 0.6441125727841277,
+      "total_wall_time": 1.576745899999878,
+      "evaluation_time": 1.248300100000506,
+      "max_memory_bytes": 40960,
+      "failed_candidates": "",
+      "leave_one_out": {
+        "b1": {
+          "winner": "b2a_w4",
+          "makespan": 46607,
+          "added_copy_bytes": 2034404
+        },
+        "b2a_w4": {
+          "winner": "b1",
+          "makespan": 46207,
+          "added_copy_bytes": 894358
+        },
+        "b2a_w8": {
+          "winner": "b1",
+          "makespan": 46207,
+          "added_copy_bytes": 894358
+        },
+        "b2a_w16": {
+          "winner": "b1",
+          "makespan": 46207,
+          "added_copy_bytes": 894358
+        }
+      }
+    }
+  ],
+  "method_statistics": {
+    "single": {
+      "winner_count": 4,
+      "valid_comparisons": 48,
+      "identical_to_winner_metrics": 4
+    },
+    "b0": {
+      "winner_count": 8,
+      "valid_comparisons": 48,
+      "identical_to_winner_metrics": 8
+    },
+    "b1": {
+      "winner_count": 9,
+      "valid_comparisons": 48,
+      "identical_to_winner_metrics": 14
+    },
+    "b2a_w4": {
+      "winner_count": 15,
+      "valid_comparisons": 48,
+      "identical_to_winner_metrics": 15
+    },
+    "b2a_w8": {
+      "winner_count": 4,
+      "valid_comparisons": 48,
+      "identical_to_winner_metrics": 4
+    },
+    "b2a_w16": {
+      "winner_count": 8,
+      "valid_comparisons": 48,
+      "identical_to_winner_metrics": 8
+    }
+  },
+  "winner_counts": {
+    "b0": 8,
+    "b1": 9,
+    "b2a_w4": 15,
+    "single": 4,
+    "b2a_w16": 8,
+    "b2a_w8": 4
+  },
+  "leave_one_candidate_out": {
+    "b1": {
+      "combinations": 48,
+      "score_changed": 9,
+      "makespan_changed": 9,
+      "added_copy_bytes_changed": 9,
+      "total_makespan_increase": 907546,
+      "total_added_copy_bytes_change": 163826510
+    },
+    "b2a_w4": {
+      "combinations": 48,
+      "score_changed": 15,
+      "makespan_changed": 15,
+      "added_copy_bytes_changed": 15,
+      "total_makespan_increase": 4614906,
+      "total_added_copy_bytes_change": 264716202
+    },
+    "b2a_w8": {
+      "combinations": 48,
+      "score_changed": 4,
+      "makespan_changed": 4,
+      "added_copy_bytes_changed": 4,
+      "total_makespan_increase": 46637,
+      "total_added_copy_bytes_change": -16730508
+    },
+    "b2a_w16": {
+      "combinations": 48,
+      "score_changed": 8,
+      "makespan_changed": 8,
+      "added_copy_bytes_changed": 8,
+      "total_makespan_increase": 427199,
+      "total_added_copy_bytes_change": -8192602
+    }
+  },
+  "aggregate": {
+    "official_evaluations": 224,
+    "cache_hits": 31,
+    "candidate_manager_wall_time": 2958.727040300001,
+    "evaluation_time": 2511.3144013,
+    "experiment_wall_time": 2963.6825169999997,
+    "failed_candidate_count": 0
+  }
+}
