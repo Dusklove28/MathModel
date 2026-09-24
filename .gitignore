@@ -24,3 +24,10 @@ artifacts/problem1_candidates/
 artifacts/problem1_devrun/
 artifacts/problem1_development_summary.json
 artifacts/problem1_development_summary.csv
+artifacts/problem1_development_analysis/
+artifacts/problem1_full/
+artifacts/problem1_full_trial/
+
+# Transfer archives are local inputs, not source artifacts.
+problem1_candidate_cache.zip
+problem1_data.zip
