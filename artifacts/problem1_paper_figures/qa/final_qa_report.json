@@ -1,0 +1,212 @@
+{
+  "status": "PASS",
+  "requested_format_audit": {
+    "command": [
+      "D:\\Anaconda\\python.exe",
+      "C:\\Users\\17747\\.codex\\skills\\math-modeling\\tools\\figure\\scripts\\check_figure.py",
+      "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig1_problem1_average_speedup.svg",
+      "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig1_problem1_average_speedup.png",
+      "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig2_problem1_case_speedup_distribution.svg",
+      "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig2_problem1_case_speedup_distribution.png",
+      "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig3_problem1_inherited_fallback_improvements.svg",
+      "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig3_problem1_inherited_fallback_improvements.png",
+      "--min-dpi",
+      "300",
+      "--strict"
+    ],
+    "exit_code": 0,
+    "pass": true
+  },
+  "static_source_preflight": {
+    "plot_fig1_average_speedup.py": {
+      "exit_code": 1,
+      "has_fail": false,
+      "warnings": [
+        "[WARN] FINAL-WIDTH: Detected width 160.0 mm is not near the common 89/183 mm defaults; verify the target journal"
+      ],
+      "accepted_override": true,
+      "override_reason": "通用期刊检查器仅接受约 89/183 mm；题面 DOCX 的页面可用宽度为 6.532 in，实际图宽 6.3/6.5 in 按该版芯设计。"
+    },
+    "plot_fig2_speedup_distribution.py": {
+      "exit_code": 1,
+      "has_fail": false,
+      "warnings": [
+        "[WARN] FINAL-WIDTH: Detected width 160.0 mm is not near the common 89/183 mm defaults; verify the target journal"
+      ],
+      "accepted_override": true,
+      "override_reason": "通用期刊检查器仅接受约 89/183 mm；题面 DOCX 的页面可用宽度为 6.532 in，实际图宽 6.3/6.5 in 按该版芯设计。"
+    },
+    "plot_fig3_fallback_improvements.py": {
+      "exit_code": 1,
+      "has_fail": false,
+      "warnings": [
+        "[WARN] FINAL-WIDTH: Detected width 165.1 mm is not near the common 89/183 mm defaults; verify the target journal"
+      ],
+      "accepted_override": true,
+      "override_reason": "通用期刊检查器仅接受约 89/183 mm；题面 DOCX 的页面可用宽度为 6.532 in，实际图宽 6.3/6.5 in 按该版芯设计。"
+    }
+  },
+  "raster": {
+    "fig1_problem1_average_speedup.png": {
+      "pixels": [
+        3780,
+        2280
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "pass": true
+    },
+    "fig1_problem1_average_speedup.tiff": {
+      "pixels": [
+        3780,
+        2280
+      ],
+      "dpi": [
+        600.0,
+        600.0
+      ],
+      "pass": true
+    },
+    "fig2_problem1_case_speedup_distribution.png": {
+      "pixels": [
+        3780,
+        2460
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "pass": true
+    },
+    "fig2_problem1_case_speedup_distribution.tiff": {
+      "pixels": [
+        3780,
+        2460
+      ],
+      "dpi": [
+        600.0,
+        600.0
+      ],
+      "pass": true
+    },
+    "fig3_problem1_inherited_fallback_improvements.png": {
+      "pixels": [
+        3900,
+        5160
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "pass": true
+    },
+    "fig3_problem1_inherited_fallback_improvements.tiff": {
+      "pixels": [
+        3900,
+        5160
+      ],
+      "dpi": [
+        600.0,
+        600.0
+      ],
+      "pass": true
+    }
+  },
+  "svg": {
+    "fig1_problem1_average_speedup.svg": {
+      "editable_text": true,
+      "no_embedded_base64_image": true
+    },
+    "fig2_problem1_case_speedup_distribution.svg": {
+      "editable_text": true,
+      "no_embedded_base64_image": true
+    },
+    "fig3_problem1_inherited_fallback_improvements.svg": {
+      "editable_text": true,
+      "no_embedded_base64_image": true
+    }
+  },
+  "pdf_font_embedding": {
+    "fig1_problem1_average_speedup.pdf": {
+      "fonts": {
+        "/DABZEG+SimHei": true,
+        "/GCWXDV+DejaVuSans-Oblique": true
+      },
+      "all_embedded": true,
+      "note": "Skill checker does not descend into Type0/CID descendant descriptors; pypdf confirms /FontFile2 embedding."
+    },
+    "fig2_problem1_case_speedup_distribution.pdf": {
+      "fonts": {
+        "/DABZEG+SimHei": true,
+        "/GCWXDV+DejaVuSans-Oblique": true,
+        "/BMQQDV+DejaVuSans": true
+      },
+      "all_embedded": true,
+      "note": "Skill checker does not descend into Type0/CID descendant descriptors; pypdf confirms /FontFile2 embedding."
+    },
+    "fig3_problem1_inherited_fallback_improvements.pdf": {
+      "fonts": {
+        "/DABZEG+SimHei": true
+      },
+      "all_embedded": true,
+      "note": "Skill checker does not descend into Type0/CID descendant descriptors; pypdf confirms /FontFile2 embedding."
+    }
+  },
+  "source_hash_unchanged": {
+    "problem1_inherited_fallback_aggregate.csv": {
+      "expected": "cea25eb5c5e70f8bf9da98db34679d8c31d1b404a780807755f928fad5d86a57",
+      "actual": "cea25eb5c5e70f8bf9da98db34679d8c31d1b404a780807755f928fad5d86a57",
+      "pass": true
+    },
+    "problem1_inherited_fallback_results.csv": {
+      "expected": "c3c43c117fa2cbb3c05ba0e67a800e8e8a05087726ccc854bcf7b741501e734b",
+      "actual": "c3c43c117fa2cbb3c05ba0e67a800e8e8a05087726ccc854bcf7b741501e734b",
+      "pass": true
+    },
+    "problem1_inherited_fallback_appendix.csv": {
+      "expected": "29b41e4d9c9dea577b2e8c549cf0ef190138e2fe96d31b1610e883d09344a984",
+      "actual": "29b41e4d9c9dea577b2e8c549cf0ef190138e2fe96d31b1610e883d09344a984",
+      "pass": true
+    },
+    "problem1_full_aggregate.csv": {
+      "expected": "ed4278ff18a09e9734de5d3070b2f8e339deb77017f02b57c15bbd8b79aba612",
+      "actual": "ed4278ff18a09e9734de5d3070b2f8e339deb77017f02b57c15bbd8b79aba612",
+      "pass": true
+    },
+    "problem1_full_results.csv": {
+      "expected": "d2081e3ca6e11bad46e5dad9a840ac81e620c8b0128689c3bd29cff2d55a555f",
+      "actual": "d2081e3ca6e11bad46e5dad9a840ac81e620c8b0128689c3bd29cff2d55a555f",
+      "pass": true
+    }
+  },
+  "visual_review": {
+    "fig1": "PASS：文字完整，图例不遮挡，实/虚线与圆/方标记在灰度下可区分。",
+    "fig2": "PASS：400 个原始点、箱体、中位数、均值与 S=1 基线清晰，灰度可读。",
+    "fig3": "PASS：返工后无边界裁点、标题或图例重叠；36 行标签完整，双面板对齐，灰度下圆/方/三角可区分。"
+  },
+  "official_docx_layout": {
+    "page_width_in": 8.5,
+    "left_margin_in": 0.9840277777777777,
+    "right_margin_in": 0.9840277777777777,
+    "content_width_in": 6.531944444444444
+  },
+  "output_sha256": {
+    "fig1_problem1_average_speedup.pdf": "861c8eebf4aca1b73bc070318f4a4f549d836b6fdd17cf3af677d676ce8e0d3a",
+    "fig1_problem1_average_speedup.png": "0104fa1aaeba73d5c232c7fdcf624daff21aa0e9f215c213f06ca3b5430af8a5",
+    "fig1_problem1_average_speedup.svg": "b0a80cdc9b949b63ae6b42b46e3ddb48cfe0389e7ffe9a9895886ce9e3e69348",
+    "fig1_problem1_average_speedup.tiff": "77499482722937c61f1c474cc5d478495322f3c99d755ca86ef8ca4a89711bdc",
+    "fig1_problem1_average_speedup_grayscale.png": "f4be4cf359da58ea59f54d151e36b0ea4190955987751065ae01473603dd67ba",
+    "fig2_problem1_case_speedup_distribution.pdf": "c67c6377fa1541749171d90ebc8f2a8f934490edc3ae54a6536ee84ad1aebe6c",
+    "fig2_problem1_case_speedup_distribution.png": "6e926a817d1efe46c738e437a2ce02c830e61d0b5f98d1437c4d74a431fcc168",
+    "fig2_problem1_case_speedup_distribution.svg": "2d04de45ad0dbfd7a255b2823e079af32d5e3a3a4bad3aff01e41ff8c39c10ee",
+    "fig2_problem1_case_speedup_distribution.tiff": "d63d44ddd918563b629de73c59fabe5e845dba4be80d3c2c7a3644c198b278fa",
+    "fig2_problem1_case_speedup_distribution_grayscale.png": "8b46ec45e8fbd1248b133a08c6d29816716cf7cb36384bf778eefc90fd1afea8",
+    "fig3_problem1_inherited_fallback_improvements.pdf": "5ef87e4e07c7585132cb675b41e3a59ee2bdaebfaae386989f6807a5c0ed9a62",
+    "fig3_problem1_inherited_fallback_improvements.png": "2e82cd2c4b738703159c67316c8757325a4023c006c29a677324c96a5f24045f",
+    "fig3_problem1_inherited_fallback_improvements.svg": "380f3233dde6179688ed46e98000e4177f1a4ab50b1104db6fd3a5f795778142",
+    "fig3_problem1_inherited_fallback_improvements.tiff": "76be257b1e95c4bc6f5f26ac428dd3ce04cafefef264c00c84b71f3a78681234",
+    "fig3_problem1_inherited_fallback_improvements_grayscale.png": "b38b3b40a2320391c9a305607a1ca843a544f23f7d3ce64ddfedb8352f0b5b9f"
+  }
+}

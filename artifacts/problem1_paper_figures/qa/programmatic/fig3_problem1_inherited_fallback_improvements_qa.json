@@ -1,0 +1,19 @@
+{
+  "stem": "fig3_problem1_inherited_fallback_improvements",
+  "layout_strategy": "constrained",
+  "programmatic_verdict": "PASS",
+  "issues": [],
+  "preview": "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\qa\\previews\\fig3_problem1_inherited_fallback_improvements_preview.png",
+  "size_inches": [
+    6.5,
+    8.6
+  ],
+  "dpi": 600,
+  "outputs": [
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig3_problem1_inherited_fallback_improvements.pdf",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig3_problem1_inherited_fallback_improvements.svg",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig3_problem1_inherited_fallback_improvements.png",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig3_problem1_inherited_fallback_improvements.tiff",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig3_problem1_inherited_fallback_improvements_grayscale.png"
+  ]
+}

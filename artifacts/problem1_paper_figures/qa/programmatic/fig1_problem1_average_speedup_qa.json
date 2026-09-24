@@ -1,0 +1,19 @@
+{
+  "stem": "fig1_problem1_average_speedup",
+  "layout_strategy": "constrained",
+  "programmatic_verdict": "PASS",
+  "issues": [],
+  "preview": "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\qa\\previews\\fig1_problem1_average_speedup_preview.png",
+  "size_inches": [
+    6.3,
+    3.8
+  ],
+  "dpi": 600,
+  "outputs": [
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig1_problem1_average_speedup.pdf",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig1_problem1_average_speedup.svg",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig1_problem1_average_speedup.png",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig1_problem1_average_speedup.tiff",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_paper_figures\\figures\\fig1_problem1_average_speedup_grayscale.png"
+  ]
+}

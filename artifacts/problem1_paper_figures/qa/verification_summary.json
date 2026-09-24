@@ -1,0 +1,45 @@
+{
+  "complete": true,
+  "case_count": 100,
+  "core_counts": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "row_count": 500,
+  "rows_per_core": {
+    "1": 100,
+    "2": 100,
+    "3": 100,
+    "4": 100,
+    "5": 100
+  },
+  "all_values_officially_measured": true,
+  "max_speedup_formula_abs_error": 8.881784197001252e-16,
+  "max_aggregate_mean_abs_error": 8.881784197001252e-16,
+  "arithmetic_mean_speedup": {
+    "1": 1.0,
+    "2": 1.6333714824904053,
+    "3": 2.105011719362696,
+    "4": 2.5697606855882897,
+    "5": 2.8905370454749484
+  },
+  "improved_group_count": 36,
+  "improved_case_count": 27,
+  "improved_groups_by_core": {
+    "3": 3,
+    "4": 9,
+    "5": 24
+  },
+  "improved_groups_with_lower_added_copy_bytes": 33,
+  "improved_groups_with_equal_added_copy_bytes": 3,
+  "source_sha256": {
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_inherited_fallback_c4140\\problem1_inherited_fallback_aggregate.csv": "cea25eb5c5e70f8bf9da98db34679d8c31d1b404a780807755f928fad5d86a57",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_inherited_fallback_c4140\\problem1_inherited_fallback_results.csv": "c3c43c117fa2cbb3c05ba0e67a800e8e8a05087726ccc854bcf7b741501e734b",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_inherited_fallback_c4140\\problem1_inherited_fallback_appendix.csv": "29b41e4d9c9dea577b2e8c549cf0ef190138e2fe96d31b1610e883d09344a984",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_full_c4140\\problem1_full_aggregate.csv": "ed4278ff18a09e9734de5d3070b2f8e339deb77017f02b57c15bbd8b79aba612",
+    "F:\\code\\MathModel\\code\\artifacts\\problem1_full_c4140\\problem1_full_results.csv": "d2081e3ca6e11bad46e5dad9a840ac81e620c8b0128689c3bd29cff2d55a555f"
+  }
+}
