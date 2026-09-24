@@ -751,6 +751,7 @@ def _run_group(task: Mapping[str, Any]) -> Dict[str, Any]:
             alias = dict(canonical)
             projected_score = _winner_score(source_group)
             measured_score = _candidate_score(canonical)
+            source_plan_hash = canonical_plan_signature(source_plan)
             alias_plan_path = _candidate_plan_path(
                 output_root, case, target_cores, source_cores)
             _write_json(alias_plan_path, inherited)
@@ -769,8 +770,14 @@ def _run_group(task: Mapping[str, Any]) -> Dict[str, Any]:
                 "equivalent_inherited_plan": True,
                 "source_plan_path": str(source_plan_path),
                 "source_plan_file_sha256": sha256_file(source_plan_path),
+                "source_plan_sha256": source_plan_hash,
+                "source_plan_canonical_sha256": source_plan_hash,
                 "inherited_plan_path": str(alias_plan_path.resolve()),
                 "inherited_plan_file_sha256": sha256_file(alias_plan_path),
+                "validation": {
+                    **dict(canonical.get("validation", {})),
+                    "appended_empty_core_count": target_cores - source_cores,
+                },
             })
             candidate_records.append(alias)
             _write_json(
