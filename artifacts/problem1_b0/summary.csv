@@ -1,6 +1,0 @@
-case,cores,eligible_ops,subgraphs,makespan,added_copy_bytes,solver_time_seconds,evaluator_status
-case_001,2,600,8,118572,8064,0.081866,success
-case_001,4,600,16,61884,115584,0.081274,success
-case_001,5,600,20,50628,21888,0.087767,success
-case_050,4,4555,16,153107,680658,0.567090,success
-case_100,4,1394,16,139997,1559072,0.129630,success
