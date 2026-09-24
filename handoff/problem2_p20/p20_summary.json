@@ -1,0 +1,80 @@
+{
+  "expected_evaluations": 54,
+  "record_count": 54,
+  "success_count": 54,
+  "failure_count": 0,
+  "winners": [
+    {
+      "case": "case_001",
+      "cores": 2,
+      "method": "b0",
+      "makespan_cycles": 116868,
+      "added_copy_bytes": 1152,
+      "spill_added_copy_bytes": 0
+    },
+    {
+      "case": "case_001",
+      "cores": 4,
+      "method": "b0",
+      "makespan_cycles": 58984,
+      "added_copy_bytes": 3456,
+      "spill_added_copy_bytes": 0
+    },
+    {
+      "case": "case_001",
+      "cores": 5,
+      "method": "b0",
+      "makespan_cycles": 47502,
+      "added_copy_bytes": 4608,
+      "spill_added_copy_bytes": 0
+    },
+    {
+      "case": "case_050",
+      "cores": 2,
+      "method": "b2a_w16",
+      "makespan_cycles": 81891,
+      "added_copy_bytes": 1176512,
+      "spill_added_copy_bytes": 0
+    },
+    {
+      "case": "case_050",
+      "cores": 4,
+      "method": "b2a_w16",
+      "makespan_cycles": 46748,
+      "added_copy_bytes": 1747432,
+      "spill_added_copy_bytes": 0
+    },
+    {
+      "case": "case_050",
+      "cores": 5,
+      "method": "b2a_w16",
+      "makespan_cycles": 42140,
+      "added_copy_bytes": 1696052,
+      "spill_added_copy_bytes": 0
+    },
+    {
+      "case": "case_100",
+      "cores": 2,
+      "method": "b2a_w4",
+      "makespan_cycles": 80853,
+      "added_copy_bytes": 960832,
+      "spill_added_copy_bytes": 368672
+    },
+    {
+      "case": "case_100",
+      "cores": 4,
+      "method": "b2a_w4",
+      "makespan_cycles": 67632,
+      "added_copy_bytes": 1615378,
+      "spill_added_copy_bytes": 229376
+    },
+    {
+      "case": "case_100",
+      "cores": 5,
+      "method": "b2a_w4",
+      "makespan_cycles": 68212,
+      "added_copy_bytes": 1749046,
+      "spill_added_copy_bytes": 229376
+    }
+  ]
+}

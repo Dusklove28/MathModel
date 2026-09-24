@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "kind": "candidate_group",
+  "status": "success",
+  "run_disposition": "adopted_locked_development_manifest",
+  "case": "case_001",
+  "cores": 2,
+  "graph_sha256": "a634cd1151c0e918dd3a143eba421b88907f7f0334bfe6a5ca0412342307f09f",
+  "fingerprint": {
+    "solver_sha256": "217f5599ed0b2dc4f7f932c16f3295a57ffb4dab5ca37eb334f7ceab11ce0bdd",
+    "candidate_manager_sha256": "233502399f3416d745a15dd1190452caa86aa676d3878f38d7a60bca88ef5028",
+    "config_sha256": "dcd10de54b23f8366428fb24e828812b1da9549e6eae4a3c3f38604fe5ae77b9",
+    "evaluator_sha256": "39aa209fcb84266efd57b70e532a1b5c4f6545ef689bb56145f74dcf175c2890",
+    "evaluator_file_sha256": {
+      "contest_io.py": "d5936908e4c261c7003b78e783f30bd7d65cb38d6b53a269ea67f0103cac848e",
+      "evaluation_validation.py": "103206b8c5c25e37de50cc3193de3989d7c1e01d4a11cc5f509dedd8f9be9a64",
+      "multicore_cut_evaluate_problem_1.py": "2095f188a6c24ce3899f156bef21d50dcd87cbd9368488046b1e77e2bf91af3f",
+      "schedule_step1.py": "d8fe721ff3dbe036e34a20c00cce6430960860000a49eb467e63465f76b84034",
+      "schedule_step2.py": "2836baac176f4e0bdd9eec59b8d9ce254e209e5f7a251e23837ab684312fa0c3",
+      "schedule_step3.py": "50053db0436f1d166dd75436693ba3af49b5c339576beb6e7299477f6b69fc7a",
+      "stub_multicore_cut_and_schedule.py": "0a3a3b79b5173b466fc05fc8d33b72d11d90b4df78995435853d91c632a35892"
+    },
+    "candidate_priority": [
+      "single",
+      "b0",
+      "b1",
+      "b2a_w4",
+      "b2a_w8",
+      "b2a_w16"
+    ],
+    "git_commit": null
+  },
+  "winner": {
+    "name": "b0",
+    "makespan": 118572,
+    "added_copy_bytes": 8064,
+    "canonical_signature": "2c6d2cfcc0d854f93bbb29bc82be0feeedd1df6ff4e8bf9d2742cec0dbdbabc6"
+  },
+  "generated_candidates": 6,
+  "unique_plans": 3,
+  "official_evaluations": 3,
+  "cache_hits": 0,
+  "failed_candidates": [],
+  "candidates": [
+    {
+      "name": "single",
+      "method": "SINGLE",
+      "parameters": {},
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "55e519a0ea03796ebc759a35190d9ce68fd5bce7794747302aec568438a9ef6c",
+      "canonical_candidate": "single",
+      "equivalent_methods": [
+        "single"
+      ],
+      "deduplicated": false,
+      "generation_time": 1.600000018697756e-05,
+      "validation_time": 0.004144300000007206,
+      "evaluation_time": 0.10833160000015596,
+      "cache_lookup_time": 8.32000000627886e-05,
+      "cache_hit": false,
+      "evaluation_key": "c971b48775cc868399fc562ce4d925937c0b8518b6fa1013a7e044a5cd3306a6",
+      "makespan": 233110,
+      "added_copy_bytes": 0,
+      "max_memory_bytes": 13440,
+      "full_result_path": "results\\c971b48775cc868399fc562ce4d925937c0b8518b6fa1013a7e044a5cd3306a6.json"
+    },
+    {
+      "name": "b0",
+      "method": "B0",
+      "parameters": {},
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "2c6d2cfcc0d854f93bbb29bc82be0feeedd1df6ff4e8bf9d2742cec0dbdbabc6",
+      "canonical_candidate": "b0",
+      "equivalent_methods": [
+        "b0",
+        "b1"
+      ],
+      "deduplicated": false,
+      "generation_time": 0.0002297000000908156,
+      "validation_time": 0.004176400000005742,
+      "evaluation_time": 0.059355500000037864,
+      "cache_lookup_time": 5.490000012287055e-05,
+      "cache_hit": false,
+      "evaluation_key": "a4884bf51ff71d21cac431b952a655af5e74ac85aee85fbaa610e8cfce1ae32c",
+      "makespan": 118572,
+      "added_copy_bytes": 8064,
+      "max_memory_bytes": 13440,
+      "full_result_path": "results\\a4884bf51ff71d21cac431b952a655af5e74ac85aee85fbaa610e8cfce1ae32c.json"
+    },
+    {
+      "name": "b1",
+      "method": "B1",
+      "parameters": {},
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "2c6d2cfcc0d854f93bbb29bc82be0feeedd1df6ff4e8bf9d2742cec0dbdbabc6",
+      "canonical_candidate": "b0",
+      "equivalent_methods": [
+        "b0",
+        "b1"
+      ],
+      "deduplicated": true,
+      "generation_time": 0.014449000000013257,
+      "validation_time": 0.004844299999831492,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0,
+      "cache_hit": false,
+      "evaluation_key": "a4884bf51ff71d21cac431b952a655af5e74ac85aee85fbaa610e8cfce1ae32c",
+      "makespan": 118572,
+      "added_copy_bytes": 8064,
+      "max_memory_bytes": 13440,
+      "full_result_path": "results\\a4884bf51ff71d21cac431b952a655af5e74ac85aee85fbaa610e8cfce1ae32c.json"
+    },
+    {
+      "name": "b2a_w4",
+      "method": "B2A",
+      "parameters": {
+        "windows": 4
+      },
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "0f4c48f7c4a910570285aa657d1b805562dcae9ef27a6e51b125e6a49d4ad914",
+      "canonical_candidate": "b2a_w4",
+      "equivalent_methods": [
+        "b2a_w4",
+        "b2a_w8",
+        "b2a_w16"
+      ],
+      "deduplicated": false,
+      "generation_time": 0.004116699999940465,
+      "validation_time": 0.004008699999985765,
+      "evaluation_time": 0.1310172999999395,
+      "cache_lookup_time": 5.859999987478659e-05,
+      "cache_hit": false,
+      "evaluation_key": "d90f905efca5cd9f9664c39e3682ed211b2bb329ed57da3ba4ac749774fbe0b1",
+      "makespan": 186684,
+      "added_copy_bytes": 4099456,
+      "max_memory_bytes": 17536,
+      "full_result_path": "results\\d90f905efca5cd9f9664c39e3682ed211b2bb329ed57da3ba4ac749774fbe0b1.json"
+    },
+    {
+      "name": "b2a_w8",
+      "method": "B2A",
+      "parameters": {
+        "windows": 8
+      },
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "0f4c48f7c4a910570285aa657d1b805562dcae9ef27a6e51b125e6a49d4ad914",
+      "canonical_candidate": "b2a_w4",
+      "equivalent_methods": [
+        "b2a_w4",
+        "b2a_w8",
+        "b2a_w16"
+      ],
+      "deduplicated": true,
+      "generation_time": 0.0043863999999302905,
+      "validation_time": 0.0038784999999279535,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0,
+      "cache_hit": false,
+      "evaluation_key": "d90f905efca5cd9f9664c39e3682ed211b2bb329ed57da3ba4ac749774fbe0b1",
+      "makespan": 186684,
+      "added_copy_bytes": 4099456,
+      "max_memory_bytes": 17536,
+      "full_result_path": "results\\d90f905efca5cd9f9664c39e3682ed211b2bb329ed57da3ba4ac749774fbe0b1.json"
+    },
+    {
+      "name": "b2a_w16",
+      "method": "B2A",
+      "parameters": {
+        "windows": 16
+      },
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "0f4c48f7c4a910570285aa657d1b805562dcae9ef27a6e51b125e6a49d4ad914",
+      "canonical_candidate": "b2a_w4",
+      "equivalent_methods": [
+        "b2a_w4",
+        "b2a_w8",
+        "b2a_w16"
+      ],
+      "deduplicated": true,
+      "generation_time": 0.004230500000176107,
+      "validation_time": 0.0039056000000528,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0,
+      "cache_hit": false,
+      "evaluation_key": "d90f905efca5cd9f9664c39e3682ed211b2bb329ed57da3ba4ac749774fbe0b1",
+      "makespan": 186684,
+      "added_copy_bytes": 4099456,
+      "max_memory_bytes": 17536,
+      "full_result_path": "results\\d90f905efca5cd9f9664c39e3682ed211b2bb329ed57da3ba4ac749774fbe0b1.json"
+    }
+  ],
+  "manifest_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidates/case_001/k2/manifest.json",
+  "final_plan_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidates/case_001/k2/final_multicore_res.json",
+  "timing": {
+    "unique_evaluated_plans": 3,
+    "actual_candidate_manager_wall_time_seconds": 0.4379217000000608,
+    "actual_official_evaluation_time_seconds": 0.2987044000001333,
+    "cold_cache_official_evaluation_time_seconds": 0.2987044000001333,
+    "cold_cache_estimated_wall_time_seconds": 0.4379217000000608,
+    "cold_cache_timing_complete": true,
+    "missing_cache_timing_keys": [],
+    "current_invocation_observed_wall_time_seconds": 0.003181375563144684
+  },
+  "peak_worker_rss_bytes": null,
+  "timestamp": "2026-09-24T01:41:39.392696+00:00"
+}

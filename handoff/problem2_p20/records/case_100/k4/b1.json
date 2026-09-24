@@ -1,0 +1,69 @@
+{
+  "case": "case_100",
+  "cores": 4,
+  "method": "b1",
+  "graph_sha256": "bb78167d482a9e1663bb947945def049c2d66392c3897613ce5cb145d3a2eb19",
+  "config_sha256": "e167e70f700e2ea54731aac124444ea6ee7cdbf1decaa4832c9b1da9e6815a61",
+  "source_identity": {
+    "git_head": "0f3cc5f84d2a959780eec65c33846159005d355b",
+    "file_sha256": {
+      "solver_problem1.py": "aee084a6d96367c5639fd7483cad607413e13792b8a1579a064bc27dbe3da1c0",
+      "candidate_manager_problem1.py": "8eb19e4f532bee28f823b556aa517100d523ad10ea62a6e5efb97be8815846aa",
+      "code/contest_io.py": "480babc95897d235ec7b68c8aae16aab2325e9f80c3b1b6a8422a94597d29114",
+      "code/evaluation_validation.py": "cf61f162eb705ff54bb358df23bff5b44b610d32d6ddcb739a427f6dbaf70c68",
+      "code/multicore_cut_evaluate_problem_1.py": "c7eccd466142fef10195fe35b3568149299c007abc7d25cbcca55f070c363824",
+      "code/multicore_cut_evaluate_problem_2.py": "6e3b12dce47e27c3c28caf1df795db8ad434bfcf386dc8eccd7d8f8afb4a66d0",
+      "code/multicore_cut_evaluate_problem_3.py": "acb5edcd312c754b93ae7fe9a947652dc69ae5800bb6acc6e8c4735dfc7f9e4d",
+      "code/schedule_step1.py": "3463f21a4a2fd40514d542ca369af40d5d18976877b7307e69f1ab47ea9afbbc",
+      "code/schedule_step2.py": "7071130b09d9da419ce1c9ad7dd41562c81a4f2cc538a029089bdd1f18b21ba8",
+      "code/schedule_step3.py": "8d3f47bf71ad4873d6323bb8d00190a71ef90d0fdc772d317db8bea186cb0512",
+      "code/singlecore_evaluate.py": "88d36f79171f20c218e47925951d9e839b78e1288b12aaf6107c097dcdf72d05",
+      "code/stub_multicore_cut_and_schedule.py": "747e16353b639b42d1621fd6fcd114b35df1757e125f3ec009ebc8ab125d5c24"
+    },
+    "config_sha256": "e167e70f700e2ea54731aac124444ea6ee7cdbf1decaa4832c9b1da9e6815a61",
+    "runner_sha256": "dfef5a77a24045b9535697e25a93c958d68675ea4dbdaebe2fb7bbd4133555af"
+  },
+  "candidate_source_path": "D:\\Code\\MathModel\\code\\MathModel\\artifacts\\problem1_candidates\\case_100\\k4\\candidates\\b1_multicore_res.json",
+  "candidate_source_sha256": "c1d9196db1b28ce71abde42dd1487210e4adb6e6ca4d61503abdc27aff0f35de",
+  "frozen_group_path": "D:\\Code\\MathModel\\code\\MathModel\\artifacts\\problem1_full_c4140\\groups\\case_100\\k4.json",
+  "frozen_group_sha256": "1e28a0b963ea08e06e8d7f7c59bca8a6bc87c4a316c6e908be220506afdffc8a",
+  "frozen_signature_expected": "e05289135c011954c1fd440199c65a255e19f6215f521ba2e595d2fa13526336",
+  "plan_path": "D:\\Code\\MathModel\\results\\problem2_p20\\plans\\case_100\\k4\\b1_multicore_res.json",
+  "plan_sha256": "c1d9196db1b28ce71abde42dd1487210e4adb6e6ca4d61503abdc27aff0f35de",
+  "plan_provenance": "existing_problem1_candidate",
+  "subgraph_count": 16,
+  "frozen_signature_actual": "e05289135c011954c1fd440199c65a255e19f6215f521ba2e595d2fa13526336",
+  "frozen_signature_match": true,
+  "makespan_cycles": 94337,
+  "original_graph_copy_bytes": 454598,
+  "scheduled_copy_bytes": 896734,
+  "added_copy_bytes": 442136,
+  "partition_added_copy_bytes": 442136,
+  "spill_added_copy_bytes": 0,
+  "spill_share_of_added": 0.0,
+  "spill_share_of_scheduled": 0.0,
+  "cross_task_traffic_bytes": 83212,
+  "cross_core_transfer_count": 16,
+  "used_core_count": 4,
+  "memory_peak_by_core": {
+    "0": {
+      "L1": 243584,
+      "UB": 90118
+    },
+    "1": {
+      "L1": 16384,
+      "UB": 73728
+    },
+    "2": {
+      "L1": 52992,
+      "UB": 36864
+    },
+    "3": {
+      "L1": 52992,
+      "UB": 36864
+    }
+  },
+  "status": "success",
+  "error": null,
+  "runtime_seconds": 0.245381599990651
+}

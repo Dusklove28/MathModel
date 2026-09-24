@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "kind": "candidate_group",
+  "status": "success",
+  "run_disposition": "executed",
+  "case": "case_100",
+  "cores": 4,
+  "graph_sha256": "bb78167d482a9e1663bb947945def049c2d66392c3897613ce5cb145d3a2eb19",
+  "fingerprint": {
+    "solver_sha256": "217f5599ed0b2dc4f7f932c16f3295a57ffb4dab5ca37eb334f7ceab11ce0bdd",
+    "candidate_manager_sha256": "233502399f3416d745a15dd1190452caa86aa676d3878f38d7a60bca88ef5028",
+    "config_sha256": "dcd10de54b23f8366428fb24e828812b1da9549e6eae4a3c3f38604fe5ae77b9",
+    "evaluator_sha256": "39aa209fcb84266efd57b70e532a1b5c4f6545ef689bb56145f74dcf175c2890",
+    "evaluator_file_sha256": {
+      "contest_io.py": "d5936908e4c261c7003b78e783f30bd7d65cb38d6b53a269ea67f0103cac848e",
+      "evaluation_validation.py": "103206b8c5c25e37de50cc3193de3989d7c1e01d4a11cc5f509dedd8f9be9a64",
+      "multicore_cut_evaluate_problem_1.py": "2095f188a6c24ce3899f156bef21d50dcd87cbd9368488046b1e77e2bf91af3f",
+      "schedule_step1.py": "d8fe721ff3dbe036e34a20c00cce6430960860000a49eb467e63465f76b84034",
+      "schedule_step2.py": "2836baac176f4e0bdd9eec59b8d9ce254e209e5f7a251e23837ab684312fa0c3",
+      "schedule_step3.py": "50053db0436f1d166dd75436693ba3af49b5c339576beb6e7299477f6b69fc7a",
+      "stub_multicore_cut_and_schedule.py": "0a3a3b79b5173b466fc05fc8d33b72d11d90b4df78995435853d91c632a35892"
+    },
+    "candidate_priority": [
+      "single",
+      "b0",
+      "b1",
+      "b2a_w4",
+      "b2a_w8",
+      "b2a_w16"
+    ],
+    "git_commit": null
+  },
+  "winner": {
+    "name": "b2a_w4",
+    "makespan": 76975,
+    "added_copy_bytes": 2590064,
+    "canonical_signature": "2a94cb998cb41c79bd208b7eeeaec01c8da78a9d31d8c37f4869ef8a78ef1287"
+  },
+  "generated_candidates": 6,
+  "unique_plans": 6,
+  "official_evaluations": 0,
+  "cache_hits": 6,
+  "failed_candidates": [],
+  "candidates": [
+    {
+      "name": "single",
+      "method": "SINGLE",
+      "parameters": {},
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "f5abcd53e91ece939350720879e9214497c44fd21cd0b1b3ebf4808a56bf5906",
+      "canonical_candidate": "single",
+      "equivalent_methods": [
+        "single"
+      ],
+      "deduplicated": false,
+      "generation_time": 8.969195187091827e-05,
+      "validation_time": 0.01894584484398365,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0004741959273815155,
+      "cache_hit": true,
+      "evaluation_key": "7228deb32fd8ab0a78e8079572f7f7213f740af06c60643760da06df969f5f42",
+      "makespan": 151223,
+      "added_copy_bytes": 0,
+      "max_memory_bytes": 229376,
+      "full_result_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidate_cache/results/7228deb32fd8ab0a78e8079572f7f7213f740af06c60643760da06df969f5f42.json"
+    },
+    {
+      "name": "b0",
+      "method": "B0",
+      "parameters": {},
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "b83d049f4011024f34b67dd3a9e882547a6b1829dc5336917c020e7024ee3e98",
+      "canonical_candidate": "b0",
+      "equivalent_methods": [
+        "b0"
+      ],
+      "deduplicated": false,
+      "generation_time": 0.0017905943095684052,
+      "validation_time": 0.019138410687446594,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.00035261549055576324,
+      "cache_hit": true,
+      "evaluation_key": "ec7ef7eb0a40313b77c5b4b72f9cbf6ae0979d0e371bcabf448809aa82ce8a03",
+      "makespan": 139997,
+      "added_copy_bytes": 1559072,
+      "max_memory_bytes": 73728,
+      "full_result_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidate_cache/results/ec7ef7eb0a40313b77c5b4b72f9cbf6ae0979d0e371bcabf448809aa82ce8a03.json"
+    },
+    {
+      "name": "b1",
+      "method": "B1",
+      "parameters": {},
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "e05289135c011954c1fd440199c65a255e19f6215f521ba2e595d2fa13526336",
+      "canonical_candidate": "b1",
+      "equivalent_methods": [
+        "b1"
+      ],
+      "deduplicated": false,
+      "generation_time": 0.0929130557924509,
+      "validation_time": 0.019644474610686302,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0003505200147628784,
+      "cache_hit": true,
+      "evaluation_key": "ffa56ece29555cd064b7e632e4357b90e0d6be29de86fa6a95ab053fcf0e74aa",
+      "makespan": 97402,
+      "added_copy_bytes": 1491248,
+      "max_memory_bytes": 73728,
+      "full_result_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidate_cache/results/ffa56ece29555cd064b7e632e4357b90e0d6be29de86fa6a95ab053fcf0e74aa.json"
+    },
+    {
+      "name": "b2a_w4",
+      "method": "B2A",
+      "parameters": {
+        "windows": 4
+      },
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "2a94cb998cb41c79bd208b7eeeaec01c8da78a9d31d8c37f4869ef8a78ef1287",
+      "canonical_candidate": "b2a_w4",
+      "equivalent_methods": [
+        "b2a_w4"
+      ],
+      "deduplicated": false,
+      "generation_time": 0.012671319767832756,
+      "validation_time": 0.01978001743555069,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0003335997462272644,
+      "cache_hit": true,
+      "evaluation_key": "e593bbfef36afea201a474bc75e3b81483a3ee1e0560919791b6cb57080e713b",
+      "makespan": 76975,
+      "added_copy_bytes": 2590064,
+      "max_memory_bytes": 229376,
+      "full_result_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidate_cache/results/e593bbfef36afea201a474bc75e3b81483a3ee1e0560919791b6cb57080e713b.json"
+    },
+    {
+      "name": "b2a_w8",
+      "method": "B2A",
+      "parameters": {
+        "windows": 8
+      },
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "6221fdfa15d49168bd5a854803ba5380fad2a33afb8545f3fc4a8ed3fa0380e8",
+      "canonical_candidate": "b2a_w8",
+      "equivalent_methods": [
+        "b2a_w8"
+      ],
+      "deduplicated": false,
+      "generation_time": 0.019554417580366135,
+      "validation_time": 0.020175965502858162,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0003387369215488434,
+      "cache_hit": true,
+      "evaluation_key": "5da68c23c2f198e057c1e0e6d20b00e901d3226ae349c00df89df8b163ec1db8",
+      "makespan": 107893,
+      "added_copy_bytes": 5015328,
+      "max_memory_bytes": 49152,
+      "full_result_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidate_cache/results/5da68c23c2f198e057c1e0e6d20b00e901d3226ae349c00df89df8b163ec1db8.json"
+    },
+    {
+      "name": "b2a_w16",
+      "method": "B2A",
+      "parameters": {
+        "windows": 16
+      },
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "a30995aa86cd1baeba8841c4c51ceb11bdf9d1a30aaf587b5dc8e024f99f8044",
+      "canonical_candidate": "b2a_w16",
+      "equivalent_methods": [
+        "b2a_w16"
+      ],
+      "deduplicated": false,
+      "generation_time": 0.026267418637871742,
+      "validation_time": 0.020827220752835274,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.00031084753572940826,
+      "cache_hit": true,
+      "evaluation_key": "34be6145a11055aa0da9a806330c5418b627aac4734f077177fd5cc13a358080",
+      "makespan": 136591,
+      "added_copy_bytes": 7034720,
+      "max_memory_bytes": 49156,
+      "full_result_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidate_cache/results/34be6145a11055aa0da9a806330c5418b627aac4734f077177fd5cc13a358080.json"
+    }
+  ],
+  "manifest_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidates/case_100/k4/manifest.json",
+  "final_plan_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidates/case_100/k4/final_multicore_res.json",
+  "timing": {
+    "unique_evaluated_plans": 6,
+    "actual_candidate_manager_wall_time_seconds": 0.3419569041579962,
+    "actual_official_evaluation_time_seconds": 0.0,
+    "cold_cache_official_evaluation_time_seconds": 3.8789284999947995,
+    "cold_cache_estimated_wall_time_seconds": 4.220885404152796,
+    "cold_cache_timing_complete": true,
+    "missing_cache_timing_keys": [],
+    "current_invocation_observed_wall_time_seconds": 0.34868614934384823
+  },
+  "peak_worker_rss_bytes": null,
+  "timestamp": "2026-09-24T02:53:21.576296+00:00"
+}

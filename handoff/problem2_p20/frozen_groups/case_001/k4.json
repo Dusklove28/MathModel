@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "kind": "candidate_group",
+  "status": "success",
+  "run_disposition": "adopted_locked_development_manifest",
+  "case": "case_001",
+  "cores": 4,
+  "graph_sha256": "a634cd1151c0e918dd3a143eba421b88907f7f0334bfe6a5ca0412342307f09f",
+  "fingerprint": {
+    "solver_sha256": "217f5599ed0b2dc4f7f932c16f3295a57ffb4dab5ca37eb334f7ceab11ce0bdd",
+    "candidate_manager_sha256": "233502399f3416d745a15dd1190452caa86aa676d3878f38d7a60bca88ef5028",
+    "config_sha256": "dcd10de54b23f8366428fb24e828812b1da9549e6eae4a3c3f38604fe5ae77b9",
+    "evaluator_sha256": "39aa209fcb84266efd57b70e532a1b5c4f6545ef689bb56145f74dcf175c2890",
+    "evaluator_file_sha256": {
+      "contest_io.py": "d5936908e4c261c7003b78e783f30bd7d65cb38d6b53a269ea67f0103cac848e",
+      "evaluation_validation.py": "103206b8c5c25e37de50cc3193de3989d7c1e01d4a11cc5f509dedd8f9be9a64",
+      "multicore_cut_evaluate_problem_1.py": "2095f188a6c24ce3899f156bef21d50dcd87cbd9368488046b1e77e2bf91af3f",
+      "schedule_step1.py": "d8fe721ff3dbe036e34a20c00cce6430960860000a49eb467e63465f76b84034",
+      "schedule_step2.py": "2836baac176f4e0bdd9eec59b8d9ce254e209e5f7a251e23837ab684312fa0c3",
+      "schedule_step3.py": "50053db0436f1d166dd75436693ba3af49b5c339576beb6e7299477f6b69fc7a",
+      "stub_multicore_cut_and_schedule.py": "0a3a3b79b5173b466fc05fc8d33b72d11d90b4df78995435853d91c632a35892"
+    },
+    "candidate_priority": [
+      "single",
+      "b0",
+      "b1",
+      "b2a_w4",
+      "b2a_w8",
+      "b2a_w16"
+    ],
+    "git_commit": null
+  },
+  "winner": {
+    "name": "b0",
+    "makespan": 61884,
+    "added_copy_bytes": 115584,
+    "canonical_signature": "236ac548e7b4373594ca91a6526e6edb04fee5e06a85d7ae09a537445e525fb5"
+  },
+  "generated_candidates": 6,
+  "unique_plans": 4,
+  "official_evaluations": 0,
+  "cache_hits": 4,
+  "failed_candidates": [],
+  "candidates": [
+    {
+      "name": "single",
+      "method": "SINGLE",
+      "parameters": {},
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "b4ebf120b92c79403dd28e6fa528ff1003b676fe97d5a4675aee67718274dcb0",
+      "canonical_candidate": "single",
+      "equivalent_methods": [
+        "single"
+      ],
+      "deduplicated": false,
+      "generation_time": 1.5000000075815478e-05,
+      "validation_time": 0.004108399999950052,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0004269999999451102,
+      "cache_hit": true,
+      "evaluation_key": "88fc5a105823859064f36568d6cd7d65cff9b5e60bf7b7b0f030bee97a91712e",
+      "makespan": 233110,
+      "added_copy_bytes": 0,
+      "max_memory_bytes": 13440,
+      "full_result_path": "D:\\yn\\PSO\\MathModel\\artifacts\\problem1_candidate_cache\\results\\88fc5a105823859064f36568d6cd7d65cff9b5e60bf7b7b0f030bee97a91712e.json"
+    },
+    {
+      "name": "b0",
+      "method": "B0",
+      "parameters": {},
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "236ac548e7b4373594ca91a6526e6edb04fee5e06a85d7ae09a537445e525fb5",
+      "canonical_candidate": "b0",
+      "equivalent_methods": [
+        "b0"
+      ],
+      "deduplicated": false,
+      "generation_time": 0.000299299999824143,
+      "validation_time": 0.00406739999993988,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0002937000001566048,
+      "cache_hit": true,
+      "evaluation_key": "bd5cb2f13f53796edceac12571da13a6c78fba09ceaaf046ca5a59f71fbc456a",
+      "makespan": 61884,
+      "added_copy_bytes": 115584,
+      "max_memory_bytes": 13440,
+      "full_result_path": "D:\\yn\\PSO\\MathModel\\artifacts\\problem1_candidate_cache\\results\\bd5cb2f13f53796edceac12571da13a6c78fba09ceaaf046ca5a59f71fbc456a.json"
+    },
+    {
+      "name": "b1",
+      "method": "B1",
+      "parameters": {},
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "6889220d79c97f0d9119769adc67121d2c7212d0bc3cd5e95210e5c3cc46b36c",
+      "canonical_candidate": "b1",
+      "equivalent_methods": [
+        "b1"
+      ],
+      "deduplicated": false,
+      "generation_time": 0.01541640000004918,
+      "validation_time": 0.0043074000000160595,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.00037219999990156794,
+      "cache_hit": true,
+      "evaluation_key": "386e00fb48e5729dcc4fae010512d6ef00d3f5f70765ca6756234b5148461940",
+      "makespan": 76241,
+      "added_copy_bytes": 201600,
+      "max_memory_bytes": 13440,
+      "full_result_path": "D:\\yn\\PSO\\MathModel\\artifacts\\problem1_candidate_cache\\results\\386e00fb48e5729dcc4fae010512d6ef00d3f5f70765ca6756234b5148461940.json"
+    },
+    {
+      "name": "b2a_w4",
+      "method": "B2A",
+      "parameters": {
+        "windows": 4
+      },
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "c850cfac81460376086f338d5f6e8c65a3d2b00e74d421cc1efbfc2b6ed53686",
+      "canonical_candidate": "b2a_w4",
+      "equivalent_methods": [
+        "b2a_w4",
+        "b2a_w8",
+        "b2a_w16"
+      ],
+      "deduplicated": false,
+      "generation_time": 0.005918999999948937,
+      "validation_time": 0.0038314000000809756,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.00034890000006271293,
+      "cache_hit": true,
+      "evaluation_key": "c0eab102d5c3f88196b25735cb2cee622d1f6ec601092c332f368a0dc0f47b09",
+      "makespan": 129116,
+      "added_copy_bytes": 4104064,
+      "max_memory_bytes": 17536,
+      "full_result_path": "D:\\yn\\PSO\\MathModel\\artifacts\\problem1_candidate_cache\\results\\c0eab102d5c3f88196b25735cb2cee622d1f6ec601092c332f368a0dc0f47b09.json"
+    },
+    {
+      "name": "b2a_w8",
+      "method": "B2A",
+      "parameters": {
+        "windows": 8
+      },
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "c850cfac81460376086f338d5f6e8c65a3d2b00e74d421cc1efbfc2b6ed53686",
+      "canonical_candidate": "b2a_w4",
+      "equivalent_methods": [
+        "b2a_w4",
+        "b2a_w8",
+        "b2a_w16"
+      ],
+      "deduplicated": true,
+      "generation_time": 0.005798800000093252,
+      "validation_time": 0.004091700000117271,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0,
+      "cache_hit": false,
+      "evaluation_key": "c0eab102d5c3f88196b25735cb2cee622d1f6ec601092c332f368a0dc0f47b09",
+      "makespan": 129116,
+      "added_copy_bytes": 4104064,
+      "max_memory_bytes": 17536,
+      "full_result_path": "D:\\yn\\PSO\\MathModel\\artifacts\\problem1_candidate_cache\\results\\c0eab102d5c3f88196b25735cb2cee622d1f6ec601092c332f368a0dc0f47b09.json"
+    },
+    {
+      "name": "b2a_w16",
+      "method": "B2A",
+      "parameters": {
+        "windows": 16
+      },
+      "status": "evaluated",
+      "error": null,
+      "canonical_signature": "c850cfac81460376086f338d5f6e8c65a3d2b00e74d421cc1efbfc2b6ed53686",
+      "canonical_candidate": "b2a_w4",
+      "equivalent_methods": [
+        "b2a_w4",
+        "b2a_w8",
+        "b2a_w16"
+      ],
+      "deduplicated": true,
+      "generation_time": 0.006407399999943664,
+      "validation_time": 0.004036399999904461,
+      "evaluation_time": 0.0,
+      "cache_lookup_time": 0.0,
+      "cache_hit": false,
+      "evaluation_key": "c0eab102d5c3f88196b25735cb2cee622d1f6ec601092c332f368a0dc0f47b09",
+      "makespan": 129116,
+      "added_copy_bytes": 4104064,
+      "max_memory_bytes": 17536,
+      "full_result_path": "D:\\yn\\PSO\\MathModel\\artifacts\\problem1_candidate_cache\\results\\c0eab102d5c3f88196b25735cb2cee622d1f6ec601092c332f368a0dc0f47b09.json"
+    }
+  ],
+  "manifest_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidates/case_001/k4/manifest.json",
+  "final_plan_path": "/home/dell/data/yn/MathModel/code/artifacts/problem1_candidates/case_001/k4/final_multicore_res.json",
+  "timing": {
+    "unique_evaluated_plans": 4,
+    "actual_candidate_manager_wall_time_seconds": 0.09421169999995982,
+    "actual_official_evaluation_time_seconds": 0.0,
+    "cold_cache_official_evaluation_time_seconds": 1.2437480999942636,
+    "cold_cache_estimated_wall_time_seconds": 1.3379597999942234,
+    "cold_cache_timing_complete": true,
+    "missing_cache_timing_keys": [],
+    "current_invocation_observed_wall_time_seconds": 0.0033009108155965805
+  },
+  "peak_worker_rss_bytes": null,
+  "timestamp": "2026-09-24T01:41:39.434600+00:00"
+}
