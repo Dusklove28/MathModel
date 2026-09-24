@@ -4,10 +4,17 @@ import unittest
 
 from candidate_manager_problem1 import CandidateManagerError
 from run_problem1_inherited_fallback import (
+    STORAGE_COMPATIBLE_PREVIOUS_RUNNER_HASHES,
     _aggregate,
+    _compatible_runner_revision,
+    _resumable_group,
     pad_plan_for_target,
     select_final_option,
 )
+
+from pathlib import Path
+from tempfile import TemporaryDirectory
+import json
 
 
 class InheritedFallbackTests(unittest.TestCase):
@@ -89,6 +96,48 @@ class InheritedFallbackTests(unittest.TestCase):
             row["reported_value_kind"],
             "mixed_official_measurements_and_pre_reevaluation_projections",
         )
+
+    def test_storage_only_runner_revision_is_compatible(self):
+        recorded = {
+            "source_frozen_fingerprint": {"solver_sha256": "same"},
+            "fallback_runner_sha256": next(iter(
+                STORAGE_COMPATIBLE_PREVIOUS_RUNNER_HASHES)),
+            "fallback_policy": {"padding": "append_empty_core_schedules"},
+        }
+        current = {
+            **recorded,
+            "fallback_runner_sha256": "new-runner",
+        }
+        self.assertTrue(_compatible_runner_revision(recorded, current))
+        unapproved = {**recorded, "fallback_runner_sha256": "unknown-runner"}
+        self.assertFalse(_compatible_runner_revision(unapproved, current))
+        current["fallback_policy"] = {"padding": "changed"}
+        self.assertFalse(_compatible_runner_revision(recorded, current))
+
+    def test_resumable_group_uses_relocated_deterministic_paths(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            record_path = root / "groups" / "case_001" / "k3.json"
+            run_dir = record_path.with_suffix("")
+            run_dir.mkdir(parents=True)
+            final_plan = run_dir / "final_multicore_res.json"
+            final_result = run_dir / "final_official_evaluation.json"
+            final_plan.write_text("{}", encoding="utf-8")
+            final_result.write_text("{}", encoding="utf-8")
+            identity = {"frozen": "same"}
+            record_path.write_text(json.dumps({
+                "status": "success",
+                "experiment_identity": identity,
+                "final_plan_path": "/old/disk/final_multicore_res.json",
+                "final_official_result_path": "/old/disk/result.json",
+            }), encoding="utf-8")
+            resumed = _resumable_group(record_path, identity)
+            self.assertIsNotNone(resumed)
+            self.assertEqual(resumed["final_plan_path"], str(final_plan.resolve()))
+            self.assertEqual(
+                resumed["final_official_result_path"],
+                str(final_result.resolve()),
+            )
 
 
 if __name__ == "__main__":

@@ -45,6 +45,14 @@ from stub_multicore_cut_and_schedule import derive_multicore_plan
 
 TARGET_CORES = (3, 4, 5)
 SOURCE_CORES = (2, 3, 4)
+DEFAULT_ARTIFACT_ROOT = Path(
+    os.environ.get("PROBLEM1_ARTIFACT_ROOT", "/media/data/yn"))
+# These released runner revisions used the same inheritance/evaluation policy.
+# They differ from the current runner only in portable storage/resume handling.
+STORAGE_COMPATIBLE_PREVIOUS_RUNNER_HASHES = frozenset({
+    "7b07d92bb3040a47de6f208adf482dafc76026aa2009dda591c575fcbe9463e7",
+    "f6c91c18725c8660dd193a20c0e3131bfdaf6d31dfc634ce476ad55d212c4348",
+})
 FROZEN_KEYS = (
     "solver_sha256",
     "candidate_manager_sha256",
@@ -209,6 +217,30 @@ def _experiment_identity(
             "tie_priority": "original_target_before_inherited_lower_core",
         },
     }
+
+
+def _identity_without_runner_hash(identity: Mapping[str, Any]) -> Dict[str, Any]:
+    """Return the scientific identity, excluding orchestration-only revisions."""
+
+    return {
+        key: copy.deepcopy(value)
+        for key, value in identity.items()
+        if key != "fallback_runner_sha256"
+    }
+
+
+def _compatible_runner_revision(
+    recorded: Mapping[str, Any], current: Mapping[str, Any],
+) -> bool:
+    """Allow storage/resume fixes without changing the scheduling experiment."""
+
+    return (
+        recorded.get("fallback_runner_sha256")
+        in STORAGE_COMPATIBLE_PREVIOUS_RUNNER_HASHES
+        and
+        _identity_without_runner_hash(recorded)
+        == _identity_without_runner_hash(current)
+    )
 
 
 def _group_path(root: Path, case: str, cores: int) -> Path:
@@ -456,6 +488,7 @@ def _resumable_candidate(
     graph_hash: str,
     source_plan_hash: str,
     inherited_plan_hash: str,
+    plan_path: Path,
     result_path: Path,
 ) -> Dict[str, Any] | None:
     if not record_path.is_file() or not result_path.is_file():
@@ -478,6 +511,9 @@ def _resumable_candidate(
         return None
     resumed = dict(record)
     resumed["run_disposition"] = "resumed_candidate_record"
+    resumed["inherited_plan_path"] = str(plan_path.resolve())
+    resumed["official_result_path"] = str(result_path.resolve())
+    resumed["inherited_plan_file_sha256"] = sha256_file(plan_path)
     return resumed
 
 
@@ -520,6 +556,7 @@ def _evaluate_inherited_candidate(
         graph_hash=graph_hash,
         source_plan_hash=source_plan_hash,
         inherited_plan_hash=inherited_hash,
+        plan_path=plan_path,
         result_path=result_path,
     )
     if resumed is not None:
@@ -686,13 +723,62 @@ def _resumable_group(
     if (record.get("status") != "success"
             or record.get("experiment_identity") != experiment_identity):
         return None
-    final_plan = Path(str(record.get("final_plan_path", "")))
-    final_result = Path(str(record.get("final_official_result_path", "")))
+    relocated_run_dir = path.with_suffix("")
+    final_plan = relocated_run_dir / "final_multicore_res.json"
+    final_result = relocated_run_dir / "final_official_evaluation.json"
     if not final_plan.is_file() or not final_result.is_file():
         return None
     resumed = dict(record)
     resumed["run_disposition"] = "resumed_group_record"
+    resumed["final_plan_path"] = str(final_plan.resolve())
+    resumed["final_official_result_path"] = str(final_result.resolve())
+    resumed["final_plan_file_sha256"] = sha256_file(final_plan)
+    resumed["final_official_result_sha256"] = sha256_file(final_result)
     return resumed
+
+
+def _relocate_resumed_group_paths(
+    record: Dict[str, Any],
+    *,
+    group_record_path: Path,
+    candidate_root: Path,
+    output_root: Path,
+    case: str,
+    target_cores: int,
+) -> Dict[str, Any]:
+    """Rewrite stale absolute paths after moving an experiment directory."""
+
+    record["old_plan_path"] = str((
+        candidate_root / case / "k{}".format(target_cores)
+        / "final_multicore_res.json").resolve())
+    relocated_candidates: List[Dict[str, Any]] = []
+    for raw_candidate in record.get("fallback_candidates", []):
+        candidate = dict(raw_candidate)
+        source_cores = int(candidate["source_cores"])
+        candidate["source_plan_path"] = str((
+            candidate_root / case / "k{}".format(source_cores)
+            / "final_multicore_res.json").resolve())
+        plan_path = _candidate_plan_path(
+            output_root, case, target_cores, source_cores)
+        candidate["inherited_plan_path"] = str(plan_path.resolve())
+        if plan_path.is_file():
+            candidate["inherited_plan_file_sha256"] = sha256_file(plan_path)
+        result_source_cores = source_cores
+        if candidate.get("run_disposition") == "deduplicated_inherited_plan":
+            canonical = str(candidate.get("canonical_candidate", ""))
+            if canonical.startswith("inherit_k"):
+                result_source_cores = int(canonical[len("inherit_k"):])
+        result_path = _candidate_result_path(
+            output_root, case, target_cores, result_source_cores)
+        candidate["official_result_path"] = str(result_path.resolve())
+        relocated_candidates.append(candidate)
+        candidate_record_path = _candidate_record_path(
+            output_root, case, target_cores, source_cores)
+        if candidate_record_path.is_file():
+            _write_json(candidate_record_path, candidate)
+    record["fallback_candidates"] = relocated_candidates
+    _write_json(group_record_path, record)
+    return record
 
 
 def _run_group(task: Mapping[str, Any]) -> Dict[str, Any]:
@@ -710,7 +796,14 @@ def _run_group(task: Mapping[str, Any]) -> Dict[str, Any]:
         output_root, case, target_cores)
     resumed = _resumable_group(group_record_path, identity)
     if resumed is not None:
-        return resumed
+        return _relocate_resumed_group_paths(
+            resumed,
+            group_record_path=group_record_path,
+            candidate_root=candidate_root,
+            output_root=output_root,
+            case=case,
+            target_cores=target_cores,
+        )
 
     graph_path = data_dir / (case + ".json")
     graph_hash = sha256_file(graph_path)
@@ -1397,10 +1490,18 @@ def run_experiment(args: argparse.Namespace) -> Dict[str, Any]:
     project_dir = Path(__file__).resolve().parent
     data_dir = Path(args.data_dir).resolve()
     config_path = Path(args.config).resolve()
-    full_root = Path(args.full_root).resolve()
-    candidate_root = Path(args.candidate_output_root).resolve()
-    cache_dir = Path(args.cache_dir).resolve()
-    output_root = Path(args.output_root).resolve()
+    artifact_root = Path(args.artifact_root).expanduser().resolve()
+    full_root = Path(
+        args.full_root or artifact_root / "problem1_full_c4140").resolve()
+    candidate_root = Path(
+        args.candidate_output_root
+        or artifact_root / "problem1_candidates").resolve()
+    cache_dir = Path(
+        args.cache_dir
+        or artifact_root / "problem1_candidate_cache").resolve()
+    output_root = Path(
+        args.output_root
+        or artifact_root / "problem1_inherited_fallback_c4140").resolve()
     output_root.mkdir(parents=True, exist_ok=True)
     cases = _selected_cases(data_dir, args.cases)
     targets = tuple(sorted(set(args.targets)))
@@ -1408,13 +1509,40 @@ def run_experiment(args: argparse.Namespace) -> Dict[str, Any]:
         raise ValueError("targets must be selected from 3, 4, 5")
     source_fingerprint, current_fingerprint = _check_frozen_source(
         project_dir, config_path, full_root)
-    identity = _experiment_identity(project_dir, source_fingerprint)
+    computed_identity = _experiment_identity(project_dir, source_fingerprint)
+    identity = computed_identity
+    compatible_runner_update = False
     identity_path = output_root / "frozen_fallback_experiment.json"
     if identity_path.is_file():
-        existing_identity = _read_json(identity_path)
-        if existing_identity.get("experiment_identity") != identity:
-            raise RuntimeError(
-                "fallback experiment fingerprint changed; choose a new --output-root")
+        identity_wrapper = _read_json(identity_path)
+        existing_identity = identity_wrapper.get("experiment_identity")
+        if existing_identity != computed_identity:
+            if (isinstance(existing_identity, Mapping)
+                    and _compatible_runner_revision(
+                        existing_identity, computed_identity)):
+                identity = dict(existing_identity)
+                compatible_runner_update = True
+                revisions = list(identity_wrapper.get(
+                    "compatible_runner_revisions", []))
+                current_revision = {
+                    "runner_sha256": computed_identity["fallback_runner_sha256"],
+                    "git_commit": _git_commit(project_dir),
+                    "artifact_root": str(artifact_root),
+                    "reason": "portable artifact-root and resume-path update",
+                    "recorded_at": _utc_now(),
+                }
+                if current_revision["runner_sha256"] not in {
+                    item.get("runner_sha256") for item in revisions
+                    if isinstance(item, Mapping)
+                }:
+                    revisions.append(current_revision)
+                identity_wrapper["compatible_runner_revisions"] = revisions
+                identity_wrapper["active_artifact_root"] = str(artifact_root)
+                _write_json(identity_path, identity_wrapper)
+            else:
+                raise RuntimeError(
+                    "fallback experiment fingerprint changed; choose a new "
+                    "--output-root")
     else:
         _write_json(identity_path, {
             "schema_version": 1,
@@ -1472,6 +1600,10 @@ def run_experiment(args: argparse.Namespace) -> Dict[str, Any]:
         "targets": list(targets),
         "workers": args.workers,
         "degraded_only": args.degraded_only,
+        "artifact_root": str(artifact_root),
+        "current_fallback_runner_sha256": computed_identity[
+            "fallback_runner_sha256"],
+        "compatible_runner_update": compatible_runner_update,
         "selected_task_count": len(selected),
         "makespan_degraded_task_count": sum(
             row["makespan_degraded"] for row in projections),
@@ -1555,15 +1687,21 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--data-dir", default="data")
     parser.add_argument("--config", default="data/config.txt")
     parser.add_argument(
-        "--full-root", default="artifacts/problem1_full_c4140",
-        help="read-only frozen full-run directory")
+        "--artifact-root", default=str(DEFAULT_ARTIFACT_ROOT),
+        help=(
+            "base directory for experiment artifacts; defaults to "
+            "PROBLEM1_ARTIFACT_ROOT or /media/data/yn"),
+    )
     parser.add_argument(
-        "--candidate-output-root", default="artifacts/problem1_candidates",
-        help="read-only original six-candidate plan directory")
+        "--full-root",
+        help="override read-only frozen full-run directory")
     parser.add_argument(
-        "--cache-dir", default="artifacts/problem1_candidate_cache")
+        "--candidate-output-root",
+        help="override read-only original six-candidate plan directory")
     parser.add_argument(
-        "--output-root", default="artifacts/problem1_inherited_fallback_c4140")
+        "--cache-dir", help="override shared official-evaluation cache")
+    parser.add_argument(
+        "--output-root", help="override inherited-fallback output directory")
     parser.add_argument("--cases", nargs="+", help="optional case subset")
     parser.add_argument(
         "--targets", nargs="+", type=int, default=list(TARGET_CORES))
@@ -1587,7 +1725,8 @@ def main(argv: List[str] | None = None) -> int:
     except (CandidateManagerError, FileNotFoundError, RuntimeError, ValueError) as error:
         print("[INHERITED FALLBACK ERROR] {}".format(error))
         return 2
-    path = Path(args.output_root).resolve() / "problem1_inherited_fallback_summary.json"
+    path = (Path(summary["output_root"])
+            / "problem1_inherited_fallback_summary.json")
     print("summary: {}".format(path))
     print("complete: {}".format(summary["complete"]))
     print("failures: {}".format(summary["failure_count"]))
