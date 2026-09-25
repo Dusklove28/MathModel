@@ -26,6 +26,7 @@ from candidate_manager_problem2_stage2 import (
     run_stage2_mapping_group,
 )
 from solver_problem2 import build_mapping_features
+from problem2_identity import plan_json_sha256
 
 
 def _graph():

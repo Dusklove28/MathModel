@@ -32,11 +32,12 @@ from contest_io import _read_json
 from evaluation_validation import read_evaluation_config, validate_task_order
 from multicore_cut_evaluate_problem_2 import read_scene_b_config
 from solver_problem2 import MAPPING_POLICIES, generate_scene_b_mapping_candidates
+from problem2_identity import plan_json_sha256
 from stub_multicore_cut_and_schedule import derive_multicore_plan
 
 
 SCHEMA_VERSION = 2
-IMPLEMENTATION_VERSION = "problem2-stage2-fixed-partition-mapping-v2"
+IMPLEMENTATION_VERSION = "problem2-stage2-fixed-partition-mapping-v3"
 MAPPING_FAMILIES = ("b0", "b1", "b2a_w4", "b2a_w8", "b2a_w16")
 CANDIDATE_PRIORITY = ("original",) + tuple(
     "map_{}".format(policy) for policy in MAPPING_POLICIES)
@@ -79,6 +80,7 @@ def stage2_implementation_hash() -> Tuple[str, Dict[str, str]]:
     return _hash_named_files({
         "candidate_manager_problem2_stage2.py": Path(__file__).resolve(),
         "candidate_manager_problem2.py": root / "candidate_manager_problem2.py",
+        "problem2_identity.py": root / "problem2_identity.py",
         "solver_problem2.py": root / "solver_problem2.py",
     }, IMPLEMENTATION_VERSION)
 
@@ -368,6 +370,9 @@ def load_verified_baseline_reference(
     except (KeyError, TypeError, ValueError, AttributeError) as error:
         raise Problem2Stage2Error(
             "baseline plan schema is invalid: {}".format(error)) from error
+    # Stage-1 references are frozen with the legacy in-memory integer-key
+    # hashing rule.  Preserve that rule only while validating the historical
+    # artifact; every newly generated Stage-2/3 plan uses plan_json_sha256.
     plan_hash = json_sha256(plan)
     if plan_hash != candidate.get("plan_hash"):
         raise Problem2Stage2Error("baseline plan JSON hash mismatch")
@@ -578,7 +583,7 @@ def run_stage2_mapping_group(
             "error": None,
             "plan_path": str(plan_path),
             "plan_file_sha256": sha256_file(plan_path),
-            "plan_hash": json_sha256(plan),
+            "plan_hash": plan_json_sha256(plan),
             "diagnostics_path": str(diagnostics_path),
             "diagnostics_file_sha256": sha256_file(diagnostics_path),
             "canonical_signature": None,
@@ -612,7 +617,7 @@ def run_stage2_mapping_group(
             record.update(_failed_record(name, "validation", error))
             record["plan_path"] = str(plan_path)
             record["plan_file_sha256"] = sha256_file(plan_path)
-            record["plan_hash"] = json_sha256(plan)
+            record["plan_hash"] = plan_json_sha256(plan)
             record["diagnostics_path"] = str(diagnostics_path)
             record["diagnostics_file_sha256"] = sha256_file(diagnostics_path)
             signature = None
@@ -754,7 +759,7 @@ def run_stage2_mapping_group(
             "name": winner["name"],
             "score": list(_score(winner, candidate_priority)[:2]),
             "metrics": copy.deepcopy(winner["metrics"]),
-            "plan_hash": json_sha256(winner_plan),
+            "plan_hash": plan_json_sha256(winner_plan),
         },
         "baseline": {
             "group_path": str(baseline.group_path),
