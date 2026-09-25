@@ -9,6 +9,7 @@ deduplications) are retained in a resumable, content-addressed record.
 from __future__ import annotations
 
 import copy
+import csv
 import hashlib
 import json
 import time
@@ -34,8 +35,8 @@ from solver_problem2 import MAPPING_POLICIES, generate_scene_b_mapping_candidate
 from stub_multicore_cut_and_schedule import derive_multicore_plan
 
 
-SCHEMA_VERSION = 1
-IMPLEMENTATION_VERSION = "problem2-stage2-fixed-partition-mapping-v1"
+SCHEMA_VERSION = 2
+IMPLEMENTATION_VERSION = "problem2-stage2-fixed-partition-mapping-v2"
 MAPPING_FAMILIES = ("b0", "b1", "b2a_w4", "b2a_w8", "b2a_w16")
 CANDIDATE_PRIORITY = ("original",) + tuple(
     "map_{}".format(policy) for policy in MAPPING_POLICIES)
@@ -100,6 +101,34 @@ class BaselineReference:
 
 
 @dataclass(frozen=True)
+class Stage1SelectedReference:
+    case: str
+    cores: int
+    winner: str
+    metrics: Dict[str, Any]
+    group_path: Path
+    group_file_hash: str
+    plan_path: Path
+    plan_file_hash: str
+    official_result_path: Path
+    official_result_json_hash: str
+
+    def score(self) -> Tuple[int, int]:
+        return (
+            int(self.metrics["makespan_cycles"]),
+            int(self.metrics["added_copy_bytes"]),
+        )
+
+
+@dataclass(frozen=True)
+class Stage1SelectedSnapshot:
+    selected_results_path: Path
+    selected_results_file_hash: str
+    selected_reference_hash: str
+    references: Dict[Tuple[str, int], Stage1SelectedReference]
+
+
+@dataclass(frozen=True)
 class Stage2GroupResult:
     manifest: Dict[str, Any]
     group_path: Path
@@ -114,6 +143,171 @@ def _candidate_by_name(group: Mapping[str, Any], name: str) -> Mapping[str, Any]
             "baseline group has {} records for candidate {}".format(
                 len(matches), name))
     return matches[0]
+
+
+def normalize_mapping_policies(
+    mapping_policies: Sequence[str] | None,
+) -> Tuple[str, ...]:
+    policies = tuple(MAPPING_POLICIES if mapping_policies is None else mapping_policies)
+    if not policies:
+        raise Problem2Stage2Error("at least one mapping policy is required")
+    if len(set(policies)) != len(policies):
+        raise Problem2Stage2Error("mapping policies must be unique")
+    unknown = sorted(set(policies) - set(MAPPING_POLICIES))
+    if unknown:
+        raise Problem2Stage2Error(
+            "unsupported mapping policies: {}".format(unknown))
+    return policies
+
+
+def load_verified_stage1_selected_references(
+    *,
+    graph_root: Path,
+    config_path: Path,
+    baseline_root: Path,
+    pairs: Sequence[Tuple[str, int]],
+) -> Stage1SelectedSnapshot:
+    """Load Stage-1 final winners and bind every row to official artifacts."""
+
+    graph_root = Path(graph_root).resolve()
+    config_path = Path(config_path).resolve()
+    baseline_root = Path(baseline_root).resolve()
+    selected_path = baseline_root / "selected_results.csv"
+    if not selected_path.is_file():
+        raise Problem2Stage2Error(
+            "Stage-1 selected_results.csv is missing: {}".format(selected_path))
+    with selected_path.open("r", encoding="utf-8-sig", newline="") as stream:
+        selected_rows = list(csv.DictReader(stream))
+    rows_by_pair: Dict[Tuple[str, int], Mapping[str, str]] = {}
+    for row in selected_rows:
+        try:
+            key = (str(row["case"]), int(row["cores"]))
+        except (KeyError, TypeError, ValueError) as error:
+            raise Problem2Stage2Error(
+                "Stage-1 selected_results.csv has an invalid key: {}".format(error)
+            ) from error
+        if key in rows_by_pair:
+            raise Problem2Stage2Error(
+                "Stage-1 selected_results.csv duplicates {} k{}".format(*key))
+        rows_by_pair[key] = row
+
+    evaluator_hash, _ = official_scene_b_hash()
+    stage1_impl_hash, _ = problem2_implementation_hash()
+    solver_hash = sha256_file(Path(__file__).resolve().parent / "solver_problem1.py")
+    config_hash = sha256_file(config_path)
+    references: Dict[Tuple[str, int], Stage1SelectedReference] = {}
+    stable_metric_fields = (
+        "makespan_cycles", "added_copy_bytes", "partition_added_copy_bytes",
+        "spill_added_copy_bytes", "cross_task_traffic_bytes",
+        "cross_core_transfer_count", "used_core_count",
+    )
+    for case, cores in sorted(set((str(case), int(cores)) for case, cores in pairs)):
+        row = rows_by_pair.get((case, cores))
+        if row is None:
+            raise Problem2Stage2Error(
+                "Stage-1 selected result is missing for {} k{}".format(case, cores))
+        if row.get("status") != "success":
+            raise Problem2Stage2Error(
+                "Stage-1 selected result is not successful for {} k{}".format(
+                    case, cores))
+        graph_path = graph_root / (case + ".json")
+        group_path = baseline_root / "groups" / case / "k{}.json".format(cores)
+        if not graph_path.is_file() or not group_path.is_file():
+            raise Problem2Stage2Error(
+                "Stage-1 selected reference files are missing for {} k{}".format(
+                    case, cores))
+        group = _read_json(group_path)
+        expected = {
+            "status": "success",
+            "case": case,
+            "cores": cores,
+            "graph_sha256": sha256_file(graph_path),
+            "config_sha256": config_hash,
+            "solver_sha256": solver_hash,
+            "evaluator_sha256": evaluator_hash,
+            "problem2_implementation_sha256": stage1_impl_hash,
+        }
+        for name, value in expected.items():
+            if group.get(name) != value:
+                raise Problem2Stage2Error(
+                    "Stage-1 selected identity mismatch for {} k{} {}".format(
+                        case, cores, name))
+        winner = group.get("winner")
+        if not isinstance(winner, Mapping):
+            raise Problem2Stage2Error(
+                "Stage-1 group has no winner for {} k{}".format(case, cores))
+        winner_name = str(winner.get("name"))
+        if row.get("winner") != winner_name:
+            raise Problem2Stage2Error(
+                "Stage-1 selected winner mismatch for {} k{}".format(case, cores))
+
+        group_dir = baseline_root / "groups" / case / "k{}".format(cores)
+        plan_path = group_dir / "final_multicore_res.json"
+        result_path = group_dir / "final_official_evaluation.json"
+        if (not plan_path.is_file() or sha256_file(plan_path)
+                != group.get("final_plan_file_sha256")):
+            raise Problem2Stage2Error(
+                "Stage-1 final plan hash mismatch for {} k{}".format(case, cores))
+        if (not result_path.is_file() or sha256_file(result_path)
+                != group.get("final_official_result_file_sha256")):
+            raise Problem2Stage2Error(
+                "Stage-1 final official result hash mismatch for {} k{}".format(
+                    case, cores))
+        result = _read_json(result_path)
+        result_json_hash = json_sha256(result)
+        if result_json_hash != group.get("final_official_result_json_sha256"):
+            raise Problem2Stage2Error(
+                "Stage-1 final official JSON hash mismatch for {} k{}".format(
+                    case, cores))
+        metrics = validate_and_compact_result(result)
+        if metrics != winner.get("metrics"):
+            raise Problem2Stage2Error(
+                "Stage-1 winner metrics mismatch for {} k{}".format(case, cores))
+        expected_score = [
+            int(metrics["makespan_cycles"]), int(metrics["added_copy_bytes"])
+        ]
+        if list(winner.get("score") or [])[:2] != expected_score:
+            raise Problem2Stage2Error(
+                "Stage-1 winner score mismatch for {} k{}".format(case, cores))
+        for field in stable_metric_fields:
+            try:
+                csv_value = int(row[field])
+            except (KeyError, TypeError, ValueError) as error:
+                raise Problem2Stage2Error(
+                    "Stage-1 selected field {} is invalid for {} k{}".format(
+                        field, case, cores)) from error
+            if csv_value != int(metrics[field]):
+                raise Problem2Stage2Error(
+                    "Stage-1 selected field {} mismatches official result for {} k{}"
+                    .format(field, case, cores))
+        references[(case, cores)] = Stage1SelectedReference(
+            case=case,
+            cores=cores,
+            winner=winner_name,
+            metrics=copy.deepcopy(metrics),
+            group_path=group_path,
+            group_file_hash=sha256_file(group_path),
+            plan_path=plan_path,
+            plan_file_hash=sha256_file(plan_path),
+            official_result_path=result_path,
+            official_result_json_hash=result_json_hash,
+        )
+
+    reference_payload = [{
+        "case": reference.case,
+        "cores": reference.cores,
+        "winner": reference.winner,
+        "score": list(reference.score()),
+        "group_file_sha256": reference.group_file_hash,
+        "plan_file_sha256": reference.plan_file_hash,
+        "official_result_json_sha256": reference.official_result_json_hash,
+    } for reference in references.values()]
+    return Stage1SelectedSnapshot(
+        selected_results_path=selected_path,
+        selected_results_file_hash=sha256_file(selected_path),
+        selected_reference_hash=json_sha256(reference_payload),
+        references=references,
+    )
 
 
 def load_verified_baseline_reference(
@@ -235,7 +429,9 @@ def _failed_record(name: str, stage: str, error: BaseException) -> Dict[str, Any
     }
 
 
-def _score(record: Mapping[str, Any]) -> Tuple[int, int, int]:
+def _score(
+    record: Mapping[str, Any], candidate_priority: Sequence[str] = CANDIDATE_PRIORITY,
+) -> Tuple[int, int, int]:
     metrics = record.get("metrics")
     if not isinstance(metrics, Mapping):
         raise Problem2Stage2Error("evaluated candidate lacks metrics")
@@ -243,7 +439,7 @@ def _score(record: Mapping[str, Any]) -> Tuple[int, int, int]:
     return (
         int(metrics["makespan_cycles"]),
         int(metrics["added_copy_bytes"]),
-        CANDIDATE_PRIORITY.index(name),
+        tuple(candidate_priority).index(name),
     )
 
 
@@ -258,15 +454,19 @@ def run_stage2_mapping_group(
     family: str,
     max_moves: int = 2,
     search_width: int = 12,
+    mapping_policies: Sequence[str] | None = None,
     evaluator: Callable[[Mapping[str, Any], Mapping[str, Any], Path], Dict[str, Any]] = evaluate_official_problem2,
 ) -> Stage2GroupResult:
-    """Run one strict pairing: original mapping versus three new mappings."""
+    """Run one strict pairing against the requested fixed-partition mappings."""
 
     started = time.perf_counter()
     graph_path = Path(graph_path).resolve()
     config_path = Path(config_path).resolve()
     output_root = Path(output_root).resolve()
     cache_dir = Path(cache_dir).resolve()
+    policies = normalize_mapping_policies(mapping_policies)
+    candidate_priority = ("original",) + tuple(
+        "map_{}".format(policy) for policy in policies)
     baseline = load_verified_baseline_reference(
         graph_path=graph_path,
         config_path=config_path,
@@ -293,8 +493,9 @@ def run_stage2_mapping_group(
         "search_sha256": json_sha256({
             "max_moves": max_moves,
             "search_width": search_width,
-            "policies": MAPPING_POLICIES,
+            "policies": policies,
         }),
+        "mapping_policies": list(policies),
     }
     run_dir = output_root / "groups" / baseline.case / "k{}".format(cores) / family
     plans_dir = run_dir / "plans"
@@ -338,11 +539,12 @@ def run_stage2_mapping_group(
             cross_core_delay=int(scene_b["cross_core_copy_delay_cycles"]),
             max_moves=max_moves,
             search_width=search_width,
+            policies=policies,
         )
         generation_seconds = time.perf_counter() - generation_started
     except Exception as error:
         generation_seconds = time.perf_counter() - generation_started
-        for policy in MAPPING_POLICIES:
+        for policy in policies:
             records.append(_failed_record("map_{}".format(policy), "generation", error))
 
     signature_owner: Dict[str, Dict[str, Any]] = {
@@ -351,7 +553,7 @@ def run_stage2_mapping_group(
     cache = SceneBEvaluationCache(cache_dir)
     official_evaluations = 0
     cache_hits = 0
-    for policy in MAPPING_POLICIES:
+    for policy in policies:
         name = "map_{}".format(policy)
         if policy not in generated:
             continue
@@ -389,7 +591,7 @@ def run_stage2_mapping_group(
             "official_result_json_sha256": None,
             "metrics": None,
             "timing": {
-                "generation_seconds": generation_seconds / len(MAPPING_POLICIES),
+                "generation_seconds": generation_seconds / len(policies),
                 "validation_seconds": 0.0,
                 "cache_lookup_seconds": 0.0,
                 "official_evaluation_seconds": 0.0,
@@ -481,6 +683,9 @@ def run_stage2_mapping_group(
                                 "cores": cores,
                                 "partition_family": family,
                                 "candidate": name,
+                                "mapping_policy": policy,
+                                "mapping_policies": list(policies),
+                                "search_sha256": identity["search_sha256"],
                             },
                         )
                     else:
@@ -518,7 +723,7 @@ def run_stage2_mapping_group(
                 if record.get("legal") and isinstance(record.get("metrics"), Mapping)]
     if not eligible:
         raise Problem2Stage2Error("no legal candidate retained official metrics")
-    winner = min(eligible, key=_score)
+    winner = min(eligible, key=lambda record: _score(record, candidate_priority))
     winner_plan = baseline.plan if winner["name"] == "original" else _read_json(
         Path(str(winner["plan_path"])))
     winner_plan_path = run_dir / "winner_multicore_res.json"
@@ -535,7 +740,8 @@ def run_stage2_mapping_group(
         **identity,
         "evaluator_file_sha256": evaluator_files,
         "implementation_file_sha256": implementation_files,
-        "candidate_priority": list(CANDIDATE_PRIORITY),
+        "mapping_policies": list(policies),
+        "candidate_priority": list(candidate_priority),
         "candidate_record_file_sha256": candidate_record_hashes,
         "generated_mapping_candidates": len(generated),
         "legal_mapping_candidates": sum(
@@ -546,7 +752,7 @@ def run_stage2_mapping_group(
         "cache_hits": cache_hits,
         "winner": {
             "name": winner["name"],
-            "score": list(_score(winner)[:2]),
+            "score": list(_score(winner, candidate_priority)[:2]),
             "metrics": copy.deepcopy(winner["metrics"]),
             "plan_hash": json_sha256(winner_plan),
         },
@@ -596,6 +802,7 @@ def reusable_stage2_group(
     family: str,
     max_moves: int,
     search_width: int,
+    mapping_policies: Sequence[str] | None = None,
 ) -> Dict[str, Any] | None:
     """Return an intact matching group, otherwise ``None`` for safe rerun."""
 
@@ -603,6 +810,7 @@ def reusable_stage2_group(
     if not group_path.is_file():
         return None
     try:
+        policies = normalize_mapping_policies(mapping_policies)
         group = _read_json(group_path)
         baseline = load_verified_baseline_reference(
             graph_path=graph_path,
@@ -630,8 +838,9 @@ def reusable_stage2_group(
             "search_sha256": json_sha256({
                 "max_moves": max_moves,
                 "search_width": search_width,
-                "policies": MAPPING_POLICIES,
+                "policies": policies,
             }),
+            "mapping_policies": list(policies),
         }
         if any(group.get(name) != value for name, value in expected.items()):
             return None

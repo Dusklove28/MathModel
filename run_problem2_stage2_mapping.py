@@ -27,6 +27,10 @@ from candidate_manager_problem2 import json_sha256
 from candidate_manager_problem1 import sha256_file
 from candidate_manager_problem2_stage2 import (
     MAPPING_FAMILIES,
+    MAPPING_POLICIES,
+    Stage1SelectedReference,
+    load_verified_stage1_selected_references,
+    normalize_mapping_policies,
     reusable_stage2_group,
     run_stage2_mapping_group,
     stage2_implementation_hash,
@@ -42,6 +46,12 @@ STRATIFIED_12_CASES = (
     "case_047", "case_048", "case_050", "case_051",
     "case_058", "case_064", "case_067", "case_100",
 )
+FROZEN_STRATIFIED_MAPPING_POLICY = "locality"
+MAPPING_POLICY_ARGUMENTS = tuple(
+    "map_{}".format(policy) for policy in MAPPING_POLICIES)
+STRATUM_REPEATED = "repeated_gate_b"
+STRATUM_SEEN_NEW_CORE = "seen_case_new_core"
+STRATUM_UNSEEN = "unseen_case"
 
 
 def _utc_now() -> str:
@@ -118,11 +128,35 @@ def _discover_cases(repo: Path) -> Tuple[str, ...]:
     )
 
 
-def _validate_preset_budget(preset: str) -> None:
-    if preset == "stratified12":
+def _resolve_mapping_policies(argument: str) -> Tuple[str, ...]:
+    if argument == "all":
+        return tuple(MAPPING_POLICIES)
+    prefix = "map_"
+    if not argument.startswith(prefix):
+        raise ValueError("mapping policy must use the map_<policy> name")
+    return normalize_mapping_policies((argument[len(prefix):],))
+
+
+def _validate_preset_budget(preset: str, mapping_policies: Sequence[str]) -> None:
+    policies = tuple(mapping_policies)
+    if preset == "stratified12" and policies != (
+            FROZEN_STRATIFIED_MAPPING_POLICY,):
         raise ValueError(
-            "stratified12 is budget-locked until Gate B passes and exactly "
-            "one mapping policy is frozen; do not run three policies on 240 groups")
+            "stratified12 is budget-locked unless using the pre-registered "
+            "unique policy "
+            "--mapping-policy map_locality; do not run multiple policies")
+    if preset in {"gate-a", "gate-b"} and policies != tuple(MAPPING_POLICIES):
+        raise ValueError(
+            "{} reproduces the three-policy design and requires "
+            "--mapping-policy all".format(preset))
+
+
+def _report_stratum(case: str, cores: int) -> str:
+    if case in GATE_B_CASES:
+        if cores in GATE_B_CORES:
+            return STRATUM_REPEATED
+        return STRATUM_SEEN_NEW_CORE
+    return STRATUM_UNSEEN
 
 
 def _process_exit_code(
@@ -192,6 +226,7 @@ def _run_cell(payload: Mapping[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
                 family=family,
                 max_moves=int(payload["max_moves"]),
                 search_width=int(payload["search_width"]),
+                mapping_policies=tuple(payload["mapping_policies"]),
             )
             if reusable is not None:
                 found = dict(reusable)
@@ -208,6 +243,7 @@ def _run_cell(payload: Mapping[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
                 family=family,
                 max_moves=int(payload["max_moves"]),
                 search_width=int(payload["search_width"]),
+                mapping_policies=tuple(payload["mapping_policies"]),
             )
             found = dict(result.manifest)
             found["_resume"] = False
@@ -233,8 +269,11 @@ def _candidate_rows(groups: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]
             rows.append({
                 "case": group["case"],
                 "cores": group["cores"],
+                "report_stratum": _report_stratum(
+                    str(group["case"]), int(group["cores"])),
                 "partition_family": group["partition_family"],
                 "candidate": record.get("name"),
+                "mapping_policy": record.get("policy"),
                 "status": record.get("status"),
                 "legal": record.get("legal"),
                 "deduplicated": record.get("deduplicated"),
@@ -275,7 +314,17 @@ def _paired_rows(groups: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
     for group in sorted(groups, key=lambda item: (
             item["case"], int(item["cores"]), item["partition_family"])):
         baseline = group["baseline"]["metrics"]
-        mapped = [candidate for candidate in group.get("candidates", [])[1:]
+        configured = tuple(group.get("mapping_policies") or (
+            str(candidate.get("policy"))
+            for candidate in group.get("candidates", [])[1:]
+            if candidate.get("policy")
+        ))
+        expected_names = {"map_{}".format(policy) for policy in configured}
+        mapping_records = [
+            candidate for candidate in group.get("candidates", [])[1:]
+            if candidate.get("name") in expected_names
+        ]
+        mapped = [candidate for candidate in mapping_records
                   if candidate.get("legal") and candidate.get("metrics")]
         best = min(mapped, key=lambda candidate: (
             int(candidate["metrics"]["makespan_cycles"]),
@@ -283,10 +332,15 @@ def _paired_rows(groups: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
             str(candidate["name"]),
         )) if mapped else None
         old = int(baseline["makespan_cycles"])
+        old_added = int(baseline["added_copy_bytes"])
         new = int(best["metrics"]["makespan_cycles"]) if best else None
+        new_added = int(best["metrics"]["added_copy_bytes"]) if best else None
+        score_win = (best is not None and (new, new_added) < (old, old_added))
         rows.append({
             "case": group["case"],
             "cores": group["cores"],
+            "report_stratum": _report_stratum(
+                str(group["case"]), int(group["cores"])),
             "partition_family": group["partition_family"],
             "baseline_makespan_cycles": old,
             "best_mapping_candidate": best["name"] if best else None,
@@ -294,59 +348,157 @@ def _paired_rows(groups: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
             "makespan_delta_cycles": new - old if new is not None else None,
             "relative_improvement": ((old - new) / old
                                      if new is not None and old else None),
-            "baseline_added_copy_bytes": baseline["added_copy_bytes"],
-            "best_mapping_added_copy_bytes": (
-                best["metrics"]["added_copy_bytes"] if best else None),
+            "baseline_added_copy_bytes": old_added,
+            "best_mapping_added_copy_bytes": new_added,
+            "added_copy_delta_bytes": (
+                new_added - old_added if new_added is not None else None),
             "baseline_spill_added_copy_bytes": baseline["spill_added_copy_bytes"],
             "best_mapping_spill_added_copy_bytes": (
                 best["metrics"]["spill_added_copy_bytes"] if best else None),
-            "strict_mapping_win": new is not None and new < old,
+            "strict_mapping_win": score_win,
+            "strict_mapping_score_win": score_win,
+            "strict_mapping_makespan_win": new is not None and new < old,
             "all_mapping_candidates_legal": (
-                len(mapped) == 3
-                and all(candidate.get("legal")
-                        for candidate in group.get("candidates", [])[1:])),
+                bool(configured)
+                and len(mapping_records) == len(configured)
+                and len(mapped) == len(configured)),
         })
     return rows
 
 
-def _case_core_rows(groups: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+def _mapping_records(
+    cell_groups: Sequence[Mapping[str, Any]], policy: str | None = None,
+) -> List[Tuple[Mapping[str, Any], Mapping[str, Any]]]:
+    expected_name = None if policy is None else "map_{}".format(policy)
+    return [
+        (group, candidate)
+        for group in cell_groups
+        for candidate in group.get("candidates", [])[1:]
+        if candidate.get("legal") and candidate.get("metrics")
+        and (expected_name is None or candidate.get("name") == expected_name)
+    ]
+
+
+def _case_core_selection_row(
+    *,
+    case: str,
+    cores: int,
+    cell_groups: Sequence[Mapping[str, Any]],
+    stage1: Stage1SelectedReference,
+    policy: str | None = None,
+) -> Dict[str, Any]:
+    mappings = _mapping_records(cell_groups, policy)
+    best_pair = min(mappings, key=lambda item: (
+        int(item[1]["metrics"]["makespan_cycles"]),
+        int(item[1]["metrics"]["added_copy_bytes"]),
+        str(item[0]["partition_family"]),
+        str(item[1]["name"]),
+    )) if mappings else None
+    baseline_metrics = stage1.metrics
+    baseline_score = stage1.score()
+    if best_pair is None:
+        best_group = best_candidate = None
+        mapped_score = None
+    else:
+        best_group, best_candidate = best_pair
+        mapped_score = (
+            int(best_candidate["metrics"]["makespan_cycles"]),
+            int(best_candidate["metrics"]["added_copy_bytes"]),
+        )
+    use_mapping = mapped_score is not None and mapped_score < baseline_score
+    final_metrics = (best_candidate["metrics"] if use_mapping
+                     else baseline_metrics)
+    final_makespan = int(final_metrics["makespan_cycles"])
+    baseline_makespan = int(baseline_metrics["makespan_cycles"])
+    makespan_delta = final_makespan - baseline_makespan
+    improvement = ((baseline_makespan - final_makespan) / baseline_makespan
+                   if baseline_makespan else 0.0)
+    return {
+        "case": case,
+        "cores": cores,
+        "report_stratum": _report_stratum(case, cores),
+        **({"mapping_policy": policy} if policy is not None else {}),
+        "stage1_winner": stage1.winner,
+        "stage1_makespan_cycles": baseline_makespan,
+        "stage1_added_copy_bytes": int(baseline_metrics["added_copy_bytes"]),
+        "stage1_spill_added_copy_bytes": int(
+            baseline_metrics["spill_added_copy_bytes"]),
+        "best_mapping_family": (
+            str(best_group["partition_family"]) if best_group else None),
+        "best_mapping_candidate": (
+            str(best_candidate["name"]) if best_candidate else None),
+        "best_mapping_makespan_cycles": (
+            int(best_candidate["metrics"]["makespan_cycles"])
+            if best_candidate else None),
+        "best_mapping_added_copy_bytes": (
+            int(best_candidate["metrics"]["added_copy_bytes"])
+            if best_candidate else None),
+        "final_source": "mapping" if use_mapping else "stage1_fallback",
+        "final_winner": (
+            str(best_candidate["name"]) if use_mapping else stage1.winner),
+        "final_partition_family": (
+            str(best_group["partition_family"]) if use_mapping else None),
+        "final_makespan_cycles": final_makespan,
+        "final_added_copy_bytes": int(final_metrics["added_copy_bytes"]),
+        "final_spill_added_copy_bytes": int(
+            final_metrics["spill_added_copy_bytes"]),
+        "makespan_delta_cycles": makespan_delta,
+        "added_copy_delta_bytes": (
+            int(final_metrics["added_copy_bytes"])
+            - int(baseline_metrics["added_copy_bytes"])),
+        "spill_delta_bytes": (
+            int(final_metrics["spill_added_copy_bytes"])
+            - int(baseline_metrics["spill_added_copy_bytes"])),
+        "relative_improvement": improvement,
+        "score_improved": use_mapping,
+        "makespan_improved": makespan_delta < 0,
+        "improved_at_least_1pct": improvement >= 0.01,
+    }
+
+
+def _case_core_rows(
+    groups: Sequence[Mapping[str, Any]],
+    stage1_selected: Mapping[Tuple[str, int], Stage1SelectedReference],
+) -> List[Dict[str, Any]]:
     cells: Dict[Tuple[str, int], List[Mapping[str, Any]]] = {}
     for group in groups:
         cells.setdefault((str(group["case"]), int(group["cores"])), []).append(group)
     rows: List[Dict[str, Any]] = []
     for (case, cores), cell_groups in sorted(cells.items()):
-        originals = [
-            (int(group["baseline"]["metrics"]["makespan_cycles"]),
-             str(group["partition_family"]))
-            for group in cell_groups
-        ]
-        mappings = [
-            (int(candidate["metrics"]["makespan_cycles"]),
-             str(group["partition_family"]), str(candidate["name"]))
-            for group in cell_groups
-            for candidate in group.get("candidates", [])[1:]
-            if candidate.get("legal") and candidate.get("metrics")
-        ]
-        base_value, base_family = min(originals)
-        if mappings:
-            mapped_value, mapped_family, mapped_candidate = min(mappings)
-            improvement = ((base_value - mapped_value) / base_value
-                           if base_value else 0.0)
-        else:
-            mapped_value = mapped_family = mapped_candidate = None
-            improvement = None
-        rows.append({
-            "case": case,
-            "cores": cores,
-            "best_original_family": base_family,
-            "best_original_makespan_cycles": base_value,
-            "best_mapping_family": mapped_family,
-            "best_mapping_candidate": mapped_candidate,
-            "best_mapping_makespan_cycles": mapped_value,
-            "relative_improvement": improvement,
-            "improved_at_least_1pct": (
-                improvement is not None and improvement >= 0.01),
-        })
+        try:
+            stage1 = stage1_selected[(case, cores)]
+        except KeyError as error:
+            raise ValueError(
+                "missing Stage-1 selected fallback for {} k{}".format(
+                    case, cores)) from error
+        rows.append(_case_core_selection_row(
+            case=case,
+            cores=cores,
+            cell_groups=cell_groups,
+            stage1=stage1,
+        ))
+    return rows
+
+
+def _policy_case_core_rows(
+    groups: Sequence[Mapping[str, Any]],
+    stage1_selected: Mapping[Tuple[str, int], Stage1SelectedReference],
+    mapping_policies: Sequence[str],
+) -> List[Dict[str, Any]]:
+    cells: Dict[Tuple[str, int], List[Mapping[str, Any]]] = {}
+    for group in groups:
+        cells.setdefault((str(group["case"]), int(group["cores"])), []).append(group)
+    rows: List[Dict[str, Any]] = []
+    for (case, cores), cell_groups in sorted(cells.items()):
+        stage1 = stage1_selected[(case, cores)]
+        for policy in mapping_policies:
+            rows.append(_case_core_selection_row(
+                case=case,
+                cores=cores,
+                cell_groups=cell_groups,
+                stage1=stage1,
+                policy=policy,
+            ))
     return rows
 
 
@@ -362,31 +514,89 @@ def _quantile(values: Sequence[float], probability: float) -> float | None:
     return ordered[lower] * (upper - index) + ordered[upper] * (index - lower)
 
 
+def _selection_aggregate(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    relative = [float(row["relative_improvement"]) for row in rows]
+    savings = [-int(row["makespan_delta_cycles"]) for row in rows]
+    return {
+        "case_core_cells": len(rows),
+        "score_improved_cells": sum(bool(row["score_improved"]) for row in rows),
+        "makespan_improved_cells": sum(
+            bool(row["makespan_improved"]) for row in rows),
+        "improved_at_least_1pct_cells": sum(
+            bool(row["improved_at_least_1pct"]) for row in rows),
+        "total_makespan_cycles_saved": sum(savings),
+        "mean_relative_improvement": (
+            statistics.fmean(relative) if relative else None),
+        "median_relative_improvement": (
+            statistics.median(relative) if relative else None),
+        "max_relative_improvement": max(relative) if relative else None,
+        "mean_added_copy_delta_bytes": (
+            statistics.fmean(float(row["added_copy_delta_bytes"]) for row in rows)
+            if rows else None),
+        "mean_spill_delta_bytes": (
+            statistics.fmean(float(row["spill_delta_bytes"]) for row in rows)
+            if rows else None),
+    }
+
+
 def summarize(
     *,
     output: Path,
     groups: Sequence[Mapping[str, Any]],
     expected_groups: int,
     preset: str,
+    mapping_policies: Sequence[str],
+    stage1_selected: Mapping[Tuple[str, int], Stage1SelectedReference],
     run_identity: Mapping[str, Any],
     wall_seconds: float,
 ) -> Dict[str, Any]:
     candidates = _candidate_rows(groups)
     paired = _paired_rows(groups)
-    case_core = _case_core_rows(groups)
+    case_core = _case_core_rows(groups, stage1_selected)
+    policy_case_core = _policy_case_core_rows(
+        groups, stage1_selected, mapping_policies)
     failures = [row for row in candidates if row["status"] == "failed"]
     _write_csv(output / "candidate_results.csv", candidates)
     _write_csv(output / "paired_mapping_results.csv", paired)
     _write_csv(output / "case_core_results.csv", case_core)
+    _write_csv(output / "policy_case_core_results.csv", policy_case_core)
     _write_csv(output / "failures.csv", failures)
 
     deltas = [int(row["makespan_delta_cycles"]) for row in paired
               if row["makespan_delta_cycles"] is not None]
     strict_wins = sum(bool(row["strict_mapping_win"]) for row in paired)
+    strict_makespan_wins = sum(
+        bool(row["strict_mapping_makespan_win"]) for row in paired)
     legal_groups = sum(bool(row["all_mapping_candidates_legal"]) for row in paired)
     improved_cells = sum(bool(row["improved_at_least_1pct"]) for row in case_core)
     complete = len(groups) == expected_groups
     gate_common = complete and legal_groups == expected_groups and not failures
+    group_strata = {
+        stratum: sum(
+            1 for group in groups
+            if _report_stratum(str(group["case"]), int(group["cores"])) == stratum)
+        for stratum in (
+            STRATUM_REPEATED, STRATUM_SEEN_NEW_CORE, STRATUM_UNSEEN)
+    }
+    cell_rows_by_stratum = {
+        stratum: [row for row in case_core if row["report_stratum"] == stratum]
+        for stratum in (
+            STRATUM_REPEATED, STRATUM_SEEN_NEW_CORE, STRATUM_UNSEEN)
+    }
+    stratum_results = {
+        stratum: {
+            "groups": group_strata[stratum],
+            **_selection_aggregate(rows),
+        }
+        for stratum, rows in cell_rows_by_stratum.items()
+    }
+    policy_results = {
+        policy: _selection_aggregate([
+            row for row in policy_case_core
+            if row["mapping_policy"] == policy
+        ])
+        for policy in mapping_policies
+    }
     design_official_evaluations = sum(
         int(group.get("official_evaluations", 0)) for group in groups)
     invocation_official_evaluations = sum(
@@ -397,12 +607,30 @@ def summarize(
         criterion = "complete, every mapped candidate legal, zero failures, <=10 official evaluations"
     elif preset == "gate-b":
         gate_pass = gate_common and (strict_wins >= 9 or improved_cells >= 3)
-        criterion = "45/45 groups legal, zero failures, and >=9 strict wins or >=3/9 case-core cells improve >=1%"
+        criterion = ("45/45 groups legal, zero failures, and >=9 strict "
+                     "(makespan, added-copy) wins or >=3/9 final case-core "
+                     "cells improve Makespan >=1% versus Stage-1 selected winners")
+    elif preset == "stratified12":
+        strata_match = group_strata == {
+            STRATUM_REPEATED: 45,
+            STRATUM_SEEN_NEW_CORE: 15,
+            STRATUM_UNSEEN: 180,
+        } and {name: len(rows) for name, rows in cell_rows_by_stratum.items()} == {
+            STRATUM_REPEATED: 9,
+            STRATUM_SEEN_NEW_CORE: 3,
+            STRATUM_UNSEEN: 36,
+        }
+        gate_pass = gate_common and strata_match
+        criterion = ("240/240 map_locality groups legal and zero failures; "
+                     "report 45 repeated, 15 seen-case/new-core, and 180 "
+                     "unseen-case groups separately; primary efficacy metric "
+                     "is the 36 unseen-case final case-core selections versus "
+                     "Stage-1 selected winners")
     else:
         gate_pass = gate_common
         criterion = "complete, every mapped candidate legal, zero failures"
     summary = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "problem2_stage2_mapping_summary",
         "preset": preset,
         "expected_groups": expected_groups,
@@ -416,8 +644,30 @@ def summarize(
         "failed_candidates": len(failures),
         "all_mapping_candidates_legal_groups": legal_groups,
         "strict_mapping_wins": strict_wins,
+        "strict_mapping_makespan_wins": strict_makespan_wins,
         "case_core_cells": len(case_core),
         "case_core_improved_at_least_1pct": improved_cells,
+        "case_core_selection": _selection_aggregate(case_core),
+        "policy_case_core_selection": policy_results,
+        "report_strata": stratum_results,
+        "reporting_contract": {
+            "selection_score": ["makespan_cycles", "added_copy_bytes"],
+            "global_fallback": "Stage-1 selected_results.csv actual winner",
+            "stratified12_mapping_policy": "map_locality",
+            "expected_group_strata": {
+                STRATUM_REPEATED: 45,
+                STRATUM_SEEN_NEW_CORE: 15,
+                STRATUM_UNSEEN: 180,
+            },
+            "expected_case_core_strata": {
+                STRATUM_REPEATED: 9,
+                STRATUM_SEEN_NEW_CORE: 3,
+                STRATUM_UNSEEN: 36,
+            },
+            "primary_metric": (
+                "36 unseen-case final case-core selections relative to "
+                "Stage-1 actual winners"),
+        },
         "paired_delta_cycles": {
             "mean": statistics.fmean(deltas) if deltas else None,
             "median": statistics.median(deltas) if deltas else None,
@@ -448,6 +698,13 @@ def main() -> int:
     parser.add_argument("--cases")
     parser.add_argument("--cores")
     parser.add_argument("--families")
+    parser.add_argument(
+        "--mapping-policy",
+        choices=("all",) + MAPPING_POLICY_ARGUMENTS,
+        default="all",
+        help=("mapping candidate set; stratified12 is pre-registered to "
+              "map_locality only"),
+    )
     parser.add_argument("--workers", type=int, default=min(32, os.cpu_count() or 1))
     parser.add_argument("--max-moves", type=int, default=2)
     parser.add_argument("--search-width", type=int, default=12)
@@ -456,7 +713,8 @@ def main() -> int:
     started_at = _utc_now()
     invocation_id = _invocation_id(started_at)
     try:
-        _validate_preset_budget(args.preset)
+        mapping_policies = _resolve_mapping_policies(args.mapping_policy)
+        _validate_preset_budget(args.preset, mapping_policies)
     except ValueError as error:
         parser.error(str(error))
     repo = args.repo.resolve()
@@ -476,6 +734,15 @@ def main() -> int:
     pairs = [(case, core) for case in cases for core in cores
              if allowed_pairs is None or (case, core) in allowed_pairs]
     expected_groups = len(pairs) * len(families)
+    try:
+        selected_snapshot = load_verified_stage1_selected_references(
+            graph_root=repo / "data",
+            config_path=repo / "data" / "config.txt",
+            baseline_root=baseline,
+            pairs=pairs,
+        )
+    except Exception as error:
+        parser.error("Stage-1 selected fallback validation failed: {}".format(error))
     implementation_hash, implementation_files = stage2_implementation_hash()
     run_identity = {
         "implementation_sha256": implementation_hash,
@@ -485,10 +752,18 @@ def main() -> int:
         "cases": list(cases),
         "cores": list(cores),
         "families": list(families),
+        "mapping_policy_argument": args.mapping_policy,
+        "mapping_policies": list(mapping_policies),
         "pairs": [[case, core] for case, core in pairs],
         "max_moves": args.max_moves,
         "search_width": args.search_width,
         "baseline": str(baseline),
+        "stage1_selected_results": str(
+            selected_snapshot.selected_results_path),
+        "stage1_selected_results_file_sha256": (
+            selected_snapshot.selected_results_file_hash),
+        "stage1_selected_reference_sha256": (
+            selected_snapshot.selected_reference_hash),
         "cache": str(cache),
     }
     run_identity["run_identity_sha256"] = json_sha256(run_identity)
@@ -505,6 +780,7 @@ def main() -> int:
         "case": case,
         "cores": core,
         "families": list(families),
+        "mapping_policies": list(mapping_policies),
         "max_moves": args.max_moves,
         "search_width": args.search_width,
     } for case, core in pairs]
@@ -555,6 +831,8 @@ def main() -> int:
         groups=groups,
         expected_groups=expected_groups,
         preset=args.preset,
+        mapping_policies=mapping_policies,
+        stage1_selected=selected_snapshot.references,
         run_identity=run_identity,
         wall_seconds=time.perf_counter() - started,
     )
@@ -566,6 +844,7 @@ def main() -> int:
         "started_at": started_at,
         "finished_at": _utc_now(),
         "preset": args.preset,
+        "mapping_policies": list(mapping_policies),
         "run_identity_sha256": run_identity["run_identity_sha256"],
         "expected_groups": expected_groups,
         "recorded_groups": len(groups),

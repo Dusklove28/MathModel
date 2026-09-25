@@ -624,13 +624,23 @@ def generate_scene_b_mapping_candidates(
     cross_core_delay: int = 500,
     max_moves: int = 2,
     search_width: int = 12,
+    policies: Sequence[str] | None = None,
 ) -> Dict[str, Tuple[Dict[str, Any], Dict[str, Any]]]:
-    """Return three deterministic mappings while preserving the partition."""
+    """Return the requested deterministic mappings with a fixed partition."""
 
     if not isinstance(max_moves, int) or max_moves < 0:
         raise Problem2MappingError("max_moves must be a non-negative integer")
     if not isinstance(search_width, int) or search_width < 1:
         raise Problem2MappingError("search_width must be a positive integer")
+    selected_policies = tuple(MAPPING_POLICIES if policies is None else policies)
+    if not selected_policies:
+        raise Problem2MappingError("at least one mapping policy is required")
+    if len(set(selected_policies)) != len(selected_policies):
+        raise Problem2MappingError("mapping policies must be unique")
+    unknown_policies = sorted(set(selected_policies) - set(MAPPING_POLICIES))
+    if unknown_policies:
+        raise Problem2MappingError(
+            "unsupported mapping policies: {}".format(unknown_policies))
     graph = GraphInfo.from_graph(graph_json)
     features = build_mapping_features(
         graph_json,
@@ -646,7 +656,7 @@ def generate_scene_b_mapping_candidates(
         raise Problem2MappingError("base schedules do not cover the partition")
 
     results: Dict[str, Tuple[Dict[str, Any], Dict[str, Any]]] = {}
-    for policy in MAPPING_POLICIES:
+    for policy in selected_policies:
         greedy = _greedy_assignment(
             graph, features, num_cores, policy, bandwidth, cross_core_delay)
         base_proxy = scene_b_mapping_proxy(

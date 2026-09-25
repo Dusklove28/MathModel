@@ -109,6 +109,14 @@ class Problem2MappingSolverTests(unittest.TestCase):
             graph, base, max_moves=1, search_width=2)
         self.assertEqual(base, before)
 
+    def test_single_policy_generation_is_explicit_and_deterministic(self):
+        generated = generate_scene_b_mapping_candidates(
+            _io_chain_graph(), _base_plan(), max_moves=1, search_width=2,
+            policies=("locality",),
+        )
+        self.assertEqual(tuple(generated), ("locality",))
+        self.assertEqual(generated["locality"][1]["policy"], "locality")
+
 
 if __name__ == "__main__":
     unittest.main()
