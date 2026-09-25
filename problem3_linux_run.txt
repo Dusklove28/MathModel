@@ -1,0 +1,163 @@
+Problem 3 Linux server run guide (2026-09-25)
+============================================
+
+The artifacts/各文件夹说明.txt records a 2026-09-25 disk snapshot, not a verified
+repository checkout path. Replace /path/to/MathModel with the actual server
+Git checkout. Use one main process per output/cache directory; keep all prior
+artifacts. The scripts never edit official data, data/config.txt, or supplied
+evaluators.
+
+1. Check checkout, space, and Python; obtain only a fast-forward update:
+
+   cd /path/to/MathModel
+   pwd
+   git status --short --branch
+   git rev-parse HEAD
+   git pull --ff-only
+   python3 --version
+   df -h . /media/dell/data
+   df -h /media/dell/data/yn
+
+   Python 3.10+ is required (the archived Stage-1 run used Python 3.8.8).
+   If python3 is older, activate an existing 3.10+ environment and use its
+   interpreter for every command below. If git pull refuses because of a concurrent
+   teammate change, stop and coordinate; do not reset or force push.
+   The historical Stage-1 manifest used /home/dell/data/yn/MathModel; verify
+   the present checkout before replacing the placeholder. The disk snapshot
+   in artifacts/各文件夹说明.txt is historical. On Windows, the 500-group G1
+   output used about 3.11 GiB and later full outputs may use several GiB,
+   so recheck both filesystems before each batch and keep older artifacts.
+
+2. G0 asset and semantic gate:
+
+   python3 audit_problem3_assets.py --output artifacts/problem3_g0/audit.json
+   python3 -m unittest tests.test_problem3_semantics -v
+
+   The audit must report passed=true, 500 manifests/plans/results, and empty
+   missing/mismatches. Raw file hashes may differ from Windows due to CRLF;
+   the report includes LF-normalized official and config hashes.
+
+   If the 500 Stage-1 winner files are absent, retain the audit's missing list.
+   After checking current disk space, rebuild in NEW directories, never over
+   existing Stage-1/Problem-1 assets:
+
+   python3 -u run_problem2_baseline.py --repo . \
+     --output artifacts/problem2_stage1_for_problem3_rebuild \
+     --cache /media/dell/data/yn/problem2_stage1_for_problem3_cache \
+     --workers 8
+   python3 audit_problem3_assets.py \
+     --baseline artifacts/problem2_stage1_for_problem3_rebuild \
+     --output artifacts/problem3_g0/rebuilt_audit.json
+
+   For all later commands, add
+     --baseline artifacts/problem2_stage1_for_problem3_rebuild
+   to G1 and G2 when this rebuilt directory is used.
+   For both report_problem3.py commands, add
+     --stage1 artifacts/problem2_stage1_for_problem3_rebuild
+   when this rebuilt directory is used.
+
+3. G1 smoke, then full 500 paired groups:
+
+   python3 -u run_problem3_g1.py \
+     --cases case_001 case_050 case_100 --cores 2 3 4 5 \
+     --recheck-no-l2
+   python3 -u run_problem3_g1.py
+   python3 report_problem3.py --mode g1 \
+     --output artifacts/problem3_report_g1_v4
+
+   G1 defaults to artifacts/problem3_g1_paired. It verifies and reuses the
+   matching historical no-L2 official result except when --recheck-no-l2 is
+   set. The full run resumes completed groups and preserves full official
+   results and the winner plan per group. Confirm 500 rows in
+   artifacts/problem3_report_g1_v4/case_core_2x2.csv before claiming completion.
+   The report gives both the frozen requested-k1 winner and the fastest
+   verified candidate among all requested-k1 candidates as no-L2
+   denominators; they have different meanings and must be labeled.
+
+4. Only after G1 and its report pass, run the deterministic ordering branch:
+
+   python3 -m unittest tests.test_solver_problem3 -v
+   mkdir -p /media/dell/data/yn/problem3_g2_candidate_cache_v2
+   python3 -u run_problem3_g2.py --phase smoke \
+     --output artifacts/problem3_g2_ordering_v2 \
+     --cache /media/dell/data/yn/problem3_g2_candidate_cache_v2
+   python3 -u run_problem3_g2.py --phase development \
+     --output artifacts/problem3_g2_ordering_v2 \
+     --cache /media/dell/data/yn/problem3_g2_candidate_cache_v2
+
+   Review artifacts/problem3_g2_ordering_v2/candidate_results.csv. If fewer
+   than two distinct development cases strictly improve, stop this branch.
+   Otherwise freeze the code and run:
+
+   python3 -u run_problem3_g2.py --phase validation \
+     --output artifacts/problem3_g2_ordering_v2 \
+     --cache /media/dell/data/yn/problem3_g2_candidate_cache_v2
+
+   If fewer than two validation cases strictly improve, stop. Otherwise the
+   ordering branch is eligible for the 70-case final holdout.
+
+5. Optional shared-input core-mapping branch. It uses the completed ordering
+   result as its fallback and makes at most two deterministic one-subgraph
+   move proposals per group. Run each phase only after the corresponding
+   ordering phase completes. Keep its output and cache separate:
+
+   mkdir -p /media/dell/data/yn/problem3_final_mapping_cache_v2
+   python3 -u probe_problem3_mapping.py --phase smoke \
+     --g2 artifacts/problem3_g2_ordering_v2 \
+     --output artifacts/problem3_final_mapping_v2 \
+     --cache /media/dell/data/yn/problem3_final_mapping_cache_v2
+   python3 -u probe_problem3_mapping.py --phase development \
+     --g2 artifacts/problem3_g2_ordering_v2 \
+     --output artifacts/problem3_final_mapping_v2 \
+     --cache /media/dell/data/yn/problem3_final_mapping_cache_v2
+
+   If fewer than two distinct development cases strictly improve, stop the
+   mapping branch. Otherwise, freeze all code and run:
+
+   python3 -u probe_problem3_mapping.py --phase validation \
+     --g2 artifacts/problem3_g2_ordering_v2 \
+     --output artifacts/problem3_final_mapping_v2 \
+     --cache /media/dell/data/yn/problem3_final_mapping_cache_v2
+
+   If fewer than two distinct validation cases strictly improve, stop the
+   mapping branch. Do not modify its rule after validation.
+
+6. Run the holdout once after the validation gates, with resume allowed and
+   no rule changes. Run ordering first; run mapping only if its own validation
+   gate passed:
+
+   python3 -u run_problem3_g2.py --phase holdout \
+     --output artifacts/problem3_g2_ordering_v2 \
+     --cache /media/dell/data/yn/problem3_g2_candidate_cache_v2
+   python3 -u probe_problem3_mapping.py --phase holdout \
+     --g2 artifacts/problem3_g2_ordering_v2 \
+     --output artifacts/problem3_final_mapping_v2 \
+     --cache /media/dell/data/yn/problem3_final_mapping_cache_v2
+
+   If mapping stopped at its validation gate, omit its holdout command and
+   use the ordering directory for the report. Otherwise use the mapping
+   directory. Examples:
+
+   python3 report_problem3.py --mode g2 \
+     --g2 artifacts/problem3_final_mapping_v2 \
+     --g2-source artifacts/problem3_g2_ordering_v2 \
+     --output artifacts/problem3_report_final
+   python3 report_problem3.py --mode g2 \
+     --g2 artifacts/problem3_g2_ordering_v2 \
+     --output artifacts/problem3_report_final
+
+   G2 output and its content-addressed cache are separate from G1. The report
+   re-evaluates any changed final plan with the official no-L2 evaluator to
+   complete the 2x2 ablation. It writes a 500-row table and curve summary.
+   Verify 501 and 6 lines, respectively (one header in each):
+
+   wc -l artifacts/problem3_report_final/case_core_2x2.csv
+   wc -l artifacts/problem3_report_final/curve_1_to_5.csv
+   df -h . /media/dell/data
+
+7. Timeline evidence for a selected case-core:
+
+   python3 analyze_problem3_timeline.py case_050 4
+
+Artifacts are ignored by Git. Keep them on the server or transfer them as
+separate evidence; never assume a Git pull contains prior 500 winner plans.
