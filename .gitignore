@@ -30,3 +30,9 @@ problem1_candidate_cache.zip
 problem1_data.zip
 
 review
+
+# Local environments, transfer copies, and paper review caches
+.venv/
+figures.zip
+论文工作稿/审阅页/
+优秀论文参考/

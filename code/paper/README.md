@@ -29,3 +29,16 @@ python code/paper/scripts/generate_problem1_chapter.py
 生成脚本会检查 500 行最终结果、400 行原始多核结果、100 例附录宽表、关键统计量与逐例字段的一致性，然后覆盖 `draft/问题一章节草稿.docx`。需要 PDF 时，可用 Word 将该 DOCX 导出为 PDF。`scripts/omml_fragments.json` 保存了本稿公式的 Word 原生 OMML 片段，使脚本无须依赖作者本机的技能目录；修改公式时需同步更新对应片段。
 
 本阶段稿以当届官方模板的页面设置与格式规范排版。第三方 [LaTeX 仓库](https://github.com/1SPECOO/Huawei_Cup_2026_Mathematical_Modeling_latex)仅作为结构参考，不是本稿模板来源。HEFT 式上行秩与 EFT 属于经典调度方法的场景改造，方法归属见对照矩阵。
+
+## 问题三图表协作资料
+
+问题三尚未写入本 Word 阶段稿。可供后续写作的正式图在仓库根目录的 [`figures/`](../../figures/)，图数据、图注、表注与审计记录在 [`results/`](../../results/)。绘图入口为根目录的 `reproduce_q3_figures.py`，其前置校验和数据整理见 `validate_q3_figures.py`、`prepare_q3_figures.py`；依赖版本见 [`scripts/requirements-q3-figures.txt`](scripts/requirements-q3-figures.txt)。
+
+已入库的紧凑原始证据包括 `artifacts/artifacts/problem3_report_final/` 的最终配对表、曲线和摘要，两条分支的 `invocations/` 阶段记录，以及 `artifacts/problem3_timeline_evidence/` 的典型案例摘要。大量逐组评测缓存仍是本地实验产物，不属于本次图表协作包。`results/复现清单.json` 保留原机器绝对路径以记录生成环境；换机核对时，应以仓库相对路径定位同名文件并比对其中的 SHA-256。
+
+```powershell
+python -m pip install -r code/paper/scripts/requirements-q3-figures.txt
+python reproduce_q3_figures.py
+```
+
+一键绘图和审计还需要已安装的 `math-modeling` 图表工具；若它不在当前用户的 `~/.codex/skills/math-modeling`，设置环境变量 `MATH_MODELING_SKILL_ROOT` 为该技能目录。正式 PNG/SVG 和全部绘图数据已直接入库，阅读与引用无需安装该技能。

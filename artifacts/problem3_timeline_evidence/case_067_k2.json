@@ -1,0 +1,127 @@
+{
+  "case": "case_067",
+  "cores": 2,
+  "plan_file_sha256": "f2faab65d2db28133c84b1eb5051b3ed9c4c97f3df13249e367026cef63518dc",
+  "no_l2_result_file_sha256": "0112dba9e03a7da9e3dc77e989895ea98a192642c8a86e0dc043e3020128a039",
+  "l2_result_file_sha256": "6a0026f45aab5046cb0a42bd7cf60fd02e0977ba5d60edc96c2bbbd85cea8dd5",
+  "same_core_speedup": 0.9925875303377804,
+  "nominal_data_movement_equal": true,
+  "no_l2": {
+    "makespan": 31892152,
+    "copy_path_op_counts": {
+      "unknown": 4030
+    },
+    "copy_path_overlap": {
+      "unknown": {
+        "max_simultaneous": 4,
+        "cycles_with_any": 4453468,
+        "cycles_with_multiple": 387255
+      }
+    },
+    "pipe_op_counts": {
+      "PIPE_MTE2": 2958,
+      "PIPE_M": 3550,
+      "PIPE_V": 5254,
+      "PIPE_MTE3": 1072
+    },
+    "pipe_sum_durations": {
+      "PIPE_MTE2": 4697294,
+      "PIPE_M": 58915232,
+      "PIPE_V": 2360608,
+      "PIPE_MTE3": 175775
+    },
+    "cross_core_transfer_count": 710,
+    "cross_core_release_delay_cycles": 500,
+    "cache_stats": null
+  },
+  "l2": {
+    "makespan": 32130317,
+    "copy_path_op_counts": {
+      "DDR": 3354,
+      "CACHE_READ": 676
+    },
+    "copy_path_overlap": {
+      "DDR": {
+        "max_simultaneous": 4,
+        "cycles_with_any": 3378611,
+        "cycles_with_multiple": 1191701
+      },
+      "CACHE_READ": {
+        "max_simultaneous": 2,
+        "cycles_with_any": 258056,
+        "cycles_with_multiple": 10
+      }
+    },
+    "pipe_op_counts": {
+      "PIPE_MTE2": 2958,
+      "PIPE_M": 3550,
+      "PIPE_V": 5254,
+      "PIPE_MTE3": 1072
+    },
+    "pipe_sum_durations": {
+      "PIPE_MTE2": 4692952,
+      "PIPE_M": 58915232,
+      "PIPE_V": 2360608,
+      "PIPE_MTE3": 170222
+    },
+    "cross_core_transfer_count": 710,
+    "cross_core_release_delay_cycles": 500,
+    "cache_stats": {
+      "copy_in_hits": 676,
+      "copy_in_misses": 2282,
+      "hit_bytes": 64469248,
+      "miss_bytes": 196890368,
+      "hits": 676,
+      "accesses": 2958,
+      "hit_rate": 0.24666874319252138
+    },
+    "cache_event_evidence": {
+      "first_miss": {
+        "time": 0,
+        "event": "miss",
+        "tensor_id": 1000000001,
+        "size_bytes": 1152,
+        "core_id": 0,
+        "op_id": 1000009118,
+        "op": "COPY_IN"
+      },
+      "first_completion_fill": {
+        "time": 40,
+        "event": "insert",
+        "tensor_id": 1000000001,
+        "size_bytes": 1152,
+        "used_bytes": 1152,
+        "evicted_tensor_ids": [],
+        "core_id": 0,
+        "op_id": 1000009118
+      },
+      "first_hit": {
+        "time": 3878084,
+        "event": "hit",
+        "tensor_id": 1000000003,
+        "size_bytes": 1152,
+        "core_id": 0,
+        "op_id": 1000011744,
+        "op": "COPY_IN"
+      },
+      "hit_count": 676,
+      "miss_count": 2282,
+      "insertion_count": 2044,
+      "eviction_count": 1916,
+      "simultaneous_or_early_repeat_misses_before_first_fill": 17,
+      "first_eviction": {
+        "time": 5442132,
+        "event": "insert",
+        "tensor_id": 1000004385,
+        "size_bytes": 16384,
+        "used_bytes": 1036032,
+        "evicted_tensor_ids": [
+          1000000001,
+          1000000101
+        ],
+        "core_id": 0,
+        "op_id": 1000010474
+      }
+    }
+  }
+}

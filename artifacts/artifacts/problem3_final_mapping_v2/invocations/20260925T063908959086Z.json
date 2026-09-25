@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "phase": "smoke",
+  "progress": [
+    {
+      "case": "case_001",
+      "cores": 2,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 0,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_001",
+      "cores": 3,
+      "status": "success",
+      "winner": "mapping_locality_one_move",
+      "strict_improvement": true,
+      "official_calls": 1,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_001",
+      "cores": 4,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 0,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_001",
+      "cores": 5,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 0,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_050",
+      "cores": 2,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 1,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_050",
+      "cores": 3,
+      "status": "success",
+      "winner": "mapping_locality_one_move",
+      "strict_improvement": true,
+      "official_calls": 1,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_050",
+      "cores": 4,
+      "status": "success",
+      "winner": "mapping_locality_one_move",
+      "strict_improvement": true,
+      "official_calls": 1,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_050",
+      "cores": 5,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 1,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_100",
+      "cores": 2,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 1,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_100",
+      "cores": 3,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 1,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_100",
+      "cores": 4,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 2,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    },
+    {
+      "case": "case_100",
+      "cores": 5,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 2,
+      "candidate_cache_hits": 0,
+      "failures": 0,
+      "resumed": false
+    }
+  ],
+  "failed_groups": 0,
+  "official_calls_this_invocation": 11,
+  "strict_improvement_groups": 3,
+  "strict_improvement_cases": [
+    "case_001",
+    "case_050"
+  ],
+  "elapsed_wall_seconds": 18.873265700000047
+}

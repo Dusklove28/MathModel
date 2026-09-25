@@ -1,0 +1,4 @@
+﻿case,cores,role,baseline_no_l2_cycles,baseline_l2_cycles,final_l2_cycles,copy_in_hits,copy_in_misses,copy_in_hit_bytes,copy_in_miss_bytes,copy_in_byte_hit_rate,fifo_evictions,first_hit_cycle,first_eviction_cycle,event_resolution,timeline_source
+case_050,4,G1 hardware positive,46748,44398,43595,220,1087,282156,1022738,0.21622905768591166,0,3496,,summary and selected first events only,artifacts\problem3_timeline_evidence\case_050_k4.json
+case_001,2,G1 hardware no gain,116868,116868,116868,0,202,0,821504,0.0,0,,,summary and selected first events only,artifacts\problem3_timeline_evidence\case_001_k2.json
+case_067,2,G1 hardware negative,31892152,32130317,32116988,676,2282,64469248,196890368,0.24666874319252138,1916,3878084,5442132,summary and selected first events only,artifacts\problem3_timeline_evidence\case_067_k2.json

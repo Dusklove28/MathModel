@@ -1,0 +1,527 @@
+{
+  "source": "D:\\Code\\MathModel\\code\\MathModel\\results\\q3_effects_case_core.csv",
+  "n_rows": 500,
+  "n_cols": 12,
+  "columns": {
+    "case": {
+      "type": "unknown",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0
+    },
+    "split": {
+      "type": "unknown",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0
+    },
+    "cores": {
+      "type": "ordinal",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 500,
+      "n_unique": 5,
+      "categories": [
+        [
+          "1",
+          100
+        ],
+        [
+          "2",
+          100
+        ],
+        [
+          "3",
+          100
+        ],
+        [
+          "4",
+          100
+        ],
+        [
+          "5",
+          100
+        ]
+      ],
+      "min_group_n": 100,
+      "max_group_n": 100,
+      "small_groups_flag": false
+    },
+    "baseline_no_l2_makespan_cycles": {
+      "type": "continuous",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 500,
+      "mean": 1617258.348,
+      "median": 228619.5,
+      "sd": 4869593.9411196895,
+      "min": 10300.0,
+      "max": 63834834.0,
+      "skewness": 7.246216132142902,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 75,
+      "outlier_lo": -1218599.625,
+      "outlier_hi": 2214241.375,
+      "needs_log_axis": "True"
+    },
+    "baseline_l2_makespan_cycles": {
+      "type": "continuous",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 500,
+      "mean": 1609069.822,
+      "median": 228618.5,
+      "sd": 4862364.518553411,
+      "min": 10300.0,
+      "max": 63834834.0,
+      "skewness": 7.278369195336578,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 74,
+      "outlier_lo": -1218866.375,
+      "outlier_hi": 2213724.625,
+      "needs_log_axis": "True"
+    },
+    "final_no_l2_makespan_cycles": {
+      "type": "continuous",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 500,
+      "mean": 1613733.402,
+      "median": 228619.5,
+      "sd": 4868724.259065337,
+      "min": 10300.0,
+      "max": 63834834.0,
+      "skewness": 7.252363413202377,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 74,
+      "outlier_lo": -1221309.0,
+      "outlier_hi": 2215867.0,
+      "needs_log_axis": "True"
+    },
+    "final_l2_makespan_cycles": {
+      "type": "continuous",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 500,
+      "mean": 1605660.118,
+      "median": 228618.5,
+      "sd": 4860926.087236748,
+      "min": 10300.0,
+      "max": 63834834.0,
+      "skewness": 7.284784764615506,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 73,
+      "outlier_lo": -1222779.5,
+      "outlier_hi": 2216072.5,
+      "needs_log_axis": "True"
+    },
+    "hardware_baseline_ratio": {
+      "type": "continuous",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 500,
+      "mean": 1.0129764510925072,
+      "median": 1.0000197680548235,
+      "sd": 0.03782269095407326,
+      "min": 0.9925875303377804,
+      "max": 1.4321609438477378,
+      "skewness": 5.897508746949492,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 100,
+      "outlier_lo": 0.9929128135184837,
+      "outlier_hi": 1.0118119774691938,
+      "needs_log_axis": "False"
+    },
+    "hardware_final_ratio": {
+      "type": "continuous",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 500,
+      "mean": 1.0124579345271718,
+      "median": 1.0000023896004588,
+      "sd": 0.036623271487077856,
+      "min": 0.9940910710556046,
+      "max": 1.4321609438477378,
+      "skewness": 6.294541805620694,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 104,
+      "outlier_lo": 0.9937065276156833,
+      "outlier_hi": 1.0104891206405278,
+      "needs_log_axis": "False"
+    },
+    "schedule_no_l2_ratio": {
+      "type": "continuous",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 500,
+      "mean": 1.00946189370216,
+      "median": 1.0,
+      "sd": 0.027588684005983275,
+      "min": 0.9848095349380696,
+      "max": 1.2021125175195893,
+      "skewness": 4.489330066494163,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 102,
+      "outlier_lo": 0.9957654467981334,
+      "outlier_hi": 1.0070575886697777,
+      "needs_log_axis": "False"
+    },
+    "schedule_l2_ratio": {
+      "type": "continuous",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 500,
+      "mean": 1.0089188705830872,
+      "median": 1.0,
+      "sd": 0.024658900185425554,
+      "min": 1.0,
+      "max": 1.185877078273865,
+      "skewness": 4.232564383527011,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 89,
+      "outlier_lo": 0.9951674276146966,
+      "outlier_hi": 1.008054287308839,
+      "needs_log_axis": "False"
+    },
+    "l2_strict_improvement": {
+      "type": "boolean",
+      "n_total": 500,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 500,
+      "n_unique": 2,
+      "categories": [
+        [
+          "False",
+          320
+        ],
+        [
+          "True",
+          180
+        ]
+      ],
+      "min_group_n": 180,
+      "max_group_n": 320,
+      "small_groups_flag": false
+    }
+  },
+  "correlation": {
+    "columns": [
+      "baseline_no_l2_makespan_cycles",
+      "baseline_l2_makespan_cycles",
+      "final_no_l2_makespan_cycles",
+      "final_l2_makespan_cycles",
+      "hardware_baseline_ratio",
+      "hardware_final_ratio",
+      "schedule_no_l2_ratio",
+      "schedule_l2_ratio"
+    ],
+    "matrix": {
+      "baseline_no_l2_makespan_cycles": {
+        "baseline_no_l2_makespan_cycles": 1.0,
+        "baseline_l2_makespan_cycles": 1.0,
+        "final_no_l2_makespan_cycles": 1.0,
+        "final_l2_makespan_cycles": 1.0,
+        "hardware_baseline_ratio": -0.065,
+        "hardware_final_ratio": -0.063,
+        "schedule_no_l2_ratio": -0.086,
+        "schedule_l2_ratio": -0.09
+      },
+      "baseline_l2_makespan_cycles": {
+        "baseline_no_l2_makespan_cycles": 1.0,
+        "baseline_l2_makespan_cycles": 1.0,
+        "final_no_l2_makespan_cycles": 1.0,
+        "final_l2_makespan_cycles": 1.0,
+        "hardware_baseline_ratio": -0.069,
+        "hardware_final_ratio": -0.067,
+        "schedule_no_l2_ratio": -0.086,
+        "schedule_l2_ratio": -0.09
+      },
+      "final_no_l2_makespan_cycles": {
+        "baseline_no_l2_makespan_cycles": 1.0,
+        "baseline_l2_makespan_cycles": 1.0,
+        "final_no_l2_makespan_cycles": 1.0,
+        "final_l2_makespan_cycles": 1.0,
+        "hardware_baseline_ratio": -0.065,
+        "hardware_final_ratio": -0.062,
+        "schedule_no_l2_ratio": -0.088,
+        "schedule_l2_ratio": -0.092
+      },
+      "final_l2_makespan_cycles": {
+        "baseline_no_l2_makespan_cycles": 1.0,
+        "baseline_l2_makespan_cycles": 1.0,
+        "final_no_l2_makespan_cycles": 1.0,
+        "final_l2_makespan_cycles": 1.0,
+        "hardware_baseline_ratio": -0.069,
+        "hardware_final_ratio": -0.067,
+        "schedule_no_l2_ratio": -0.087,
+        "schedule_l2_ratio": -0.091
+      },
+      "hardware_baseline_ratio": {
+        "baseline_no_l2_makespan_cycles": -0.065,
+        "baseline_l2_makespan_cycles": -0.069,
+        "final_no_l2_makespan_cycles": -0.065,
+        "final_l2_makespan_cycles": -0.069,
+        "hardware_baseline_ratio": 1.0,
+        "hardware_final_ratio": 0.967,
+        "schedule_no_l2_ratio": 0.128,
+        "schedule_l2_ratio": 0.042
+      },
+      "hardware_final_ratio": {
+        "baseline_no_l2_makespan_cycles": -0.063,
+        "baseline_l2_makespan_cycles": -0.067,
+        "final_no_l2_makespan_cycles": -0.062,
+        "final_l2_makespan_cycles": -0.067,
+        "hardware_baseline_ratio": 0.967,
+        "hardware_final_ratio": 1.0,
+        "schedule_no_l2_ratio": 0.013,
+        "schedule_l2_ratio": 0.017
+      },
+      "schedule_no_l2_ratio": {
+        "baseline_no_l2_makespan_cycles": -0.086,
+        "baseline_l2_makespan_cycles": -0.086,
+        "final_no_l2_makespan_cycles": -0.088,
+        "final_l2_makespan_cycles": -0.087,
+        "hardware_baseline_ratio": 0.128,
+        "hardware_final_ratio": 0.013,
+        "schedule_no_l2_ratio": 1.0,
+        "schedule_l2_ratio": 0.933
+      },
+      "schedule_l2_ratio": {
+        "baseline_no_l2_makespan_cycles": -0.09,
+        "baseline_l2_makespan_cycles": -0.09,
+        "final_no_l2_makespan_cycles": -0.092,
+        "final_l2_makespan_cycles": -0.091,
+        "hardware_baseline_ratio": 0.042,
+        "hardware_final_ratio": 0.017,
+        "schedule_no_l2_ratio": 0.933,
+        "schedule_l2_ratio": 1.0
+      }
+    },
+    "pairs_sorted": [
+      {
+        "a": "baseline_l2_makespan_cycles",
+        "b": "final_l2_makespan_cycles",
+        "r": 0.9999922463770328,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "baseline_no_l2_makespan_cycles",
+        "b": "final_no_l2_makespan_cycles",
+        "r": 0.9999913561450794,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "final_no_l2_makespan_cycles",
+        "b": "final_l2_makespan_cycles",
+        "r": 0.9999222200266266,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "baseline_no_l2_makespan_cycles",
+        "b": "baseline_l2_makespan_cycles",
+        "r": 0.9999211641113952,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "baseline_no_l2_makespan_cycles",
+        "b": "final_l2_makespan_cycles",
+        "r": 0.9999142638876302,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "baseline_l2_makespan_cycles",
+        "b": "final_no_l2_makespan_cycles",
+        "r": 0.99991294442115,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "hardware_baseline_ratio",
+        "b": "hardware_final_ratio",
+        "r": 0.9666041373206307,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "schedule_no_l2_ratio",
+        "b": "schedule_l2_ratio",
+        "r": 0.9332341436651813,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "hardware_baseline_ratio",
+        "b": "schedule_no_l2_ratio",
+        "r": 0.12765438919955083,
+        "magnitude": "weak"
+      },
+      {
+        "a": "final_no_l2_makespan_cycles",
+        "b": "schedule_l2_ratio",
+        "r": -0.09157438648863711,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "final_l2_makespan_cycles",
+        "b": "schedule_l2_ratio",
+        "r": -0.09120951193464824,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "baseline_no_l2_makespan_cycles",
+        "b": "schedule_l2_ratio",
+        "r": -0.08984493815495673,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "baseline_l2_makespan_cycles",
+        "b": "schedule_l2_ratio",
+        "r": -0.08960784721007628,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "final_no_l2_makespan_cycles",
+        "b": "schedule_no_l2_ratio",
+        "r": -0.08760731489467287,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "final_l2_makespan_cycles",
+        "b": "schedule_no_l2_ratio",
+        "r": -0.08726702668823327,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "baseline_no_l2_makespan_cycles",
+        "b": "schedule_no_l2_ratio",
+        "r": -0.08582379578003461,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "baseline_l2_makespan_cycles",
+        "b": "schedule_no_l2_ratio",
+        "r": -0.08572051366312883,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "baseline_l2_makespan_cycles",
+        "b": "hardware_baseline_ratio",
+        "r": -0.06914839874323114,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "final_l2_makespan_cycles",
+        "b": "hardware_baseline_ratio",
+        "r": -0.06906976114036578,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "baseline_l2_makespan_cycles",
+        "b": "hardware_final_ratio",
+        "r": -0.06730616051633534,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "final_l2_makespan_cycles",
+        "b": "hardware_final_ratio",
+        "r": -0.06714767883077391,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "baseline_no_l2_makespan_cycles",
+        "b": "hardware_baseline_ratio",
+        "r": -0.06452914376503294,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "final_no_l2_makespan_cycles",
+        "b": "hardware_baseline_ratio",
+        "r": -0.06452828476209017,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "baseline_no_l2_makespan_cycles",
+        "b": "hardware_final_ratio",
+        "r": -0.06261210508024624,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "final_no_l2_makespan_cycles",
+        "b": "hardware_final_ratio",
+        "r": -0.062446589408775274,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "hardware_baseline_ratio",
+        "b": "schedule_l2_ratio",
+        "r": 0.042326427826748184,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "hardware_final_ratio",
+        "b": "schedule_l2_ratio",
+        "r": 0.017247635330839336,
+        "magnitude": "negligible"
+      },
+      {
+        "a": "hardware_final_ratio",
+        "b": "schedule_no_l2_ratio",
+        "r": 0.012644747861265022,
+        "magnitude": "negligible"
+      }
+    ]
+  },
+  "group_summary": {
+    "by": [
+      "cores"
+    ],
+    "n_groups": 5,
+    "min_n_per_group": 100,
+    "max_n_per_group": 100,
+    "median_n_per_group": 100,
+    "small_groups_flag": false,
+    "tiny_groups_flag": false,
+    "per_group_counts": [
+      [
+        "1",
+        100
+      ],
+      [
+        "2",
+        100
+      ],
+      [
+        "3",
+        100
+      ],
+      [
+        "4",
+        100
+      ],
+      [
+        "5",
+        100
+      ]
+    ]
+  },
+  "warnings": [],
+  "suggestions": [
+    "分类 vs 连续，样本量充足 → 箱线图 / 小提琴图，或带误差棒的柱状图（误差棒说明 SD/SEM/CI）",
+    "≥3 个连续变量 → 相关性热力图（['baseline_no_l2_makespan_cycles', 'baseline_l2_makespan_cycles', 'final_no_l2_makespan_cycles', 'final_l2_makespan_cycles', 'hardware_baseline_ratio']）或 pairplot 散点矩阵",
+    "baseline_no_l2_makespan_cycles 跨数个量级（1.03e+04 ~ 6.38e+07）→ 用对数 y 轴",
+    "baseline_l2_makespan_cycles 跨数个量级（1.03e+04 ~ 6.38e+07）→ 用对数 y 轴",
+    "final_no_l2_makespan_cycles 跨数个量级（1.03e+04 ~ 6.38e+07）→ 用对数 y 轴",
+    "final_l2_makespan_cycles 跨数个量级（1.03e+04 ~ 6.38e+07）→ 用对数 y 轴",
+    "hardware_baseline_ratio 高度偏态（skew=5.90）→ 考虑对数变换或小提琴图代替均值柱图",
+    "hardware_final_ratio 高度偏态（skew=6.29）→ 考虑对数变换或小提琴图代替均值柱图",
+    "schedule_no_l2_ratio 高度偏态（skew=4.49）→ 考虑对数变换或小提琴图代替均值柱图",
+    "schedule_l2_ratio 高度偏态（skew=4.23）→ 考虑对数变换或小提琴图代替均值柱图"
+  ]
+}

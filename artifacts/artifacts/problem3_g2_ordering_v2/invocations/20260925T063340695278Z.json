@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "phase": "smoke",
+  "cases": [
+    "case_001",
+    "case_050",
+    "case_100"
+  ],
+  "cores": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "progress": [
+    {
+      "case": "case_001",
+      "cores": 2,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 0,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_001",
+      "cores": 3,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 1,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_001",
+      "cores": 4,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 0,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_001",
+      "cores": 5,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 0,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_050",
+      "cores": 2,
+      "status": "success",
+      "winner": "reuse_window",
+      "strict_improvement": true,
+      "official_calls": 2,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_050",
+      "cores": 3,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 1,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_050",
+      "cores": 4,
+      "status": "success",
+      "winner": "balanced_window",
+      "strict_improvement": true,
+      "official_calls": 2,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_050",
+      "cores": 5,
+      "status": "success",
+      "winner": "balanced_window",
+      "strict_improvement": true,
+      "official_calls": 2,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_100",
+      "cores": 2,
+      "status": "success",
+      "winner": "reuse_window",
+      "strict_improvement": true,
+      "official_calls": 1,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_100",
+      "cores": 3,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 2,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_100",
+      "cores": 4,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 2,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    },
+    {
+      "case": "case_100",
+      "cores": 5,
+      "status": "success",
+      "winner": "baseline",
+      "strict_improvement": false,
+      "official_calls": 2,
+      "candidate_cache_hits": 0,
+      "resumed": false,
+      "generation_failures": 0,
+      "evaluation_failures": 0
+    }
+  ],
+  "official_calls_this_invocation": 15,
+  "candidate_cache_hits_this_invocation": 0,
+  "failed_groups": 0,
+  "elapsed_wall_seconds": 15.685534900003404,
+  "summary": {
+    "record_count": 12,
+    "strict_improvement_groups": 4,
+    "strict_improvement_cases": 2,
+    "total_official_calls": 15,
+    "total_candidate_cache_hits": 0
+  }
+}

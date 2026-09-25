@@ -1,0 +1,115 @@
+{
+  "case": "case_044",
+  "cores": 1,
+  "plan_file_sha256": "b3a3d432d31479494edec684578b81a56b8d294b44a2049ede0aaefb991fe351",
+  "no_l2_result_file_sha256": "d34616e7036b5e83f232bdba2185a2a53ecc6414e4074bd654a012c081dfe3fe",
+  "l2_result_file_sha256": "93ccc2e743f1eed5c5550fc77245de31befc3e5f319ab994b351a13009953160",
+  "same_core_speedup": 1.4321609438477378,
+  "nominal_data_movement_equal": true,
+  "no_l2": {
+    "makespan": 154407,
+    "copy_path_op_counts": {
+      "unknown": 316
+    },
+    "copy_path_overlap": {
+      "unknown": {
+        "max_simultaneous": 2,
+        "cycles_with_any": 90391,
+        "cycles_with_multiple": 762
+      }
+    },
+    "pipe_op_counts": {
+      "PIPE_MTE2": 291,
+      "PIPE_M": 550,
+      "PIPE_V": 814,
+      "PIPE_MTE3": 25
+    },
+    "pipe_sum_durations": {
+      "PIPE_MTE2": 90129,
+      "PIPE_M": 74404,
+      "PIPE_V": 9988,
+      "PIPE_MTE3": 1024
+    },
+    "cross_core_transfer_count": 0,
+    "cross_core_release_delay_cycles": 500,
+    "cache_stats": null
+  },
+  "l2": {
+    "makespan": 107814,
+    "copy_path_op_counts": {
+      "DDR": 100,
+      "CACHE_READ": 216
+    },
+    "copy_path_overlap": {
+      "DDR": {
+        "max_simultaneous": 2,
+        "cycles_with_any": 16816,
+        "cycles_with_multiple": 280
+      },
+      "CACHE_READ": {
+        "max_simultaneous": 1,
+        "cycles_with_any": 17732,
+        "cycles_with_multiple": 0
+      }
+    },
+    "pipe_op_counts": {
+      "PIPE_MTE2": 291,
+      "PIPE_M": 550,
+      "PIPE_V": 814,
+      "PIPE_MTE3": 25
+    },
+    "pipe_sum_durations": {
+      "PIPE_MTE2": 34045,
+      "PIPE_M": 74404,
+      "PIPE_V": 9988,
+      "PIPE_MTE3": 783
+    },
+    "cross_core_transfer_count": 0,
+    "cross_core_release_delay_cycles": 500,
+    "cache_stats": {
+      "copy_in_hits": 216,
+      "copy_in_misses": 75,
+      "hit_bytes": 4408416,
+      "miss_bytes": 967776,
+      "hits": 216,
+      "accesses": 291,
+      "hit_rate": 0.8199885718367201
+    },
+    "cache_event_evidence": {
+      "first_miss": {
+        "time": 0,
+        "event": "miss",
+        "tensor_id": 1000000001,
+        "size_bytes": 288,
+        "core_id": 0,
+        "op_id": 1000001498,
+        "op": "COPY_IN"
+      },
+      "first_completion_fill": {
+        "time": 5,
+        "event": "insert",
+        "tensor_id": 1000000001,
+        "size_bytes": 288,
+        "used_bytes": 288,
+        "evicted_tensor_ids": [],
+        "core_id": 0,
+        "op_id": 1000001498
+      },
+      "first_hit": {
+        "time": 22606,
+        "event": "hit",
+        "tensor_id": 1000000051,
+        "size_bytes": 73728,
+        "core_id": 0,
+        "op_id": 1000001641,
+        "op": "COPY_IN"
+      },
+      "hit_count": 216,
+      "miss_count": 75,
+      "insertion_count": 75,
+      "eviction_count": 0,
+      "simultaneous_or_early_repeat_misses_before_first_fill": 0,
+      "first_eviction": null
+    }
+  }
+}

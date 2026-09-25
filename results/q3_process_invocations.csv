@@ -1,0 +1,9 @@
+﻿branch,phase,groups,cases,strict_improved_groups,strict_improved_cases,official_calls_this_invocation,failed_groups,invocation_file,overlaps_development
+ordering,smoke,12,3,4,2,15,0,artifacts\artifacts\problem3_g2_ordering_v2\invocations\20260925T063340695278Z.json,True
+ordering,development,48,12,9,6,40,0,artifacts\artifacts\problem3_g2_ordering_v2\invocations\20260925T063548192244Z.json,False
+ordering,validation,72,18,23,14,84,0,artifacts\artifacts\problem3_g2_ordering_v2\invocations\20260925T063959922725Z.json,False
+ordering,holdout,280,70,85,46,385,0,artifacts\artifacts\problem3_g2_ordering_v2\invocations\20260925T093938611749Z.json,False
+mapping,smoke,12,3,3,2,11,0,artifacts\artifacts\problem3_final_mapping_v2\invocations\20260925T063908959086Z.json,True
+mapping,development,48,12,3,2,18,0,artifacts\artifacts\problem3_final_mapping_v2\invocations\20260925T064135423482Z.json,False
+mapping,validation,72,18,24,11,61,0,artifacts\artifacts\problem3_final_mapping_v2\invocations\20260925T064723956745Z.json,False
+mapping,holdout,280,70,65,40,242,0,artifacts\artifacts\problem3_final_mapping_v2\invocations\20260925T114001438911Z.json,False

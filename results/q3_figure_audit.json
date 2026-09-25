@@ -1,0 +1,130 @@
+{
+  "ok": true,
+  "directory": "D:\\Code\\MathModel\\code\\MathModel\\figures",
+  "questions": [
+    "q3"
+  ],
+  "files": {
+    "flow_q3_model.png": {
+      "width_px": 2160,
+      "height_px": 1800,
+      "dpi_x": 299.9994,
+      "dpi_y": 299.9994,
+      "width_in": 7.200014400028801,
+      "height_in": 6.000012000024
+    },
+    "flow_q3_model.svg": {
+      "text_count": 9,
+      "embedded_raster": false
+    },
+    "process_q3_calls.png": {
+      "width_px": 2160,
+      "height_px": 1110,
+      "dpi_x": 299.9994,
+      "dpi_y": 299.9994,
+      "width_in": 7.200014400028801,
+      "height_in": 3.7000074000148
+    },
+    "process_q3_calls.svg": {
+      "text_count": 25,
+      "embedded_raster": false
+    },
+    "process_q3_coverage.png": {
+      "width_px": 2160,
+      "height_px": 960,
+      "dpi_x": 299.9994,
+      "dpi_y": 299.9994,
+      "width_in": 7.200014400028801,
+      "height_in": 3.2000064000128003
+    },
+    "process_q3_coverage.svg": {
+      "text_count": 15,
+      "embedded_raster": false
+    },
+    "process_q3_improvements.png": {
+      "width_px": 2160,
+      "height_px": 1110,
+      "dpi_x": 299.9994,
+      "dpi_y": 299.9994,
+      "width_in": 7.200014400028801,
+      "height_in": 3.7000074000148
+    },
+    "process_q3_improvements.svg": {
+      "text_count": 26,
+      "embedded_raster": false
+    },
+    "raw_q3_graph_bytes.png": {
+      "width_px": 2160,
+      "height_px": 1200,
+      "dpi_x": 299.9994,
+      "dpi_y": 299.9994,
+      "width_in": 7.200014400028801,
+      "height_in": 4.000008000016
+    },
+    "raw_q3_graph_bytes.svg": {
+      "text_count": 10,
+      "embedded_raster": false
+    },
+    "raw_q3_graph_scale.png": {
+      "width_px": 2160,
+      "height_px": 1050,
+      "dpi_x": 299.9994,
+      "dpi_y": 299.9994,
+      "width_in": 7.200014400028801,
+      "height_in": 3.5000070000140004
+    },
+    "raw_q3_graph_scale.svg": {
+      "text_count": 21,
+      "embedded_raster": false
+    },
+    "raw_q3_tensor_size.png": {
+      "width_px": 2160,
+      "height_px": 1140,
+      "dpi_x": 299.9994,
+      "dpi_y": 299.9994,
+      "width_in": 7.200014400028801,
+      "height_in": 3.8000076000152
+    },
+    "raw_q3_tensor_size.svg": {
+      "text_count": 16,
+      "embedded_raster": false
+    },
+    "result_q3_effects.png": {
+      "width_px": 2160,
+      "height_px": 1200,
+      "dpi_x": 299.9994,
+      "dpi_y": 299.9994,
+      "width_in": 7.200014400028801,
+      "height_in": 4.000008000016
+    },
+    "result_q3_effects.svg": {
+      "text_count": 38,
+      "embedded_raster": false
+    },
+    "result_q3_holdout.png": {
+      "width_px": 2160,
+      "height_px": 1200,
+      "dpi_x": 299.9994,
+      "dpi_y": 299.9994,
+      "width_in": 7.200014400028801,
+      "height_in": 4.000008000016
+    },
+    "result_q3_holdout.svg": {
+      "text_count": 19,
+      "embedded_raster": false
+    },
+    "result_q3_scaling.png": {
+      "width_px": 2160,
+      "height_px": 1260,
+      "dpi_x": 299.9994,
+      "dpi_y": 299.9994,
+      "width_in": 7.200014400028801,
+      "height_in": 4.2000084000168005
+    },
+    "result_q3_scaling.svg": {
+      "text_count": 17,
+      "embedded_raster": false
+    }
+  },
+  "issues": []
+}

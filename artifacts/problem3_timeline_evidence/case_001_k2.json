@@ -1,0 +1,101 @@
+{
+  "case": "case_001",
+  "cores": 2,
+  "plan_file_sha256": "5d187370156683aa1cb7e2eab372f293b6089ee4283bade0e99a6e0115066503",
+  "no_l2_result_file_sha256": "5f253fea98fa3d9ed8d2b2fd6912e1d8910f69b4e077386325cd06117e8fbaeb",
+  "l2_result_file_sha256": "6c9e62617a219527de792bf343ece75b286599c16f3aeedf190d15c820d9e5ed",
+  "same_core_speedup": 1.0,
+  "nominal_data_movement_equal": true,
+  "no_l2": {
+    "makespan": 116868,
+    "copy_path_op_counts": {
+      "unknown": 402
+    },
+    "copy_path_overlap": {
+      "unknown": {
+        "max_simultaneous": 4,
+        "cycles_with_any": 27640,
+        "cycles_with_multiple": 27640
+      }
+    },
+    "pipe_op_counts": {
+      "PIPE_MTE2": 202,
+      "PIPE_M": 200,
+      "PIPE_V": 400,
+      "PIPE_MTE3": 200
+    },
+    "pipe_sum_durations": {
+      "PIPE_MTE2": 37616,
+      "PIPE_M": 232800,
+      "PIPE_V": 30400,
+      "PIPE_MTE3": 37536
+    },
+    "cross_core_transfer_count": 0,
+    "cross_core_release_delay_cycles": 500,
+    "cache_stats": null
+  },
+  "l2": {
+    "makespan": 116868,
+    "copy_path_op_counts": {
+      "DDR": 402
+    },
+    "copy_path_overlap": {
+      "DDR": {
+        "max_simultaneous": 4,
+        "cycles_with_any": 27640,
+        "cycles_with_multiple": 27640
+      }
+    },
+    "pipe_op_counts": {
+      "PIPE_MTE2": 202,
+      "PIPE_M": 200,
+      "PIPE_V": 400,
+      "PIPE_MTE3": 200
+    },
+    "pipe_sum_durations": {
+      "PIPE_MTE2": 37616,
+      "PIPE_M": 232800,
+      "PIPE_V": 30400,
+      "PIPE_MTE3": 37536
+    },
+    "cross_core_transfer_count": 0,
+    "cross_core_release_delay_cycles": 500,
+    "cache_stats": {
+      "copy_in_hits": 0,
+      "copy_in_misses": 202,
+      "hit_bytes": 0,
+      "miss_bytes": 821504,
+      "hits": 0,
+      "accesses": 202,
+      "hit_rate": 0.0
+    },
+    "cache_event_evidence": {
+      "first_miss": {
+        "time": 0,
+        "event": "miss",
+        "tensor_id": 1000000001,
+        "size_bytes": 1152,
+        "core_id": 0,
+        "op_id": 1000001203,
+        "op": "COPY_IN"
+      },
+      "first_completion_fill": {
+        "time": 40,
+        "event": "insert",
+        "tensor_id": 1000000001,
+        "size_bytes": 1152,
+        "used_bytes": 1152,
+        "evicted_tensor_ids": [],
+        "core_id": 0,
+        "op_id": 1000001203
+      },
+      "first_hit": null,
+      "hit_count": 0,
+      "miss_count": 202,
+      "insertion_count": 201,
+      "eviction_count": 0,
+      "simultaneous_or_early_repeat_misses_before_first_fill": 1,
+      "first_eviction": null
+    }
+  }
+}

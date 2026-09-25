@@ -1,0 +1,277 @@
+{
+  "source": "D:\\Code\\MathModel\\code\\MathModel\\results\\q3_process_invocations.csv",
+  "n_rows": 8,
+  "n_cols": 10,
+  "columns": {
+    "branch": {
+      "type": "unknown",
+      "n_total": 8,
+      "n_null": 0,
+      "missing_rate": 0.0
+    },
+    "phase": {
+      "type": "unknown",
+      "n_total": 8,
+      "n_null": 0,
+      "missing_rate": 0.0
+    },
+    "groups": {
+      "type": "ordinal",
+      "n_total": 8,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 8,
+      "n_unique": 4,
+      "categories": [
+        [
+          "12",
+          2
+        ],
+        [
+          "48",
+          2
+        ],
+        [
+          "72",
+          2
+        ],
+        [
+          "280",
+          2
+        ]
+      ],
+      "min_group_n": 2,
+      "max_group_n": 2,
+      "small_groups_flag": true
+    },
+    "cases": {
+      "type": "ordinal",
+      "n_total": 8,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 8,
+      "n_unique": 4,
+      "categories": [
+        [
+          "3",
+          2
+        ],
+        [
+          "12",
+          2
+        ],
+        [
+          "18",
+          2
+        ],
+        [
+          "70",
+          2
+        ]
+      ],
+      "min_group_n": 2,
+      "max_group_n": 2,
+      "small_groups_flag": true
+    },
+    "strict_improved_groups": {
+      "type": "ordinal",
+      "n_total": 8,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 8,
+      "n_unique": 7,
+      "categories": [
+        [
+          "3",
+          2
+        ],
+        [
+          "4",
+          1
+        ],
+        [
+          "9",
+          1
+        ],
+        [
+          "23",
+          1
+        ],
+        [
+          "85",
+          1
+        ],
+        [
+          "24",
+          1
+        ],
+        [
+          "65",
+          1
+        ]
+      ],
+      "min_group_n": 1,
+      "max_group_n": 2,
+      "small_groups_flag": true
+    },
+    "strict_improved_cases": {
+      "type": "ordinal",
+      "n_total": 8,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 8,
+      "n_unique": 6,
+      "categories": [
+        [
+          "2",
+          3
+        ],
+        [
+          "6",
+          1
+        ],
+        [
+          "14",
+          1
+        ],
+        [
+          "46",
+          1
+        ],
+        [
+          "11",
+          1
+        ],
+        [
+          "40",
+          1
+        ]
+      ],
+      "min_group_n": 1,
+      "max_group_n": 3,
+      "small_groups_flag": true
+    },
+    "official_calls_this_invocation": {
+      "type": "continuous",
+      "n_total": 8,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 8,
+      "mean": 107.0,
+      "median": 50.5,
+      "sd": 135.35350541663644,
+      "min": 11.0,
+      "max": 385.0,
+      "skewness": 1.0669743712890787,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 1,
+      "outlier_lo": -142.125,
+      "outlier_hi": 282.875,
+      "needs_log_axis": "False"
+    },
+    "failed_groups": {
+      "type": "boolean",
+      "n_total": 8,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 8,
+      "n_unique": 1,
+      "categories": [
+        [
+          "0",
+          8
+        ]
+      ],
+      "min_group_n": 8,
+      "max_group_n": 8,
+      "small_groups_flag": true
+    },
+    "invocation_file": {
+      "type": "unknown",
+      "n_total": 8,
+      "n_null": 0,
+      "missing_rate": 0.0
+    },
+    "overlaps_development": {
+      "type": "boolean",
+      "n_total": 8,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 8,
+      "n_unique": 2,
+      "categories": [
+        [
+          "False",
+          6
+        ],
+        [
+          "True",
+          2
+        ]
+      ],
+      "min_group_n": 2,
+      "max_group_n": 6,
+      "small_groups_flag": true
+    }
+  },
+  "correlation": null,
+  "group_summary": {
+    "by": [
+      "branch",
+      "phase"
+    ],
+    "n_groups": 8,
+    "min_n_per_group": 1,
+    "max_n_per_group": 1,
+    "median_n_per_group": 1,
+    "small_groups_flag": true,
+    "tiny_groups_flag": true,
+    "per_group_counts": [
+      [
+        "('mapping', 'development')",
+        1
+      ],
+      [
+        "('mapping', 'holdout')",
+        1
+      ],
+      [
+        "('mapping', 'smoke')",
+        1
+      ],
+      [
+        "('mapping', 'validation')",
+        1
+      ],
+      [
+        "('ordering', 'development')",
+        1
+      ],
+      [
+        "('ordering', 'holdout')",
+        1
+      ],
+      [
+        "('ordering', 'smoke')",
+        1
+      ],
+      [
+        "('ordering', 'validation')",
+        1
+      ]
+    ]
+  },
+  "warnings": [
+    "列 'groups' 至少有一个类别 n<10 — 小样本必须展示原始数据点，不要只画均值柱状图。",
+    "列 'cases' 至少有一个类别 n<10 — 小样本必须展示原始数据点，不要只画均值柱状图。",
+    "列 'strict_improved_groups' 至少有一个类别 n<10 — 小样本必须展示原始数据点，不要只画均值柱状图。",
+    "列 'strict_improved_cases' 至少有一个类别 n<10 — 小样本必须展示原始数据点，不要只画均值柱状图。",
+    "列 'failed_groups' 至少有一个类别 n<10 — 小样本必须展示原始数据点，不要只画均值柱状图。",
+    "列 'overlaps_development' 至少有一个类别 n<10 — 小样本必须展示原始数据点，不要只画均值柱状图。"
+  ],
+  "suggestions": [
+    "分类 vs 连续，小样本（每组 n<10）→ **箱线图/小提琴图 + stripplot 叠加原始点**；**避免**只画均值柱状图，会掩盖分布。",
+    "分类维度组合数 = 1344（groups, cases, strict_improved_groups, strict_improved_cases, failed_groups, overlaps_development 全交叉），**一张图塞不下**——建议按某一维拆成多面板，或选择子集。",
+    "official_calls_this_invocation 高度偏态（skew=1.07）→ 考虑对数变换或小提琴图代替均值柱图"
+  ]
+}

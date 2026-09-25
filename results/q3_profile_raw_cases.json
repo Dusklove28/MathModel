@@ -1,0 +1,471 @@
+{
+  "source": "D:\\Code\\MathModel\\code\\MathModel\\results\\q3_raw_case_graph.csv",
+  "n_rows": 100,
+  "n_cols": 11,
+  "columns": {
+    "case": {
+      "type": "unknown",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0
+    },
+    "split": {
+      "type": "unknown",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0
+    },
+    "ops": {
+      "type": "continuous",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 100,
+      "mean": 6991.18,
+      "median": 4223.0,
+      "sd": 8361.566984239209,
+      "min": 766.0,
+      "max": 38666.0,
+      "skewness": 1.9312455116206075,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 14,
+      "outlier_lo": -7909.125,
+      "outlier_hi": 16919.875,
+      "needs_log_axis": "False"
+    },
+    "edges": {
+      "type": "continuous",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 100,
+      "mean": 18673.94,
+      "median": 11187.0,
+      "sd": 23163.80322910656,
+      "min": 1841.0,
+      "max": 108272.0,
+      "skewness": 2.0526977046118144,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 13,
+      "outlier_lo": -22296.75,
+      "outlier_hi": 46189.25,
+      "needs_log_axis": "False"
+    },
+    "tensors": {
+      "type": "continuous",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 100,
+      "mean": 7477.86,
+      "median": 4590.5,
+      "sd": 8787.507626354149,
+      "min": 816.0,
+      "max": 40287.0,
+      "skewness": 1.9093155685837886,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 15,
+      "outlier_lo": -8022.875,
+      "outlier_hi": 17620.125,
+      "needs_log_axis": "False"
+    },
+    "tensor_bytes_sum": {
+      "type": "continuous",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 100,
+      "mean": 29375957.16,
+      "median": 9366784.0,
+      "sd": 54180862.25155535,
+      "min": 325708.0,
+      "max": 360593104.0,
+      "skewness": 3.6281420167309397,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 16,
+      "outlier_lo": -26409034.0,
+      "outlier_hi": 54471966.0,
+      "needs_log_axis": "True"
+    },
+    "ddr_tensor_bytes_sum": {
+      "type": "continuous",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 100,
+      "mean": 2407300.54,
+      "median": 1387305.0,
+      "sd": 2935398.9267625166,
+      "min": 37414.0,
+      "max": 13401600.0,
+      "skewness": 2.0070302628763774,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 10,
+      "outlier_lo": -2950051.25,
+      "outlier_hi": 6216710.75,
+      "needs_log_axis": "True"
+    },
+    "ddr_tensor_count": {
+      "type": "continuous",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 100,
+      "mean": 646.12,
+      "median": 315.0,
+      "sd": 959.4428757978205,
+      "min": 13.0,
+      "max": 5385.0,
+      "skewness": 3.236218406357366,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 12,
+      "outlier_lo": -533.125,
+      "outlier_hi": 1379.875,
+      "needs_log_axis": "True"
+    },
+    "l1_tensor_count": {
+      "type": "continuous",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 100,
+      "mean": 4098.38,
+      "median": 1321.5,
+      "sd": 6896.003124017901,
+      "min": 0.0,
+      "max": 32854.0,
+      "skewness": 2.613452552551745,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 12,
+      "outlier_lo": -5471.875,
+      "outlier_hi": 9901.125,
+      "needs_log_axis": false
+    },
+    "ub_tensor_count": {
+      "type": "continuous",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0,
+      "n": 100,
+      "mean": 2733.36,
+      "median": 1037.5,
+      "sd": 3823.4081985748385,
+      "min": 0.0,
+      "max": 17995.0,
+      "skewness": 2.1671389882856564,
+      "skew_label": "highly skewed",
+      "n_outliers_iqr": 9,
+      "outlier_lo": -3922.375,
+      "outlier_hi": 7906.625,
+      "needs_log_axis": false
+    },
+    "source_sha256": {
+      "type": "unknown",
+      "n_total": 100,
+      "n_null": 0,
+      "missing_rate": 0.0
+    }
+  },
+  "correlation": {
+    "columns": [
+      "ops",
+      "edges",
+      "tensors",
+      "tensor_bytes_sum",
+      "ddr_tensor_bytes_sum",
+      "ddr_tensor_count",
+      "l1_tensor_count",
+      "ub_tensor_count"
+    ],
+    "matrix": {
+      "ops": {
+        "ops": 1.0,
+        "edges": 0.998,
+        "tensors": 0.998,
+        "tensor_bytes_sum": 0.67,
+        "ddr_tensor_bytes_sum": 0.674,
+        "ddr_tensor_count": 0.607,
+        "l1_tensor_count": 0.886,
+        "ub_tensor_count": 0.542
+      },
+      "edges": {
+        "ops": 0.998,
+        "edges": 1.0,
+        "tensors": 0.994,
+        "tensor_bytes_sum": 0.665,
+        "ddr_tensor_bytes_sum": 0.665,
+        "ddr_tensor_count": 0.592,
+        "l1_tensor_count": 0.904,
+        "ub_tensor_count": 0.505
+      },
+      "tensors": {
+        "ops": 0.998,
+        "edges": 0.994,
+        "tensors": 1.0,
+        "tensor_bytes_sum": 0.663,
+        "ddr_tensor_bytes_sum": 0.71,
+        "ddr_tensor_count": 0.656,
+        "l1_tensor_count": 0.884,
+        "ub_tensor_count": 0.54
+      },
+      "tensor_bytes_sum": {
+        "ops": 0.67,
+        "edges": 0.665,
+        "tensors": 0.663,
+        "tensor_bytes_sum": 1.0,
+        "ddr_tensor_bytes_sum": 0.523,
+        "ddr_tensor_count": 0.335,
+        "l1_tensor_count": 0.607,
+        "ub_tensor_count": 0.344
+      },
+      "ddr_tensor_bytes_sum": {
+        "ops": 0.674,
+        "edges": 0.665,
+        "tensors": 0.71,
+        "tensor_bytes_sum": 0.523,
+        "ddr_tensor_bytes_sum": 1.0,
+        "ddr_tensor_count": 0.826,
+        "l1_tensor_count": 0.673,
+        "ub_tensor_count": 0.212
+      },
+      "ddr_tensor_count": {
+        "ops": 0.607,
+        "edges": 0.592,
+        "tensors": 0.656,
+        "tensor_bytes_sum": 0.335,
+        "ddr_tensor_bytes_sum": 0.826,
+        "ddr_tensor_count": 1.0,
+        "l1_tensor_count": 0.537,
+        "ub_tensor_count": 0.29
+      },
+      "l1_tensor_count": {
+        "ops": 0.886,
+        "edges": 0.904,
+        "tensors": 0.884,
+        "tensor_bytes_sum": 0.607,
+        "ddr_tensor_bytes_sum": 0.673,
+        "ddr_tensor_count": 0.537,
+        "l1_tensor_count": 1.0,
+        "ub_tensor_count": 0.093
+      },
+      "ub_tensor_count": {
+        "ops": 0.542,
+        "edges": 0.505,
+        "tensors": 0.54,
+        "tensor_bytes_sum": 0.344,
+        "ddr_tensor_bytes_sum": 0.212,
+        "ddr_tensor_count": 0.29,
+        "l1_tensor_count": 0.093,
+        "ub_tensor_count": 1.0
+      }
+    },
+    "pairs_sorted": [
+      {
+        "a": "ops",
+        "b": "edges",
+        "r": 0.9977823031094081,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "ops",
+        "b": "tensors",
+        "r": 0.9977252051624986,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "edges",
+        "b": "tensors",
+        "r": 0.9940041657372312,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "edges",
+        "b": "l1_tensor_count",
+        "r": 0.9044988941847868,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "ops",
+        "b": "l1_tensor_count",
+        "r": 0.8864966271952242,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "tensors",
+        "b": "l1_tensor_count",
+        "r": 0.8837677586541884,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "ddr_tensor_bytes_sum",
+        "b": "ddr_tensor_count",
+        "r": 0.8258515901593534,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "tensors",
+        "b": "ddr_tensor_bytes_sum",
+        "r": 0.7102763622651876,
+        "magnitude": "very strong"
+      },
+      {
+        "a": "ops",
+        "b": "ddr_tensor_bytes_sum",
+        "r": 0.6741878640356365,
+        "magnitude": "strong"
+      },
+      {
+        "a": "ddr_tensor_bytes_sum",
+        "b": "l1_tensor_count",
+        "r": 0.6725431983087732,
+        "magnitude": "strong"
+      },
+      {
+        "a": "ops",
+        "b": "tensor_bytes_sum",
+        "r": 0.6703169682665662,
+        "magnitude": "strong"
+      },
+      {
+        "a": "edges",
+        "b": "tensor_bytes_sum",
+        "r": 0.6647852358665639,
+        "magnitude": "strong"
+      },
+      {
+        "a": "edges",
+        "b": "ddr_tensor_bytes_sum",
+        "r": 0.6647393397179205,
+        "magnitude": "strong"
+      },
+      {
+        "a": "tensors",
+        "b": "tensor_bytes_sum",
+        "r": 0.6627279334372036,
+        "magnitude": "strong"
+      },
+      {
+        "a": "tensors",
+        "b": "ddr_tensor_count",
+        "r": 0.6564371575696049,
+        "magnitude": "strong"
+      },
+      {
+        "a": "ops",
+        "b": "ddr_tensor_count",
+        "r": 0.6074220078290212,
+        "magnitude": "strong"
+      },
+      {
+        "a": "tensor_bytes_sum",
+        "b": "l1_tensor_count",
+        "r": 0.607382704991495,
+        "magnitude": "strong"
+      },
+      {
+        "a": "edges",
+        "b": "ddr_tensor_count",
+        "r": 0.5924896760463468,
+        "magnitude": "strong"
+      },
+      {
+        "a": "ops",
+        "b": "ub_tensor_count",
+        "r": 0.5417803993723134,
+        "magnitude": "strong"
+      },
+      {
+        "a": "tensors",
+        "b": "ub_tensor_count",
+        "r": 0.5396307012938085,
+        "magnitude": "strong"
+      },
+      {
+        "a": "ddr_tensor_count",
+        "b": "l1_tensor_count",
+        "r": 0.5367090947337081,
+        "magnitude": "strong"
+      },
+      {
+        "a": "tensor_bytes_sum",
+        "b": "ddr_tensor_bytes_sum",
+        "r": 0.5225791102681081,
+        "magnitude": "strong"
+      },
+      {
+        "a": "edges",
+        "b": "ub_tensor_count",
+        "r": 0.504505898461813,
+        "magnitude": "strong"
+      },
+      {
+        "a": "tensor_bytes_sum",
+        "b": "ub_tensor_count",
+        "r": 0.3435410235972306,
+        "magnitude": "moderate"
+      },
+      {
+        "a": "tensor_bytes_sum",
+        "b": "ddr_tensor_count",
+        "r": 0.3353156088064047,
+        "magnitude": "moderate"
+      },
+      {
+        "a": "ddr_tensor_count",
+        "b": "ub_tensor_count",
+        "r": 0.2897561549948553,
+        "magnitude": "weak"
+      },
+      {
+        "a": "ddr_tensor_bytes_sum",
+        "b": "ub_tensor_count",
+        "r": 0.2122037425425453,
+        "magnitude": "weak"
+      },
+      {
+        "a": "l1_tensor_count",
+        "b": "ub_tensor_count",
+        "r": 0.09289384217356898,
+        "magnitude": "negligible"
+      }
+    ]
+  },
+  "group_summary": {
+    "by": [
+      "split"
+    ],
+    "n_groups": 3,
+    "min_n_per_group": 12,
+    "max_n_per_group": 70,
+    "median_n_per_group": 18,
+    "small_groups_flag": false,
+    "tiny_groups_flag": false,
+    "per_group_counts": [
+      [
+        "development",
+        12
+      ],
+      [
+        "holdout",
+        70
+      ],
+      [
+        "validation",
+        18
+      ]
+    ]
+  },
+  "warnings": [],
+  "suggestions": [
+    "≥3 个连续变量 → 相关性热力图（['ops', 'edges', 'tensors', 'tensor_bytes_sum', 'ddr_tensor_bytes_sum']）或 pairplot 散点矩阵",
+    "单个连续变量 ops → 直方图 / KDE / 箱线图看分布",
+    "ops 高度偏态（skew=1.93）→ 考虑对数变换或小提琴图代替均值柱图",
+    "edges 高度偏态（skew=2.05）→ 考虑对数变换或小提琴图代替均值柱图",
+    "tensors 高度偏态（skew=1.91）→ 考虑对数变换或小提琴图代替均值柱图",
+    "tensor_bytes_sum 跨数个量级（3.26e+05 ~ 3.61e+08）→ 用对数 y 轴",
+    "ddr_tensor_bytes_sum 跨数个量级（3.74e+04 ~ 1.34e+07）→ 用对数 y 轴",
+    "ddr_tensor_count 跨数个量级（13 ~ 5.38e+03）→ 用对数 y 轴",
+    "l1_tensor_count 高度偏态（skew=2.61）→ 考虑对数变换或小提琴图代替均值柱图",
+    "ub_tensor_count 高度偏态（skew=2.17）→ 考虑对数变换或小提琴图代替均值柱图"
+  ]
+}

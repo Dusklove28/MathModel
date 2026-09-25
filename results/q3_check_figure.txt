@@ -1,0 +1,91 @@
+
+--- D:\Code\MathModel\code\MathModel\figures\flow_q3_model.png ---
+  category: raster  ext: png  size: 116488 B
+  pixels: 2160x1800  dpi: (299.9994, 299.9994)
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\flow_q3_model.svg ---
+  category: vector  ext: svg  size: 9518 B
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\process_q3_calls.png ---
+  category: raster  ext: png  size: 80438 B
+  pixels: 2160x1110  dpi: (299.9994, 299.9994)
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\process_q3_calls.svg ---
+  category: vector  ext: svg  size: 14376 B
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\process_q3_coverage.png ---
+  category: raster  ext: png  size: 54899 B
+  pixels: 2160x960  dpi: (299.9994, 299.9994)
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\process_q3_coverage.svg ---
+  category: vector  ext: svg  size: 9081 B
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\process_q3_improvements.png ---
+  category: raster  ext: png  size: 74327 B
+  pixels: 2160x1110  dpi: (299.9994, 299.9994)
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\process_q3_improvements.svg ---
+  category: vector  ext: svg  size: 13939 B
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\raw_q3_graph_bytes.png ---
+  category: raster  ext: png  size: 88842 B
+  pixels: 2160x1200  dpi: (299.9994, 299.9994)
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\raw_q3_graph_bytes.svg ---
+  category: vector  ext: svg  size: 33508 B
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\raw_q3_graph_scale.png ---
+  category: raster  ext: png  size: 56345 B
+  pixels: 2160x1050  dpi: (299.9994, 299.9994)
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\raw_q3_graph_scale.svg ---
+  category: vector  ext: svg  size: 16443 B
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\raw_q3_tensor_size.png ---
+  category: raster  ext: png  size: 72805 B
+  pixels: 2160x1140  dpi: (299.9994, 299.9994)
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\raw_q3_tensor_size.svg ---
+  category: vector  ext: svg  size: 26931 B
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\result_q3_effects.png ---
+  category: raster  ext: png  size: 102643 B
+  pixels: 2160x1200  dpi: (299.9994, 299.9994)
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\result_q3_effects.svg ---
+  category: vector  ext: svg  size: 33272 B
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\result_q3_holdout.png ---
+  category: raster  ext: png  size: 116923 B
+  pixels: 2160x1200  dpi: (299.9994, 299.9994)
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\result_q3_holdout.svg ---
+  category: vector  ext: svg  size: 64215 B
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\result_q3_scaling.png ---
+  category: raster  ext: png  size: 133852 B
+  pixels: 2160x1260  dpi: (299.9994, 299.9994)
+  [PASS] 无问题。
+
+--- D:\Code\MathModel\code\MathModel\figures\result_q3_scaling.svg ---
+  category: vector  ext: svg  size: 15057 B
+  [PASS] 无问题。
+

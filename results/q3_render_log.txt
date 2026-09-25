@@ -1,0 +1,41 @@
+findfont: Failed to find font weight normal for Noto Sans SC, now using 100.
+findfont: Failed to find font weight normal for Noto Sans SC, now using 100.
+findfont: Failed to find font weight normal for Noto Sans SC, now using 100.
+findfont: Failed to find font weight normal for Noto Sans SC, now using 100.
+findfont: Failed to find font weight normal for Noto Sans SC, now using 100.
+findfont: Failed to find font weight normal for Noto Sans SC, now using 100.
+findfont: Failed to find font weight bold for Noto Sans SC, now using 100.
+FINAL: 500 unique groups; 100 x 1-5; split 12/18/70; legal 500/500; changed 208; L2 wins 180; L2 losses 0; holdout wins 133/280
+ORDERING [('smoke', 12, 4, 15), ('development', 48, 9, 40), ('validation', 72, 23, 84), ('holdout', 280, 85, 385)] cumulative calls 524
+MAPPING [('smoke', 12, 3, 11), ('development', 48, 3, 18), ('validation', 72, 24, 61), ('holdout', 280, 65, 242)] cumulative calls 332
+PASS
+LAYOUT raw_q3_graph_scale [('WARN', "以下文字可能超出画布被裁切：['原始操作数（个/例）', '病例数（例）']。跑 finalize_figure(fig) 或导出时 bbox_inches='tight' 兜底；标题/标签过长可换行或缩短。")]
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\raw_q3_graph_scale.svg
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\raw_q3_graph_scale.png
+LAYOUT raw_q3_tensor_size [('WARN', "以下文字可能超出画布被裁切：['原始 Tensor 大小（B，对数刻度）', '累计比例']。跑 finalize_figure(fig) 或导出时 bbox_inches='tight' 兜底；标题/标签过长可换行或缩短。")]
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\raw_q3_tensor_size.svg
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\raw_q3_tensor_size.png
+LAYOUT raw_q3_graph_bytes [('WARN', "以下文字可能超出画布被裁切：['原始操作数（个/例，对数刻度）', 'DDR 标记 Tensor 名义大小总和（B，对']。跑 finalize_figure(fig) 或导出时 bbox_inches='tight' 兜底；标题/标签过长可换行或缩短。")]
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\raw_q3_graph_bytes.svg
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\raw_q3_graph_bytes.png
+LAYOUT process_q3_coverage [('WARN', "以下文字可能超出画布被裁切：['预注册 case-core 组数（2–5 核）']。跑 finalize_figure(fig) 或导出时 bbox_inches='tight' 兜底；标题/标签过长可换行或缩短。")]
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\process_q3_coverage.svg
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\process_q3_coverage.png
+LAYOUT process_q3_improvements [('WARN', "以下文字可能超出画布被裁切：['严格改善组 / 阶段组数']。跑 finalize_figure(fig) 或导出时 bbox_inches='tight' 兜底；标题/标签过长可换行或缩短。")]
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\process_q3_improvements.svg
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\process_q3_improvements.png
+LAYOUT process_q3_calls [('WARN', "以下文字可能超出画布被裁切：['本阶段官方候选评估调用（次）']。跑 finalize_figure(fig) 或导出时 bbox_inches='tight' 兜底；标题/标签过长可换行或缩短。")]
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\process_q3_calls.svg
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\process_q3_calls.png
+LAYOUT result_q3_scaling [('WARN', "以下文字可能超出画布被裁切：['请求核数 k', '逐例并行加速比的均值（×）']。跑 finalize_figure(fig) 或导出时 bbox_inches='tight' 兜底；标题/标签过长可换行或缩短。")]
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\result_q3_scaling.svg
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\result_q3_scaling.png
+LAYOUT result_q3_effects [('WARN', "以下文字可能超出画布被裁切：['请求核数 k', '逐例配对比值的均值（×）']。跑 finalize_figure(fig) 或导出时 bbox_inches='tight' 兜底；标题/标签过长可换行或缩短。")]
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\result_q3_effects.svg
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\result_q3_effects.png
+LAYOUT result_q3_holdout [('WARN', "以下文字可能超出画布被裁切：['请求核数 k', '留出集逐例 L2 下方案收益（×）']。跑 finalize_figure(fig) 或导出时 bbox_inches='tight' 兜底；标题/标签过长可换行或缩短。")]
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\result_q3_holdout.svg
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\result_q3_holdout.png
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\flow_q3_model.svg
+[scipilot-figure-skill] wrote D:\Code\MathModel\code\MathModel\figures\flow_q3_model.png
+RENDERED 10 Q3 figures

@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "repo": "/home/dell/data/yn/MathModel/code",
+  "git_head": null,
+  "baseline": "/home/dell/data/yn/MathModel/code/artifacts/problem2_stage1_baseline_full",
+  "baseline_git_head": null,
+  "baseline_runner_sha256": "d7fc83a6634eb37c67ed52feb549df478574526f165ecc827043f666fb0acae7",
+  "baseline_solver_sha256": "217f5599ed0b2dc4f7f932c16f3295a57ffb4dab5ca37eb334f7ceab11ce0bdd",
+  "local_runner_lf_sha256": "ad19153b28e4025be6e5ba217e3985ff9316160706a10a9db5fa22ee1948af0f",
+  "local_solver_lf_sha256": "b8fe34006a2ccf9dd90c33d2a386ba5f98e131f4cf6caaf40d58545e18fecae2",
+  "baseline_config_sha256": "dcd10de54b23f8366428fb24e828812b1da9549e6eae4a3c3f38604fe5ae77b9",
+  "local_config": {
+    "raw_sha256": "dcd10de54b23f8366428fb24e828812b1da9549e6eae4a3c3f38604fe5ae77b9",
+    "lf_sha256": "dcd10de54b23f8366428fb24e828812b1da9549e6eae4a3c3f38604fe5ae77b9"
+  },
+  "baseline_official_file_sha256": {
+    "contest_io.py": "d5936908e4c261c7003b78e783f30bd7d65cb38d6b53a269ea67f0103cac848e",
+    "evaluation_validation.py": "103206b8c5c25e37de50cc3193de3989d7c1e01d4a11cc5f509dedd8f9be9a64",
+    "multicore_cut_evaluate_problem_1.py": "2095f188a6c24ce3899f156bef21d50dcd87cbd9368488046b1e77e2bf91af3f",
+    "multicore_cut_evaluate_problem_2.py": "0b39f84d5ec0a7fba9a4c92a598a9044b97ab79c71393824c1ba130ecfe6c464",
+    "schedule_step1.py": "d8fe721ff3dbe036e34a20c00cce6430960860000a49eb467e63465f76b84034",
+    "schedule_step2.py": "2836baac176f4e0bdd9eec59b8d9ce254e209e5f7a251e23837ab684312fa0c3",
+    "schedule_step3.py": "50053db0436f1d166dd75436693ba3af49b5c339576beb6e7299477f6b69fc7a",
+    "stub_multicore_cut_and_schedule.py": "0a3a3b79b5173b466fc05fc8d33b72d11d90b4df78995435853d91c632a35892"
+  },
+  "local_official_dependencies": {
+    "contest_io.py": {
+      "raw_sha256": "d5936908e4c261c7003b78e783f30bd7d65cb38d6b53a269ea67f0103cac848e",
+      "lf_sha256": "d5936908e4c261c7003b78e783f30bd7d65cb38d6b53a269ea67f0103cac848e"
+    },
+    "evaluation_validation.py": {
+      "raw_sha256": "103206b8c5c25e37de50cc3193de3989d7c1e01d4a11cc5f509dedd8f9be9a64",
+      "lf_sha256": "103206b8c5c25e37de50cc3193de3989d7c1e01d4a11cc5f509dedd8f9be9a64"
+    },
+    "multicore_cut_evaluate_problem_1.py": {
+      "raw_sha256": "2095f188a6c24ce3899f156bef21d50dcd87cbd9368488046b1e77e2bf91af3f",
+      "lf_sha256": "2095f188a6c24ce3899f156bef21d50dcd87cbd9368488046b1e77e2bf91af3f"
+    },
+    "multicore_cut_evaluate_problem_2.py": {
+      "raw_sha256": "0b39f84d5ec0a7fba9a4c92a598a9044b97ab79c71393824c1ba130ecfe6c464",
+      "lf_sha256": "0b39f84d5ec0a7fba9a4c92a598a9044b97ab79c71393824c1ba130ecfe6c464"
+    },
+    "multicore_cut_evaluate_problem_3.py": {
+      "raw_sha256": "eab1504dead881f4b67c0f0498cbc2dbbd9039dc3c9d198c6af58773c127eeb0",
+      "lf_sha256": "eab1504dead881f4b67c0f0498cbc2dbbd9039dc3c9d198c6af58773c127eeb0"
+    },
+    "schedule_step1.py": {
+      "raw_sha256": "d8fe721ff3dbe036e34a20c00cce6430960860000a49eb467e63465f76b84034",
+      "lf_sha256": "d8fe721ff3dbe036e34a20c00cce6430960860000a49eb467e63465f76b84034"
+    },
+    "schedule_step2.py": {
+      "raw_sha256": "2836baac176f4e0bdd9eec59b8d9ce254e209e5f7a251e23837ab684312fa0c3",
+      "lf_sha256": "2836baac176f4e0bdd9eec59b8d9ce254e209e5f7a251e23837ab684312fa0c3"
+    },
+    "schedule_step3.py": {
+      "raw_sha256": "50053db0436f1d166dd75436693ba3af49b5c339576beb6e7299477f6b69fc7a",
+      "lf_sha256": "50053db0436f1d166dd75436693ba3af49b5c339576beb6e7299477f6b69fc7a"
+    },
+    "stub_multicore_cut_and_schedule.py": {
+      "raw_sha256": "0a3a3b79b5173b466fc05fc8d33b72d11d90b4df78995435853d91c632a35892",
+      "lf_sha256": "0a3a3b79b5173b466fc05fc8d33b72d11d90b4df78995435853d91c632a35892"
+    }
+  },
+  "counts": {
+    "expected_groups": 500,
+    "manifest_files": 500,
+    "winner_plan_files": 500,
+    "winner_official_result_files": 500,
+    "matching_graph_hashes": 500,
+    "matching_plan_file_hashes": 500,
+    "matching_result_file_hashes": 500
+  },
+  "missing": [],
+  "mismatches": [],
+  "passed": true
+}
