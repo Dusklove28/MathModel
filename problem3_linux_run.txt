@@ -31,8 +31,7 @@ or supplied evaluators.
 2. G0 asset and semantic gate:
 
    python3 audit_problem3_assets.py --output artifacts/problem3_g0/audit.json
-   python3 -m unittest tests.test_problem3_offline_runtime \
-     tests.test_problem3_semantics tests.test_solver_problem3 -v
+   python3 -m unittest discover -s tests -p 'test_problem3*.py' -v
 
    The audit must report passed=true, 500 manifests/plans/results, and empty
    missing/mismatches. Raw file hashes may differ from Windows due to CRLF;
@@ -77,7 +76,7 @@ or supplied evaluators.
 
 4. Only after G1 and its report pass, run the deterministic ordering branch:
 
-   python3 -m unittest tests.test_solver_problem3 -v
+   python3 -m unittest discover -s tests -p 'test_solver_problem3.py' -v
    mkdir -p /media/dell/data/yn/problem3_g2_candidate_cache_v2
    python3 -u run_problem3_g2.py --phase smoke \
      --output artifacts/problem3_g2_ordering_v2 \
