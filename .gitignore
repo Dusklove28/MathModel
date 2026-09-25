@@ -21,6 +21,9 @@ artifacts/*
 !artifacts/各文件夹说明.txt
 
 *.md
+!题目分析报告.md
+!术语表格.md
+!handoff/problem2_final/README.md
 
 # Transfer archives are local inputs, not source artifacts.
 problem1_candidate_cache.zip
