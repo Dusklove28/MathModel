@@ -18,6 +18,7 @@ data/*_problem_*_log.txt
 
 # Local Problem 1 experiment outputs and content-addressed evaluator cache
 artifacts/*
+!artifacts/各文件夹说明.txt
 
 *.md
 

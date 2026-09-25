@@ -1,0 +1,295 @@
+artifacts 各文件夹说明
+=====================
+
+更新时间：2026-09-25 01:13:21 +08:00
+统计口径：容量为当前工作区的近似值；目录内容变化后容量也会变化。
+
+服务器磁盘空间快照
+------------------
+
+记录时间：2026-09-25 00:07:15 +08:00
+来源：用户提供的服务器 `df -h` 输出。以下是磁盘可用空间，不是运行内存（RAM）。
+
+挂载点             设备        总容量    已使用    可用      使用率    当前用途
+/                 /dev/sda5   109G      65G       39G       63%       当前问题二工作区与实验
+/media/dell/data   /dev/sda6   192G      150G      32G       83%       保存第一次问题一全量实验及缓存
+
+sda6 已有问题一产物
+-------------------
+
+位置：`/media/dell/data/yn/`
+来源：用户提供的服务器目录截图。
+
+  problem1_candidates
+  problem1_candidate_cache
+  problem1_full_c4140
+  problem1_inherited_fallback_c4140
+
+说明：截图中最后一个目录名称显示为 `problem1_inherited_fallb...`，结合当前仓库和既有实验记录，按 `problem1_inherited_fallback_c4140` 记载。以上目录是第一次解决问题一时的全量实验结果、候选方案和 Cache，应视为服务器原始实验资产；未经备份和核验，不要覆盖或删除。
+
+空间判断：
+
+1. 当前实验使用 `/dev/sda5`，可用空间约 39G。
+2. 已有 `problem2_stage1_baseline_full` 的展开结果约 11.39 GiB。一次新的完整冷审计，单是 output 就可能再次接近这一规模；独立 cache 还可能增加数 GB 到十余 GB，具体大小取决于候选去重和官方结果文件大小。
+3. 因此 39G 大概率能容纳一次阶段 1 冷审计，但如果 output 和 cache 都放在 sda5，再继续保留阶段 2/3 全量产物，空间会偏紧，不能视为长期充足。
+4. 建议阶段 1 冷审计期间至少保留 15G 安全余量；可用空间低于 15G 时不要启动新的批量实验，低于 10G 时应先归档或迁移已有产物。
+5. `/dev/sda6` 尚余 32G，但其中已经保存第一次问题一全量实验和 Cache，使用率已达 83%。若需要分散写入，可为问题二冷审计新建 `/media/dell/data/yn/problem2_stage1_cache_cold_audit`，不得复用或覆盖上述问题一目录；同时仍需监控两个分区。
+6. 阶段 2 的 12 例及后续全量实验开始前，应重新记录一次 `df -h`，并根据阶段 1 冷审计的实际 output/cache 大小更新预算。
+7. 阶段 1 冷审计现已完成：output 约 10.72 GiB、cache 约 9.08 GiB，合计约 19.80 GiB。若这两者都仍在 sda5，按原 39G 空闲粗算只余约 19G；把 cache 迁到 sda6 并核验后再删除 sda5 原副本，可把 sda5 空闲恢复到约 28G。sda6 在迁入 9.08 GiB 后预计约余 23G，足以容纳 Gate B 的独立缓存，但后续仍须监控。
+
+服务器运行时建议监控：
+
+  watch -n 60 'df -h / /media/dell/data; du -sh artifacts/problem2_stage1_baseline_cold_audit artifacts/problem2_stage1_cache_cold_audit /media/dell/data/yn/problem2_stage1_cache_cold_audit 2>/dev/null'
+
+如需把冷审计缓存分配到 sda6，可使用：
+
+  python -u run_problem2_baseline.py \
+    --repo . \
+    --output artifacts/problem2_stage1_baseline_cold_audit \
+    --cache /media/dell/data/yn/problem2_stage1_cache_cold_audit \
+    --workers 32
+
+冷审计现已完成，已有 cache 的安全迁移步骤如下。先复制并逐文件校验；在确认 `diff -qr` 无输出、文件数和容量一致之前，不要删除 sda5 原目录：
+
+  mkdir -p /media/dell/data/yn/problem2_stage1_cache_cold_audit
+  rsync -a --info=progress2 \
+    artifacts/problem2_stage1_cache_cold_audit/ \
+    /media/dell/data/yn/problem2_stage1_cache_cold_audit/
+  diff -qr \
+    artifacts/problem2_stage1_cache_cold_audit \
+    /media/dell/data/yn/problem2_stage1_cache_cold_audit
+  find artifacts/problem2_stage1_cache_cold_audit -type f | wc -l
+  find /media/dell/data/yn/problem2_stage1_cache_cold_audit -type f | wc -l
+  du -sh \
+    artifacts/problem2_stage1_cache_cold_audit \
+    /media/dell/data/yn/problem2_stage1_cache_cold_audit
+
+阶段 2 不复用阶段 1 cache。Gate B 使用独立目录：
+
+  /media/dell/data/yn/problem2_stage2_mapping_cache_gate_b
+
+分类说明
+--------
+
+【正式证据】已用于阶段结论、论文材料或全量结果，应保留。
+【开发实验】算法开发过程中的探针或候选结果，可重算，不应替代正式结果。
+【质检/Smoke】用于检查合法性、缓存、断点续跑或跨环境一致性，不代表全量结论。
+【缓存】只用于加速重跑，删除后可以重新生成。
+【未完成】失败、预检中止或被中断的运行，不能作为正式结论。
+
+重要原则
+--------
+
+1. artifacts/ 中大部分运行产物已被 .gitignore 忽略，不要使用 git add -f 把大目录提交到 Git。
+2. 运行 problem2_stage1_baseline_cold_audit 不需要读取任何旧 artifacts；新 output 和 cache 必须为空或不存在。
+3. 正式数值结论以官方评估器输出、汇总 CSV/JSON、输入与源码哈希为准。
+4. 同一 output/cache 目录只能由一个主进程写入；--workers 是单个主进程内部并行度。
+5. “可不上传”不等于建议立即删除；删除前应确认服务器或其他介质已有备份，且不再需要断点续跑。
+
+现有文件夹
+----------
+
+1. p1_qa_problem2_20260924_qa_cache_replay（约 2.81 MiB）
+   分类：【质检/Smoke】
+   用途：问题二阶段 1 的独立 P1 质检产物，验证已有缓存的重放、结果一致性及独立官方复核。
+   地位：只用于证明缓存复用没有改变结果，不是正式全量基线。
+   上传建议：通常不需要上传；若需要保留完整质检证据，可以上传，体积很小。
+
+2. p1_qa_problem2_20260924_qa_cold（约 4.02 MiB）
+   分类：【质检/Smoke】
+   用途：独立 P1 质检的新目录执行样例，主要覆盖 case_001 的少量核数和无候选缓存路径。
+   地位：验证运行器和候选管理器，不代表 100 个 case。
+   上传建议：通常不需要上传；可重算。
+
+3. p1_qa_problem2_20260924_resume_integrity（约 2.07 MiB）
+   分类：【质检/Smoke】
+   用途：验证断点续跑必须检查计划、候选记录和官方结果文件的完整性，防止损坏产物被错误复用。
+   地位：回归测试证据，不是正式实验。
+   上传建议：通常不需要上传；可重算。
+
+4. problem1_b0（约 6.28 MiB）
+   分类：【开发实验】
+   用途：问题一早期 B0 切图方案在少量 case、核数下的计划、日志、trace 和官方结果。
+   地位：历史开发探针；正式问题一结论应看 problem1_full_c4140 等全量目录。
+   上传建议：通常不需要上传。
+
+5. problem1_b05_b1（约 31.35 MiB）
+   分类：【开发实验】
+   用途：问题一 B0/B1 方案的对照实验、诊断、计划、日志和官方结果。
+   地位：用于算法形成过程和消融追溯，不是最终全量汇总。
+   上传建议：论文若需要展示早期消融可保留；否则不必跨机器同步。
+
+6. problem1_b2a（约 89.92 MiB）
+   分类：【开发实验】
+   用途：问题一 B2A-w4、B2A-w8、B2A-w16 三种窗口方案的开发实验和官方评估记录。
+   地位：解释六候选体系的来源；正式总体性能仍以全量目录为准。
+   上传建议：不是问题二运行依赖，通常不需要上传。
+
+7. problem1_candidate_cache（约 1.80 GiB）
+   分类：【缓存】
+   用途：问题一候选的内容寻址官方评估缓存，包含 entries/ 和 results/。
+   地位：只负责加速重跑，不是唯一结果证据。
+   上传建议：不要上传到 Git；跨机器可不传，缺失时重新评估即可。只有为了节省大量重算时间时才单独迁移。
+
+8. problem1_candidates（约 54.88 MiB）
+   分类：【开发实验】
+   用途：问题一开发 case 的候选计划、候选记录和分组结果，覆盖多种切图方案。
+   地位：比缓存更适合人工追溯候选生成过程，但不替代全量汇总。
+   上传建议：问题二冷启动基线不需要；需要复查问题一开发过程时再同步。
+
+9. problem1_development_analysis（约 0.32 MiB）
+   分类：【正式证据/开发分析】
+   用途：问题一开发集的候选明细、按 case/方法消融表、输入审计和图表。
+   地位：轻量且适合论文分析，建议保留。
+   上传建议：可以上传或备份，体积很小；但不要将其误当成 100 case 最终结果。
+
+10. problem1_devrun（不足 0.01 MiB）
+    分类：【未完成】
+    用途：一次问题一开发运行的 stdout/stderr 日志；stdout 显示运行只进行到部分任务。
+    地位：仅用于排查当时运行过程，不能作为完整实验结果。
+    上传建议：不需要上传；如无排错价值可在备份后清理。
+
+11. problem1_full（不足 0.01 MiB）
+    分类：【未完成】
+    用途：一次问题一全量运行的预检失败记录和冻结指纹；记录显示 case_016/k2 缺少 manifest。
+    地位：失败尝试，不是正式全量结果。
+    上传建议：不需要上传；保留小文件可说明失败原因。
+
+12. problem1_full_c4140（约 16.35 MiB）
+    分类：【正式证据】
+    用途：C4140 服务器上完成的问题一 100 case、2～5 核全量实验，包括分组结果、单核基准、日志和汇总。
+    地位：问题一主要全量数值证据；summary 记录 400/400 候选组完成、失败数为 0。
+    上传建议：建议完整保留；体积较小，可以跨机器备份。Git 中只跟踪了少量冻结/汇总文件，不代表整个目录都已上传。
+
+13. problem1_inherited_fallback_c4140（约 3.38 GiB）
+    分类：【正式证据】
+    用途：问题一低核优胜方案向高核空核继承的全量官方复评、候选计划、结果和日志。
+    地位：问题一继承候选及其消融的重要证据。
+    上传建议：展开目录不建议上传 Git；跨机器迁移优先使用 artifacts 顶层已有的 problem1_inherited_fallback_c4140.zip（约 206 MiB），并保留汇总 CSV/JSON。
+
+14. problem1_paper_figures（约 147.89 MiB）
+    分类：【正式证据】
+    用途：问题一论文图表的数据、绘图脚本、图片、图表契约、QA 和说明文档。
+    地位：论文复现资产；其中多项文件已经被 Git 跟踪。
+    上传建议：必须保留并按 Git 正常同步，不要用新的大目录覆盖其中已有文件。
+
+15. problem2_stage1_baseline_full（约 11.39 GiB）
+    分类：【正式证据】
+    用途：问题二场景 B 阶段 1 的完整基线，覆盖 100 case × 1～5 核，共 500 组、3600 条逻辑候选、3449 个不同方案官方评估。
+    地位：当前问题二最重要的阶段 1 数值证据；旧产物应保持原样，不回填历史字段。
+    主要空间：groups/ 约 10.97 GiB；groups.tar.gz 约 690 MiB；顶层 CSV/JSON 合计约 6 MiB。
+    上传建议：
+      - 服务器已有该目录时，不要重复上传。
+      - 只做分析时，仅同步顶层 CSV/JSON。
+      - 另一台机器需要完整计划和官方结果时，传 groups.tar.gz，不传展开后的 groups/。
+      - 不要提交到 Git。
+
+16. problem2_stage1_p20_recheck（约 2.04 MiB）
+    分类：【正式复核证据】
+    用途：重新执行 P2-0 三个 case、2/4/5 核、六方案的冻结探针，共 54 次官方评估。
+    地位：54/54 成功，用于证明新环境、当前方案签名和历史 P2-0 口径一致。
+    上传建议：建议保留；体积小，可作为阶段 1 复核包同步。
+
+17. problem2_stage1_provenance_smoke_20260924（约 4.03 MiB）
+    分类：【质检/Smoke】
+    用途：验证新版运行级溯源功能。第一次调用执行 2 组，第二次调用续跑 2 组，并分别保存 invocation identity/progress/summary/history。
+    地位：证明 Git/源码快照、执行与续跑计数、墙钟记录修补有效；不是全量基线。
+    上传建议：通常不需要上传；交接文档已经记录关键结果，可重算。
+
+18. problem2_stage1_smoke（约 8.80 MiB）
+    分类：【质检/Smoke】
+    用途：问题二阶段 1 早期 case_001、1～3 核的候选生成、合法性、缓存和汇总 smoke。
+    地位：早期检查产物；正式结论看 problem2_stage1_baseline_full。
+    上传建议：不需要上传；可重算。
+
+19. problem2_stage1_baseline_cold_audit（约 10.72 GiB，12,164 个文件）
+   分类：【正式证据】
+   用途：阶段 1 在全新 output/cache 下完成的 100 case × 1～5 核冷审计，500/500 组、3600 候选、3449 次实际官方评估、151 次去重、0 失败；端到端墙钟约 43 分 58 秒。
+   地位：补齐原全量结果缺失的冷执行与运行级溯源证据。独立质检已逐项核验缓存键、约 9.740 GB 结果文件哈希、规范 JSON 哈希和稳定指标，结论 PASS。
+   上传建议：不要上传整个展开目录到 Git。跨机器做阶段 2 时需要其中五类非 single 方案和对应官方基线结果；当前本机已有完整副本，服务器原目录应继续保留。轻量备份优先保存顶层 CSV/JSON、invocations/ 和每组方案/记录索引。
+
+20. problem2_stage1_cache_cold_audit（约 9.08 GiB，6,898 个文件）
+   分类：【缓存】
+   用途：上述冷审计 3449 个代表候选的内容寻址官方结果缓存。
+   地位：已经通过完整哈希审计，但不属于唯一数值证据；阶段 2 不直接复用它。
+   上传建议：不上传 Git。服务器目标位置为 `/media/dell/data/yn/problem2_stage1_cache_cold_audit/`；复制、逐文件核验和备份确认完成后，才考虑移除 sda5 原副本以回收约 9.08 GiB。
+
+21. problem2_stage2_mapping_gate_a / problem2_stage2_mapping_cache_gate_a（约 27.14 MiB 合计）
+   分类：【开发实验/旧 Gate A】
+   用途：阶段 2 Gate A 在实现冻结前的迭代目录，包含旧代理量纲和运行历史功能加入前后的若干内容寻址键。
+   地位：仅保留开发追溯；正式 Gate A 结论已经转移到带 `_final` 后缀的目录，不应引用本目录数值。
+   上传建议：无需上传；如需清理，必须先确认 `_final` 目录和交接文档已备份。
+
+22. problem2_stage2_mapping_gate_a_final（约 9.13 MiB，39 个文件）
+   分类：【质检/Smoke】
+   用途：最终阶段 2 固定切图核映射 Gate A；覆盖 case_050/k4 与 case_100/k5 的 B2A-w16，保留原映射并比较 critical/locality/memory 三个新映射。
+   地位：2/2 组、6/6 映射合法、0 失败、5 次新增官方评估、1 次去重；case_050/k4 为 46,748→44,776，case_100/k5 为 95,434→91,758。invocation 历史保留首次 19.416 秒真实执行及三次 runner-only 修补后的纯续跑，后续调用均未新增官方评估。继续判据 PASS，但不能代表 100 case 总体结论。
+   上传建议：体积小，建议完整保留并随阶段 2 交接同步；不提交展开官方结果到 Git。
+
+23. problem2_stage2_mapping_cache_gate_a_final（约 8.57 MiB，10 个文件）
+   分类：【缓存】
+   用途：最终 Gate A 的独立内容寻址缓存，含 5 个唯一新官方结果及其条目。
+   地位：只用于快速复跑。相同最终命令已验证 2/2 组严格续跑、当次新增官方评估为 0。
+   上传建议：无需上传；Gate B 使用新的独立缓存目录，不与它混用。
+
+artifacts 顶层文件（不是文件夹）
+-------------------------------
+
+1. problem1_development_summary.csv / .json
+   问题一开发集汇总，轻量，建议保留。
+
+2. problem1_devset.json
+   问题一开发 case 划分或清单，轻量，建议保留以保证复现。
+
+3. problem1_inherited_fallback_c4140.zip（约 206 MiB）
+   problem1_inherited_fallback_c4140 的压缩迁移包。跨机器优先传此文件，不必传 3.38 GiB 展开目录。
+
+计划生成但当前尚不存在的目录
+----------------------------
+
+1. problem2_stage2_mapping_gate_b
+   三例纵向 Gate B 输出：case_001、case_050、case_100 × 2/4/5 核 × 五类非 single 切图；每组保留原映射并最多评估三个新映射。预计 45 组、135 个逻辑新映射，实际官方评估数可能因去重而更少。
+
+2. /media/dell/data/yn/problem2_stage2_mapping_cache_gate_b
+   Gate B 的独立内容寻址缓存，放在 sda6。不得与阶段 1 cache、Gate A cache或问题一 cache 共用目录。
+
+问题二当前最小保留集合
+----------------------
+
+代码仓库：
+  run_problem2_baseline.py
+  run_problem2_stage2_mapping.py
+  candidate_manager_problem2.py
+  candidate_manager_problem2_stage2.py
+  candidate_manager_problem1.py
+  solver_problem1.py
+  solver_problem2.py
+  data/
+  code/ 官方评估器目录
+
+阶段 1 轻量证据：
+  problem2_stage1_baseline_full/summary.json
+  problem2_stage1_baseline_full/run_identity.json
+  problem2_stage1_baseline_full/budget_estimate.json
+  problem2_stage1_baseline_full/aggregate_by_core.csv
+  problem2_stage1_baseline_full/candidate_aggregate.csv
+  problem2_stage1_baseline_full/candidate_results.csv
+  problem2_stage1_baseline_full/selected_results.csv
+  problem2_stage1_baseline_full/paired_vs_single.csv
+  problem2_stage1_baseline_full/per_core_utilization.csv
+  problem2_stage1_baseline_full/failures.csv
+  problem2_stage1_baseline_full/latest_progress.json
+
+完整断点续跑或逐候选审计（可选）：
+  problem2_stage1_baseline_full/groups.tar.gz
+  problem2_stage1_baseline_cold_audit/groups/
+
+阶段 2 当前最小证据：
+  problem2_stage2_mapping_gate_a_final/run_identity.json
+  problem2_stage2_mapping_gate_a_final/summary.json
+  problem2_stage2_mapping_gate_a_final/invocation_history.json
+  problem2_stage2_mapping_gate_a_final/candidate_results.csv
+  problem2_stage2_mapping_gate_a_final/paired_mapping_results.csv
+  problem2_stage2_mapping_gate_a_final/case_core_results.csv
+  problem2_stage2_mapping_gate_a_final/failures.csv
+

@@ -19,7 +19,10 @@ from candidate_manager_problem2 import (
 from run_problem2_baseline import (
     _aggregate_winners,
     _discover_cases,
+    _git_provenance,
     _group_artifacts_intact,
+    _record_invocation_finish,
+    _write_invocation_progress,
 )
 
 
@@ -298,6 +301,68 @@ class Problem2CandidateManagerTests(unittest.TestCase):
             ):
                 (data / name).write_text("{}", encoding="utf-8")
             self.assertEqual(_discover_cases(root), ["case_001", "case_100"])
+
+    def test_invocation_history_separates_execution_from_resume(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary)
+            identity = {"started_at": "2026-09-24T00:00:00+00:00"}
+            summary = {
+                "expected_groups": 2,
+                "representative_cache_hit_count": 0,
+            }
+            first_progress = [
+                {"case": "case_001", "cores": 1, "status": "success",
+                 "run_disposition": "executed"},
+                {"case": "case_001", "cores": 2, "status": "success",
+                 "run_disposition": "executed"},
+            ]
+            _write_invocation_progress(output, "first", first_progress)
+            first = _record_invocation_finish(
+                output, "first", identity, first_progress, summary, 12.5, True)
+            self.assertTrue(first["fresh_evaluation_complete"])
+            self.assertEqual(first["executed_groups"], 2)
+            self.assertEqual(first["resumed_groups"], 0)
+
+            resumed_progress = [
+                {"case": "case_001", "cores": 1, "status": "success",
+                 "run_disposition": "resumed_valid_group"},
+                {"case": "case_001", "cores": 2, "status": "success",
+                 "run_disposition": "resumed_valid_group"},
+            ]
+            _write_invocation_progress(output, "second", resumed_progress)
+            second = _record_invocation_finish(
+                output, "second", identity, resumed_progress, summary, 0.5, True)
+            self.assertFalse(second["fresh_evaluation_complete"])
+            self.assertEqual(second["executed_groups"], 0)
+            self.assertEqual(second["resumed_groups"], 2)
+
+            history = json.loads(
+                (output / "invocation_history.json").read_text(encoding="utf-8"))
+            self.assertEqual(
+                [item["invocation_id"] for item in history["invocations"]],
+                ["first", "second"],
+            )
+            latest = json.loads(
+                (output / "latest_progress.json").read_text(encoding="utf-8"))
+            self.assertEqual(latest["invocation_id"], "second")
+            self.assertEqual(
+                latest["disposition_counts"], {"resumed_valid_group": 2})
+
+            cache_summary = {
+                "expected_groups": 2,
+                "representative_cache_hit_count": 1,
+            }
+            cached = _record_invocation_finish(
+                output, "cached", identity, first_progress,
+                cache_summary, 1.0, True)
+            self.assertFalse(cached["fresh_evaluation_complete"])
+
+    def test_git_probe_failure_preserves_reason(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            probe = _git_provenance(Path(temporary))
+            self.assertIsNone(probe["git_head"])
+            self.assertIn(probe["git_probe_status"], {"failed", "unavailable"})
+            self.assertTrue(probe["git_probe_error"])
 
 
 if __name__ == "__main__":

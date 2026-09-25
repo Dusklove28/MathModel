@@ -11,10 +11,12 @@ import argparse
 import csv
 import json
 import math
+import os
 import re
 import statistics
 import subprocess
 import time
+from collections import Counter
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
@@ -65,14 +67,180 @@ def _write_csv(
     temporary.replace(path)
 
 
-def _git_head(repo: Path) -> str | None:
+def _git_provenance(repo: Path) -> Dict[str, Any]:
+    """Return auditable Git metadata without making Git a hard dependency."""
+
     try:
-        return subprocess.check_output(
-            ["git", "rev-parse", "HEAD"], cwd=repo, text=True,
-            stderr=subprocess.DEVNULL,
-        ).strip()
-    except (OSError, subprocess.CalledProcessError):
-        return None
+        head_probe = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=repo,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+    except OSError as error:
+        return {
+            "git_head": None,
+            "git_probe_status": "unavailable",
+            "git_probe_error": "{}: {}".format(type(error).__name__, error),
+            "git_worktree_dirty": None,
+            "git_status_entry_count": None,
+        }
+    if head_probe.returncode != 0:
+        error = (head_probe.stderr or head_probe.stdout).strip()
+        return {
+            "git_head": None,
+            "git_probe_status": "failed",
+            "git_probe_error": error or "git rev-parse exited non-zero",
+            "git_worktree_dirty": None,
+            "git_status_entry_count": None,
+        }
+
+    status_probe = subprocess.run(
+        ["git", "status", "--short", "--untracked-files=normal"],
+        cwd=repo,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if status_probe.returncode == 0:
+        status_entries = [
+            line for line in status_probe.stdout.splitlines() if line.strip()
+        ]
+        dirty = bool(status_entries)
+        status_count = len(status_entries)
+        status_error = None
+    else:
+        dirty = None
+        status_count = None
+        status_error = (
+            (status_probe.stderr or status_probe.stdout).strip()
+            or "git status exited non-zero"
+        )
+    return {
+        "git_head": head_probe.stdout.strip(),
+        "git_probe_status": "success",
+        "git_probe_error": status_error,
+        "git_worktree_dirty": dirty,
+        "git_status_entry_count": status_count,
+    }
+
+
+def _git_head(repo: Path) -> str | None:
+    """Backward-compatible convenience wrapper used by older integrations."""
+
+    return _git_provenance(repo)["git_head"]
+
+
+def _invocation_id(started_at: str) -> str:
+    compact = re.sub(r"[^0-9A-Za-z]+", "", started_at)
+    return "{}-p{}".format(compact, os.getpid())
+
+
+def _progress_payload(
+    invocation_id: str, progress: Sequence[Mapping[str, Any]],
+) -> Dict[str, Any]:
+    dispositions = Counter(
+        str(item.get("run_disposition") or "unknown") for item in progress)
+    statuses = Counter(str(item.get("status") or "unknown") for item in progress)
+    return {
+        "schema_version": 2,
+        "invocation_id": invocation_id,
+        "records": sorted(progress, key=lambda item: (
+            str(item.get("case") or ""), int(item.get("cores") or 0))),
+        "disposition_counts": dict(sorted(dispositions.items())),
+        "status_counts": dict(sorted(statuses.items())),
+        "timestamp": _utc_now(),
+    }
+
+
+def _write_invocation_progress(
+    output: Path,
+    invocation_id: str,
+    progress: Sequence[Mapping[str, Any]],
+) -> None:
+    payload = _progress_payload(invocation_id, progress)
+    _write_json(output / "latest_progress.json", payload)
+    _write_json(
+        output / "invocations" / invocation_id / "progress.json", payload)
+
+
+def _record_invocation_finish(
+    output: Path,
+    invocation_id: str,
+    run_identity: Mapping[str, Any],
+    progress: Sequence[Mapping[str, Any]],
+    summary: Mapping[str, Any],
+    elapsed_wall_seconds: float,
+    complete: bool,
+) -> Dict[str, Any]:
+    progress_payload = _progress_payload(invocation_id, progress)
+    dispositions = progress_payload["disposition_counts"]
+    executed_groups = int(dispositions.get("executed", 0))
+    resumed_groups = int(dispositions.get("resumed_valid_group", 0))
+    expected_groups = int(summary.get("expected_groups") or 0)
+    cache_hits = int(summary.get("representative_cache_hit_count") or 0)
+    fresh_evaluation_complete = bool(
+        complete
+        and executed_groups == expected_groups
+        and resumed_groups == 0
+        and cache_hits == 0
+    )
+    record = {
+        "schema_version": 2,
+        "invocation_id": invocation_id,
+        "started_at": run_identity.get("started_at"),
+        "finished_at": _utc_now(),
+        "elapsed_wall_seconds": elapsed_wall_seconds,
+        "complete": complete,
+        "expected_groups": expected_groups,
+        "recorded_progress_groups": len(progress),
+        "executed_groups": executed_groups,
+        "resumed_groups": resumed_groups,
+        "failed_groups": sum(
+            count for status, count in progress_payload["status_counts"].items()
+            if status != "success"
+        ),
+        "representative_cache_hit_count": cache_hits,
+        "fresh_evaluation_complete": fresh_evaluation_complete,
+        "timing_scope": "end-to-end wall time for this invocation",
+        "identity_file": (
+            "invocations/{}/identity.json".format(invocation_id)),
+        "progress_file": (
+            "invocations/{}/progress.json".format(invocation_id)),
+    }
+    invocation_dir = output / "invocations" / invocation_id
+    _write_json(invocation_dir / "summary.json", record)
+
+    history_path = output / "invocation_history.json"
+    history_records: List[Dict[str, Any]] = []
+    if history_path.is_file():
+        try:
+            existing = _load_json(history_path)
+            records = existing.get("invocations", [])
+            if isinstance(records, list):
+                history_records = [
+                    dict(item) for item in records if isinstance(item, Mapping)
+                ]
+        except (OSError, TypeError, ValueError, json.JSONDecodeError):
+            history_records = []
+    history_records = [
+        item for item in history_records
+        if item.get("invocation_id") != invocation_id
+    ]
+    history_records.append(record)
+    history_records.sort(key=lambda item: (
+        str(item.get("started_at") or ""), str(item.get("invocation_id") or "")))
+    _write_json(history_path, {
+        "schema_version": 2,
+        "invocations": history_records,
+        "note": (
+            "Only invocations executed by a provenance-aware runner are listed; "
+            "earlier overwritten invocation timing is not reconstructed."),
+    })
+    return record
 
 
 def _quantile(values: Sequence[float], probability: float) -> float | None:
@@ -586,6 +754,8 @@ def summarize(output: Path, cases: Sequence[str], max_cores: int) -> Dict[str, A
         row for row in candidate_rows
         if row["status"] == "evaluated" and not row["deduplicated"]
     ]
+    representative_cache_hits = sum(
+        bool(row.get("cache_hit")) for row in representative_rows)
     observed_cold = [
         float(row["cold_cache_estimated_seconds"])
         for row in representative_rows
@@ -624,6 +794,10 @@ def summarize(output: Path, cases: Sequence[str], max_cores: int) -> Dict[str, A
         "successful_groups": sum(group.get("status") == "success" for group in groups),
         "candidate_record_count": len(candidate_rows),
         "candidate_failure_count": len(failures),
+        "representative_candidate_count": len(representative_rows),
+        "representative_cache_hit_count": representative_cache_hits,
+        "deduplicated_candidate_count": sum(
+            bool(row.get("deduplicated")) for row in candidate_rows),
         "budget": budget,
         "timestamp": _utc_now(),
     }
@@ -644,6 +818,7 @@ def _discover_cases(repo: Path) -> List[str]:
 
 
 def main() -> int:
+    invocation_started = time.perf_counter()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parent)
     parser.add_argument("--output", type=Path, required=True)
@@ -665,18 +840,26 @@ def main() -> int:
     if args.workers < 1:
         parser.error("--workers must be positive")
 
+    started_at = _utc_now()
+    invocation_id = _invocation_id(started_at)
     evaluator_hash, evaluator_files = official_scene_b_hash()
     implementation_hash, implementation_files = problem2_implementation_hash()
-    run_identity = {
-        "schema_version": 1,
-        "experiment": "problem2_scene_b_baseline",
-        "git_head": _git_head(repo),
+    git_provenance = _git_provenance(repo)
+    source_snapshot = {
         "runner_sha256": sha256_file(Path(__file__).resolve()),
         "solver_sha256": sha256_file(repo / "solver_problem1.py"),
         "config_sha256": sha256_file(repo / "data" / "config.txt"),
         "evaluator_sha256": evaluator_hash,
-        "evaluator_file_sha256": evaluator_files,
         "problem2_implementation_sha256": implementation_hash,
+    }
+    run_identity = {
+        "schema_version": 2,
+        "experiment": "problem2_scene_b_baseline",
+        "invocation_id": invocation_id,
+        **git_provenance,
+        **source_snapshot,
+        "source_snapshot_sha256": json_sha256(source_snapshot),
+        "evaluator_file_sha256": evaluator_files,
         "implementation_file_sha256": implementation_files,
         "cases": cases,
         "max_cores": args.max_cores,
@@ -687,9 +870,11 @@ def main() -> int:
             "padding": "append empty core schedules only",
             "one_core_inheritance": "omitted because target single is equivalent",
         },
-        "started_at": _utc_now(),
+        "started_at": started_at,
     }
     _write_json(output / "run_identity.json", run_identity)
+    _write_json(
+        output / "invocations" / invocation_id / "identity.json", run_identity)
 
     payloads = [{
         "repo": str(repo),
@@ -728,23 +913,24 @@ def main() -> int:
                         "error": "{}: {}".format(type(error).__name__, error),
                     })
                     print("{}: worker_failed: {}".format(case, error), flush=True)
-                _write_json(output / "latest_progress.json", {
-                    "records": sorted(progress, key=lambda item: (
-                        item["case"], item["cores"] or 0)),
-                    "timestamp": _utc_now(),
-                })
+                _write_invocation_progress(output, invocation_id, progress)
                 summarize(output, cases, args.max_cores)
-    _write_json(output / "latest_progress.json", {
-        "records": sorted(progress, key=lambda item: (
-            item["case"], item["cores"] or 0)),
-        "timestamp": _utc_now(),
-    })
+    _write_invocation_progress(output, invocation_id, progress)
     summary = summarize(output, cases, args.max_cores)
     failures = [item for item in progress if item["status"] != "success"]
     complete = (
         summary["recorded_groups"] == summary["expected_groups"]
         and summary["successful_groups"] == summary["expected_groups"]
         and not failures
+    )
+    _record_invocation_finish(
+        output,
+        invocation_id,
+        run_identity,
+        progress,
+        summary,
+        time.perf_counter() - invocation_started,
+        complete,
     )
     return 0 if complete else 1
 
