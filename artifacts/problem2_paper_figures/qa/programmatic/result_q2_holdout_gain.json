@@ -1,0 +1,15 @@
+{
+  "figure": "result_q2_holdout_gain",
+  "size_inches": [
+    6.3,
+    3.9
+  ],
+  "dpi": 600,
+  "layout_verdict": "PASS",
+  "issues": [],
+  "files": {
+    "result_q2_holdout_gain.svg": "c06a7dfd578b0c7a2ccdffc3454214c6de05d687ec98a7a014599324aef43d3e",
+    "result_q2_holdout_gain.png": "75bae5cfb1b6b09e179cd2ac5a09bebaea047f0aa826ee1d5aaaa2ba4ab6fad8",
+    "result_q2_holdout_gain_grayscale.png": "342fac89e2742246bdd589695ae76a592659003c04fb0458a5bec8b6c6308d2a"
+  }
+}

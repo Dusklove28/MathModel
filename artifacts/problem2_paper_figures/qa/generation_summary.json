@@ -1,0 +1,158 @@
+{
+  "source": "official Scene B, frozen problem2_final_v1",
+  "snapshot_only": false,
+  "figure_count": 10,
+  "source_hashes_sha256": "1693eac82ad2e57d10aa2ea97287b18190d9c45a9c1ee3060b69fcd649f02de8",
+  "reports": [
+    {
+      "figure": "raw_q2_graph_scale",
+      "size_inches": [
+        6.3,
+        3.9
+      ],
+      "dpi": 600,
+      "layout_verdict": "PASS",
+      "issues": [],
+      "files": {
+        "raw_q2_graph_scale.svg": "9ab0fe290960846805ed1b25c126556206fa39ccc32c8becef2c888b31aea725",
+        "raw_q2_graph_scale.png": "b28c4d48357df23e8bfe6995209621a5cd8b9c69c18b59a5d579b869be2c9087",
+        "raw_q2_graph_scale_grayscale.png": "5a48be07597b625b4761741d2fb0fe9ec830cccd06dfe0fa09531eebf59d1a42"
+      }
+    },
+    {
+      "figure": "raw_q2_tensor_footprint",
+      "size_inches": [
+        6.3,
+        3.9
+      ],
+      "dpi": 600,
+      "layout_verdict": "PASS",
+      "issues": [],
+      "files": {
+        "raw_q2_tensor_footprint.svg": "3d3d33e27e24215f7521d66fb3926a60c0f4b4e872633e38b93ba5b9a9db7e60",
+        "raw_q2_tensor_footprint.png": "0e4aca715289496cd77dd9a77a80282e1c440750473e1ef52fe11c6d94b44b84",
+        "raw_q2_tensor_footprint_grayscale.png": "372641baf272faaeb08dcc6d22f83d5825d0d279a590270e13fd1027a03d9967"
+      }
+    },
+    {
+      "figure": "raw_q2_graph_io",
+      "size_inches": [
+        6.3,
+        3.9
+      ],
+      "dpi": 600,
+      "layout_verdict": "PASS",
+      "issues": [],
+      "files": {
+        "raw_q2_graph_io.svg": "92d4430ab3067896ff8984ed8e270f1a6373bb79c650288b06c98e8a10952e5b",
+        "raw_q2_graph_io.png": "703a01b96f4018ab163a95e2eba95d8ae5ce795a3e84aa17be6ae38d2a625ce7",
+        "raw_q2_graph_io_grayscale.png": "36250a81afa912d252a4e82f376d95a305682fc75ebe8f9d35fe996c69c36b8a"
+      }
+    },
+    {
+      "figure": "process_q2_candidate_coverage",
+      "size_inches": [
+        6.3,
+        3.9
+      ],
+      "dpi": 600,
+      "layout_verdict": "PASS",
+      "issues": [],
+      "files": {
+        "process_q2_candidate_coverage.svg": "a1959658c22e2a0e2fb0be6252455e2a15842cd12140440b97f35efdc8f09b6d",
+        "process_q2_candidate_coverage.png": "17340c3c55ee31c077c575bdd95e192e2eb66f6a160fa709347984948b8857a5",
+        "process_q2_candidate_coverage_grayscale.png": "8616a50da0cf4d260b952dc7e39b8296519cd8a918e097c6f8ddf90773182b71"
+      }
+    },
+    {
+      "figure": "process_q2_mapping_effect",
+      "size_inches": [
+        6.3,
+        3.9
+      ],
+      "dpi": 600,
+      "layout_verdict": "PASS",
+      "issues": [],
+      "files": {
+        "process_q2_mapping_effect.svg": "3f0126a5b7e820a39cea99bb4beb853d86c7d221683413c68c0662253ae9817e",
+        "process_q2_mapping_effect.png": "19982892cdaa9057027a203863c3aa4b0b661ffb58d55c5294b1b3092951b9d6",
+        "process_q2_mapping_effect_grayscale.png": "feeef7c3a97351535525383e701e333d40ccdee4eee68a30db8ed2b2f1493eb5"
+      }
+    },
+    {
+      "figure": "process_q2_portfolio_selection",
+      "size_inches": [
+        6.3,
+        3.9
+      ],
+      "dpi": 600,
+      "layout_verdict": "PASS",
+      "issues": [],
+      "files": {
+        "process_q2_portfolio_selection.svg": "df5848203b064e62a46f6ea22b870edbbccafc21e7ae1ee8c7142a9847b679ae",
+        "process_q2_portfolio_selection.png": "5f194083744ab31df25cfe34575914b265a9633e3a74a49124d767b6108a6ceb",
+        "process_q2_portfolio_selection_grayscale.png": "be67a01ceeef32e1bff747a3ef1cd65a7f7fe777395fbe6dba855ae14c09735e"
+      }
+    },
+    {
+      "figure": "result_q2_scaling",
+      "size_inches": [
+        6.3,
+        3.9
+      ],
+      "dpi": 600,
+      "layout_verdict": "PASS",
+      "issues": [],
+      "files": {
+        "result_q2_scaling.svg": "df83cb65b30387c8462b1c8e287f55847b04ea6655073a29655ff17369923ba8",
+        "result_q2_scaling.png": "e172fae49ee8dc19437231e3d644bf88e698dea01b9624c784602110b03c4602",
+        "result_q2_scaling_grayscale.png": "c39b8a021448bf947d30969174bd6fdd400a404929c9abb63f040b4b15d1d1f4"
+      }
+    },
+    {
+      "figure": "result_q2_holdout_gain",
+      "size_inches": [
+        6.3,
+        3.9
+      ],
+      "dpi": 600,
+      "layout_verdict": "PASS",
+      "issues": [],
+      "files": {
+        "result_q2_holdout_gain.svg": "c06a7dfd578b0c7a2ccdffc3454214c6de05d687ec98a7a014599324aef43d3e",
+        "result_q2_holdout_gain.png": "75bae5cfb1b6b09e179cd2ac5a09bebaea047f0aa826ee1d5aaaa2ba4ab6fad8",
+        "result_q2_holdout_gain_grayscale.png": "342fac89e2742246bdd589695ae76a592659003c04fb0458a5bec8b6c6308d2a"
+      }
+    },
+    {
+      "figure": "result_q2_copy_spill_tradeoff",
+      "size_inches": [
+        7.2,
+        3.4
+      ],
+      "dpi": 600,
+      "layout_verdict": "PASS",
+      "issues": [],
+      "files": {
+        "result_q2_copy_spill_tradeoff.svg": "370ccf89356eab0b9975e28b831361f36600fe990f187faed50f6096b72147de",
+        "result_q2_copy_spill_tradeoff.png": "14dd10e4c67ce51cb0b6ab2fb54f51593c67bf28484e753101036405b2775b0a",
+        "result_q2_copy_spill_tradeoff_grayscale.png": "c28d641e58456ef8db16db763a45b15fb3e37957cf46aa89db6dbe367969b4c9"
+      }
+    },
+    {
+      "figure": "flow_q2_model",
+      "size_inches": [
+        6.3,
+        5.7
+      ],
+      "dpi": 600,
+      "layout_verdict": "PASS",
+      "issues": [],
+      "files": {
+        "flow_q2_model.svg": "207894f4867014127576584673acd755a37d40103dde583dd184a86aab363d45",
+        "flow_q2_model.png": "704bfb0b340ac5793d12af0062e4abe5a1cc3f2d96a282c500b62aa5b79e23ea",
+        "flow_q2_model_grayscale.png": "2c074981a9fdab33c0985da483c28f89088b27908785e6894d055f66f13b1ea3"
+      }
+    }
+  ]
+}

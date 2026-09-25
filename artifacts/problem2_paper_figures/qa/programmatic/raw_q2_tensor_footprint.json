@@ -1,0 +1,15 @@
+{
+  "figure": "raw_q2_tensor_footprint",
+  "size_inches": [
+    6.3,
+    3.9
+  ],
+  "dpi": 600,
+  "layout_verdict": "PASS",
+  "issues": [],
+  "files": {
+    "raw_q2_tensor_footprint.svg": "3d3d33e27e24215f7521d66fb3926a60c0f4b4e872633e38b93ba5b9a9db7e60",
+    "raw_q2_tensor_footprint.png": "0e4aca715289496cd77dd9a77a80282e1c440750473e1ef52fe11c6d94b44b84",
+    "raw_q2_tensor_footprint_grayscale.png": "372641baf272faaeb08dcc6d22f83d5825d0d279a590270e13fd1027a03d9967"
+  }
+}

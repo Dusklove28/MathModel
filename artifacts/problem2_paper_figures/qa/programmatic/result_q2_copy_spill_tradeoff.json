@@ -1,0 +1,15 @@
+{
+  "figure": "result_q2_copy_spill_tradeoff",
+  "size_inches": [
+    7.2,
+    3.4
+  ],
+  "dpi": 600,
+  "layout_verdict": "PASS",
+  "issues": [],
+  "files": {
+    "result_q2_copy_spill_tradeoff.svg": "370ccf89356eab0b9975e28b831361f36600fe990f187faed50f6096b72147de",
+    "result_q2_copy_spill_tradeoff.png": "14dd10e4c67ce51cb0b6ab2fb54f51593c67bf28484e753101036405b2775b0a",
+    "result_q2_copy_spill_tradeoff_grayscale.png": "c28d641e58456ef8db16db763a45b15fb3e37957cf46aa89db6dbe367969b4c9"
+  }
+}

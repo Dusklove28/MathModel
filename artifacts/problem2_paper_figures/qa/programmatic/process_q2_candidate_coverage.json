@@ -1,0 +1,15 @@
+{
+  "figure": "process_q2_candidate_coverage",
+  "size_inches": [
+    6.3,
+    3.9
+  ],
+  "dpi": 600,
+  "layout_verdict": "PASS",
+  "issues": [],
+  "files": {
+    "process_q2_candidate_coverage.svg": "a1959658c22e2a0e2fb0be6252455e2a15842cd12140440b97f35efdc8f09b6d",
+    "process_q2_candidate_coverage.png": "17340c3c55ee31c077c575bdd95e192e2eb66f6a160fa709347984948b8857a5",
+    "process_q2_candidate_coverage_grayscale.png": "8616a50da0cf4d260b952dc7e39b8296519cd8a918e097c6f8ddf90773182b71"
+  }
+}

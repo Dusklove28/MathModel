@@ -1,0 +1,15 @@
+{
+  "figure": "flow_q2_model",
+  "size_inches": [
+    6.3,
+    5.7
+  ],
+  "dpi": 600,
+  "layout_verdict": "PASS",
+  "issues": [],
+  "files": {
+    "flow_q2_model.svg": "207894f4867014127576584673acd755a37d40103dde583dd184a86aab363d45",
+    "flow_q2_model.png": "704bfb0b340ac5793d12af0062e4abe5a1cc3f2d96a282c500b62aa5b79e23ea",
+    "flow_q2_model_grayscale.png": "2c074981a9fdab33c0985da483c28f89088b27908785e6894d055f66f13b1ea3"
+  }
+}

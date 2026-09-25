@@ -1,0 +1,15 @@
+{
+  "figure": "process_q2_portfolio_selection",
+  "size_inches": [
+    6.3,
+    3.9
+  ],
+  "dpi": 600,
+  "layout_verdict": "PASS",
+  "issues": [],
+  "files": {
+    "process_q2_portfolio_selection.svg": "df5848203b064e62a46f6ea22b870edbbccafc21e7ae1ee8c7142a9847b679ae",
+    "process_q2_portfolio_selection.png": "5f194083744ab31df25cfe34575914b265a9633e3a74a49124d767b6108a6ceb",
+    "process_q2_portfolio_selection_grayscale.png": "be67a01ceeef32e1bff747a3ef1cd65a7f7fe777395fbe6dba855ae14c09735e"
+  }
+}

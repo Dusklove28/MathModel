@@ -1,0 +1,15 @@
+{
+  "figure": "raw_q2_graph_io",
+  "size_inches": [
+    6.3,
+    3.9
+  ],
+  "dpi": 600,
+  "layout_verdict": "PASS",
+  "issues": [],
+  "files": {
+    "raw_q2_graph_io.svg": "92d4430ab3067896ff8984ed8e270f1a6373bb79c650288b06c98e8a10952e5b",
+    "raw_q2_graph_io.png": "703a01b96f4018ab163a95e2eba95d8ae5ce795a3e84aa17be6ae38d2a625ce7",
+    "raw_q2_graph_io_grayscale.png": "36250a81afa912d252a4e82f376d95a305682fc75ebe8f9d35fe996c69c36b8a"
+  }
+}
