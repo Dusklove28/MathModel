@@ -1,0 +1,22 @@
+问题二：官方场景 B 结果图与表格
+
+正式图（每张均有同名 SVG 与 600 DPI PNG）：
+  raw_q2_*：原图规模、张量大小、图输入输出特征，共 3 张。
+  process_q2_*：候选覆盖、固定切图映射收益、最终组合赢家构成，共 3 张。
+  result_q2_*：1～5 核加速比、预注册留出集改善、搬运与 Spill 权衡，共 3 张。
+  flow_q2_model：问题二方法流程图 1 张。
+灰度预览在 qa/grayscale/，不计为新的逻辑图。
+
+论文正文优先使用 flow_q2_model、result_q2_scaling、result_q2_holdout_gain、result_q2_copy_spill_tradeoff；其余可放方法或补充材料。完整图注与图表契约仍以 artifacts/problem2_paper_figures/docs/ 为准。
+
+tables/ 中的主表：
+  selected_results.csv：100 例×1～5 核的官方最终结果、搬运、Spill、跨核传输及每核利用率，500 行。
+  aggregate_by_core.csv：每核 100 例的平均、中位数、尾部分位数等，5 行。
+  speedups.csv：逐例相对整图 single 的加速比，500 行。
+  paired_candidate_summary.csv：候选相对阶段一实际赢家的严格配对汇总，15 行。
+  selected_compact.csv：绘图用 500 行紧凑表，包含预注册分层和增益；与 selected_results.csv 不可混称为两个实验。
+  candidate_effects.csv、candidate_coverage.csv、graph_features.csv、tensor_position.csv：过程图、原始数据图的数据快照。
+  tail_degradation.csv：仅含表头、零数据行，表示本次记录中无尾部退化行；不能解释为文件损坏。
+  summary.json：原最终实验摘要。
+
+来源：artifacts/problem2_paper_figures/figures/、data/，以及 artifacts/problem2_final_v1/。500/500 最终格 status=success。2～5 核相对阶段一实际赢家有 124 格降低官方 Makespan，另有 9 格仅在同 Makespan 下减少新增搬运；回退保证零退化。问题一场景 A 的分数不用于本问。

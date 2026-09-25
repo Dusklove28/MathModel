@@ -11,6 +11,7 @@
 | [`templates/`](templates/) | 当届官方 Word 模板与格式规范；`官方模板转换.docx` 是为生成阶段稿制作的副本。正式汇编以原始官方模板和规范为准。 |
 | [`references/2025_A/`](references/2025_A/) | 方法对照中阅读的四篇 2025 年 A 题优秀论文。 |
 | [`references/format/`](references/format/) | 上届论文格式规范，仅供历史对照。 |
+| [`references/official_2026/`](references/official_2026/) | 当届官方上传操作手册与 AI 工具使用规定；格式规范和模板原件仍在 `templates/`。 |
 | [`scripts/`](scripts/) | Word 章节生成脚本和已核验的原生 Word 公式片段。 |
 
 题目原文仍在仓库根目录的 [`通用神经网络处理器下的多核调度问题.docx`](../../通用神经网络处理器下的多核调度问题.docx)。问题一的五张权威结果表已在 [`artifacts/problem1_full_c4140/`](../../artifacts/problem1_full_c4140/) 与 [`artifacts/problem1_inherited_fallback_c4140/`](../../artifacts/problem1_inherited_fallback_c4140/)；正式图、绘图数据和逐例宽表已在 [`artifacts/problem1_paper_figures/`](../../artifacts/problem1_paper_figures/)。本目录不重复存储这些结果，以免产生两套数据源。
