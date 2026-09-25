@@ -338,7 +338,8 @@ def build(repo: Path, g1: Path, g2: Path | None, output: Path,
             "no_l2_plan_tuning_speedup_mean_of_ratios_member",
         ):
             values = [row[label] for row in subset]
-            short = label.removesuffix("_mean_of_ratios_member")
+            suffix = "_mean_of_ratios_member"
+            short = label[:-len(suffix)] if label.endswith(suffix) else label
             curve[f"mean_of_case_ratios_{short}"] = statistics.mean(values)
             curve[f"median_of_case_ratios_{short}"] = statistics.median(values)
             curve[f"wins_{short}"] = sum(value > 1 for value in values)

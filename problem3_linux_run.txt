@@ -1,29 +1,29 @@
 Problem 3 Linux server run guide (2026-09-25)
 ============================================
 
-The artifacts/各文件夹说明.txt records a 2026-09-25 disk snapshot, not a verified
-repository checkout path. Replace /path/to/MathModel with the actual server
-Git checkout. Use one main process per output/cache directory; keep all prior
-artifacts. The scripts never edit official data, data/config.txt, or supplied
-evaluators.
+The server has no network or Git executable. Transfer source changes as a ZIP,
+extract into the existing project tree, and verify the files before running.
+The path shown below matches the user's shell prompt; change it if the archive
+was extracted elsewhere. Use one main process per output/cache directory and
+keep all prior artifacts. The scripts never edit official data, data/config.txt,
+or supplied evaluators.
 
-1. Check checkout, space, and Python; obtain only a fast-forward update:
+1. Check the extracted project root, space, and Python:
 
-   cd /path/to/MathModel
+   cd ~/data/yn/MathModel/code
    pwd
-   git status --short --branch
-   git rev-parse HEAD
-   git pull --ff-only
+   test -f audit_problem3_assets.py
+   test -f data/config.txt
+   test -f code/multicore_cut_evaluate_problem_3.py
    python3 --version
    df -h . /media/dell/data
    df -h /media/dell/data/yn
 
-   Python 3.10+ is required (the archived Stage-1 run used Python 3.8.8).
-   If python3 is older, activate an existing 3.10+ environment and use its
-   interpreter for every command below. If git pull refuses because of a concurrent
-   teammate change, stop and coordinate; do not reset or force push.
-   The historical Stage-1 manifest used /home/dell/data/yn/MathModel; verify
-   the present checkout before replacing the placeholder. The disk snapshot
+   The patched scripts avoid the known Python 3.8 incompatibilities and do not
+   require Git. If a ZIP has no .git directory, audit.json records git_head=null;
+   this is metadata and does not weaken the file-hash checks. Run all small
+   tests before any batch. The historical Stage-1 manifest used
+   /home/dell/data/yn/MathModel; the extracted layout may differ. The snapshot
    in artifacts/各文件夹说明.txt is historical. On Windows, the 500-group G1
    output used about 3.11 GiB and later full outputs may use several GiB,
    so recheck both filesystems before each batch and keep older artifacts.
@@ -31,7 +31,8 @@ evaluators.
 2. G0 asset and semantic gate:
 
    python3 audit_problem3_assets.py --output artifacts/problem3_g0/audit.json
-   python3 -m unittest tests.test_problem3_semantics -v
+   python3 -m unittest tests.test_problem3_offline_runtime \
+     tests.test_problem3_semantics tests.test_solver_problem3 -v
 
    The audit must report passed=true, 500 manifests/plans/results, and empty
    missing/mismatches. Raw file hashes may differ from Windows due to CRLF;

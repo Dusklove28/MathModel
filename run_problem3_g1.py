@@ -65,10 +65,14 @@ def write_csv(path: Path, rows: list[dict], fields: list[str]) -> None:
 
 
 def git_head(repo: Path) -> str | None:
-    probe = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True,
-        text=True, check=False,
-    )
+    try:
+        probe = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True,
+            text=True, check=False,
+        )
+    except OSError:
+        # Git metadata is optional for archived, hash-verified experiments.
+        return None
     return probe.stdout.strip() if probe.returncode == 0 else None
 
 

@@ -31,10 +31,14 @@ def sha256_file(path: Path, *, normalize_newlines: bool = False) -> str:
 
 
 def git_head(repo: Path) -> str | None:
-    probe = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True,
-        text=True, check=False,
-    )
+    try:
+        probe = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True,
+            text=True, check=False,
+        )
+    except OSError:
+        # Offline ZIP deployments may have neither Git nor a .git directory.
+        return None
     return probe.stdout.strip() if probe.returncode == 0 else None
 
 
