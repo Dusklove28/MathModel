@@ -355,6 +355,14 @@ def main() -> int:
     }
     run_identity["run_identity_sha256"] = json_sha256(run_identity)
     output.mkdir(parents=True, exist_ok=True)
+    existing_identity_path = output / "run_identity.json"
+    if existing_identity_path.is_file():
+        existing_identity = json.loads(
+            existing_identity_path.read_text(encoding="utf-8"))
+        if existing_identity != run_identity:
+            parser.error(
+                "output contains a different run identity; use a new output "
+                "directory to preserve prior evidence")
     _write_json(output / "run_identity.json", run_identity)
 
     started = time.perf_counter()
@@ -392,8 +400,23 @@ def main() -> int:
                 group = result.manifest
                 group["_resume"] = False
                 groups.append(group)
-                print("{} k{} {}: success [{}]".format(
-                    case, cores, family,
+                candidate_failures = [
+                    record for record in group["candidates"]
+                    if record.get("status") == "failed"
+                ]
+                for record in candidate_failures:
+                    failures.append({
+                        "case": case,
+                        "cores": cores,
+                        "partition_family": family,
+                        "candidate": record.get("name"),
+                        "failure_stage": record.get("failure_stage"),
+                        "error_type": record.get("error_type"),
+                        "error": record.get("error"),
+                    })
+                label = "partial" if candidate_failures else "success"
+                print("{} k{} {}: {} [{}]".format(
+                    case, cores, family, label,
                     group["winner_within_fixed_mapping"]["name"]), flush=True)
             except Exception as error:
                 failure = {
@@ -437,7 +460,11 @@ def main() -> int:
             int(group["official_evaluations"])
             for group in groups if not group.get("_resume")),
         "design_official_evaluations": summary["official_evaluations"],
-        "failed_groups": len(failures),
+        "failed_groups": len({
+            (item.get("case"), item.get("cores"), item.get("partition_family"))
+            for item in failures
+        }),
+        "failure_records": len(failures),
         "complete": summary["complete"],
         "technical_gate_passed": summary["technical_gate"]["passed"],
         "recommendation": summary["decision_rule"]["recommendation"],

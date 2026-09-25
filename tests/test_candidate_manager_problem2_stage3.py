@@ -202,6 +202,7 @@ def _make_frozen_inputs(root):
         "partition_family": "b0",
         "graph_sha256": sha256_file(graph_path),
         "config_sha256": sha256_file(config_path),
+        "evaluator_sha256": evaluator_hash,
         "problem2_stage2_implementation_sha256": "frozen-stage2-test",
         "candidates": [mapped],
     })
@@ -257,6 +258,55 @@ class Problem2Stage3CandidateManagerTests(unittest.TestCase):
             keys = cache_key_summary([manifest])
             self.assertEqual(keys["unique_evaluation_keys"], len(calls))
             self.assertIsNotNone(reusable_stage3_group(
+                group_path=result.group_path,
+                graph_path=graph_path,
+                config_path=config_path,
+                baseline_root=baseline,
+                stage2_root=stage2,
+                cores=2,
+                family="b0",
+            ))
+            release_diagnostics = (
+                result.group_path.parent / "b0" / "diagnostics"
+                / "order_release.json")
+            release_diagnostics.write_text("{}", encoding="utf-8")
+            self.assertIsNone(reusable_stage3_group(
+                group_path=result.group_path,
+                graph_path=graph_path,
+                config_path=config_path,
+                baseline_root=baseline,
+                stage2_root=stage2,
+                cores=2,
+                family="b0",
+            ))
+
+    def test_failed_representative_is_not_propagated_or_resumed(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            graph_path, config_path, baseline, stage2 = _make_frozen_inputs(root)
+
+            def evaluator(graph, plan, config):
+                raise RuntimeError("synthetic transient evaluator failure")
+
+            result = run_stage3_ordering_group(
+                graph_path=graph_path,
+                config_path=config_path,
+                baseline_root=baseline,
+                stage2_root=stage2,
+                output_root=root / "out",
+                cache_dir=root / "cache",
+                cores=2,
+                family="b0",
+                evaluator=evaluator,
+            )
+            manifest = result.manifest
+            self.assertEqual(manifest["status"], "partial_failure")
+            self.assertGreater(manifest["failed_ordering_candidates"], 0)
+            failed = [record for record in manifest["candidates"]
+                      if record.get("status") == "failed"]
+            self.assertTrue(failed)
+            self.assertTrue(all(record.get("metrics") is None for record in failed))
+            self.assertIsNone(reusable_stage3_group(
                 group_path=result.group_path,
                 graph_path=graph_path,
                 config_path=config_path,

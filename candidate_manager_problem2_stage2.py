@@ -92,6 +92,7 @@ class BaselineReference:
     family: str
     plan: Dict[str, Any]
     plan_hash: str
+    legacy_plan_hash: str
     canonical_signature: str
     metrics: Dict[str, Any]
     official_result_json_hash: str
@@ -373,9 +374,10 @@ def load_verified_baseline_reference(
     # Stage-1 references are frozen with the legacy in-memory integer-key
     # hashing rule.  Preserve that rule only while validating the historical
     # artifact; every newly generated Stage-2/3 plan uses plan_json_sha256.
-    plan_hash = json_sha256(plan)
-    if plan_hash != candidate.get("plan_hash"):
+    legacy_plan_hash = json_sha256(plan)
+    if legacy_plan_hash != candidate.get("plan_hash"):
         raise Problem2Stage2Error("baseline plan JSON hash mismatch")
+    plan_hash = plan_json_sha256(plan)
     if sha256_file(plan_path) != candidate.get("plan_file_sha256"):
         raise Problem2Stage2Error("baseline plan file hash mismatch")
     graph_json = _read_json(graph_path)
@@ -407,6 +409,7 @@ def load_verified_baseline_reference(
         family=family,
         plan=plan,
         plan_hash=plan_hash,
+        legacy_plan_hash=legacy_plan_hash,
         canonical_signature=signature,
         metrics=metrics,
         official_result_json_hash=result_json_hash,
@@ -494,6 +497,7 @@ def run_stage2_mapping_group(
         "problem2_stage2_implementation_sha256": implementation_hash,
         "baseline_group_file_sha256": baseline.group_file_hash,
         "baseline_plan_sha256": baseline.plan_hash,
+        "baseline_legacy_plan_sha256": baseline.legacy_plan_hash,
         "baseline_result_json_sha256": baseline.official_result_json_hash,
         "search_sha256": json_sha256({
             "max_moves": max_moves,
@@ -766,6 +770,7 @@ def run_stage2_mapping_group(
             "group_file_sha256": baseline.group_file_hash,
             "plan_path": str(baseline.plan_path),
             "plan_hash": baseline.plan_hash,
+            "legacy_plan_hash": baseline.legacy_plan_hash,
             "official_result_path": str(baseline.official_result_path),
             "official_result_json_sha256": baseline.official_result_json_hash,
             "metrics": copy.deepcopy(baseline.metrics),
@@ -839,6 +844,7 @@ def reusable_stage2_group(
             "problem2_stage2_implementation_sha256": implementation_hash,
             "baseline_group_file_sha256": baseline.group_file_hash,
             "baseline_plan_sha256": baseline.plan_hash,
+            "baseline_legacy_plan_sha256": baseline.legacy_plan_hash,
             "baseline_result_json_sha256": baseline.official_result_json_hash,
             "search_sha256": json_sha256({
                 "max_moves": max_moves,

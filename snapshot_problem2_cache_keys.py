@@ -31,6 +31,13 @@ def snapshot(run_root: Path) -> Dict[str, Any]:
     if not identity_path.is_file() or not summary_path.is_file():
         raise ValueError("run root lacks run_identity.json or summary.json")
     identity = _read_json(identity_path)
+    if not isinstance(identity, dict):
+        raise ValueError("run_identity.json must contain an object")
+    stored_identity_hash = identity.get("run_identity_sha256")
+    identity_payload = dict(identity)
+    identity_payload.pop("run_identity_sha256", None)
+    if stored_identity_hash != json_sha256(identity_payload):
+        raise ValueError("source run_identity_sha256 is inconsistent")
     group_files: List[Path] = []
     groups: List[Dict[str, Any]] = []
     for path in sorted((run_root / "groups").glob("*/k*/*.json")):
@@ -54,7 +61,7 @@ def snapshot(run_root: Path) -> Dict[str, Any]:
         "source_run_root": str(run_root),
         "source_kind": _read_json(summary_path).get("kind"),
         "source_group_count": len(groups),
-        "source_run_identity_sha256": identity.get("run_identity_sha256"),
+        "source_run_identity_sha256": stored_identity_hash,
         "source_run_identity_file_sha256": sha256_file(identity_path),
         "source_summary_file_sha256": sha256_file(summary_path),
         "source_group_manifest_set_sha256": json_sha256(group_hashes),

@@ -166,6 +166,7 @@ def load_verified_fixed_mapping_reference(
     case = graph_path.stem
     run_identity, run_identity_path, run_identity_file_hash = (
         _validate_run_identity(stage2_root))
+    evaluator_hash, _ = official_scene_b_hash()
     group_path = stage2_root / "groups" / case / "k{}".format(cores) / (
         family + ".json")
     if not group_path.is_file():
@@ -179,6 +180,7 @@ def load_verified_fixed_mapping_reference(
         "partition_family": family,
         "graph_sha256": sha256_file(graph_path),
         "config_sha256": sha256_file(config_path),
+        "evaluator_sha256": evaluator_hash,
         "problem2_stage2_implementation_sha256": run_identity[
             "implementation_sha256"],
     }
@@ -481,14 +483,28 @@ def run_stage3_ordering_group(
         if signature is not None:
             if signature in signature_owner:
                 owner = signature_owner[signature]
-                record["status"] = "deduplicated"
-                record["deduplicated"] = True
-                record["canonical_candidate"] = owner["name"]
-                record["metrics"] = copy.deepcopy(owner["metrics"])
-                record["official_result_path"] = owner.get(
-                    "official_result_path")
-                record["official_result_json_sha256"] = owner.get(
-                    "official_result_json_sha256")
+                if not isinstance(owner.get("metrics"), Mapping):
+                    failed = _failed_record(
+                        name,
+                        "deduplication",
+                        Problem2Stage3Error(
+                            "equivalent representative did not produce "
+                            "official metrics"),
+                    )
+                    record.update({
+                        key_name: value for key_name, value in failed.items()
+                        if key_name not in {"name", "family"}
+                    })
+                    record["canonical_candidate"] = owner["name"]
+                else:
+                    record["status"] = "deduplicated"
+                    record["deduplicated"] = True
+                    record["canonical_candidate"] = owner["name"]
+                    record["metrics"] = copy.deepcopy(owner["metrics"])
+                    record["official_result_path"] = owner.get(
+                        "official_result_path")
+                    record["official_result_json_sha256"] = owner.get(
+                        "official_result_json_sha256")
             else:
                 signature_owner[signature] = record
                 record["canonical_candidate"] = name
@@ -621,11 +637,14 @@ def run_stage3_ordering_group(
     _write_json(final_plan_path, final_plan)
     _write_json(final_result_path, final_result)
 
+    failed_ordering_candidates = sum(
+        record.get("status") == "failed" for record in records[1:])
     manifest = {
         "schema_version": SCHEMA_VERSION,
         "kind": "problem2_stage3_fixed_mapping_ordering_group",
         "implementation_version": IMPLEMENTATION_VERSION,
-        "status": "success",
+        "status": (
+            "success" if failed_ordering_candidates == 0 else "partial_failure"),
         "case": fixed.case,
         "cores": cores,
         "partition_family": family,
@@ -637,8 +656,7 @@ def run_stage3_ordering_group(
         "generated_ordering_candidates": len(generated),
         "legal_ordering_candidates": sum(
             bool(record.get("legal")) for record in records[1:]),
-        "failed_ordering_candidates": sum(
-            record.get("status") == "failed" for record in records[1:]),
+        "failed_ordering_candidates": failed_ordering_candidates,
         "official_evaluations": official_evaluations,
         "cache_hits": cache_hits,
         "fixed_mapping_reference": {
@@ -771,11 +789,16 @@ def reusable_stage3_group(
             "case": Path(graph_path).stem,
             "cores": cores,
             "partition_family": family,
+            "graph_sha256": sha256_file(graph_path),
+            "config_sha256": sha256_file(config_path),
+            "evaluator_sha256": official_scene_b_hash()[0],
             "problem2_stage3_implementation_sha256": implementation_hash,
             "fixed_mapping_plan_sha256": fixed.plan_hash,
             "ordering_policies": list(policies),
         }
         if any(group.get(name) != value for name, value in expected.items()):
+            return None
+        if int(group.get("failed_ordering_candidates", -1)) != 0:
             return None
         run_dir = path.parent / family
         for filename, hash_name in (
@@ -787,10 +810,18 @@ def reusable_stage3_group(
             artifact = run_dir / filename
             if not artifact.is_file() or sha256_file(artifact) != group.get(hash_name):
                 return None
+        final_result_path = run_dir / "final_official_evaluation.json"
+        if json_sha256(_read_json(final_result_path)) != group.get(
+                "final_official_result_json_sha256"):
+            return None
         record_hashes = group.get("candidate_record_file_sha256")
         if not isinstance(record_hashes, Mapping):
             return None
         for record in group.get("candidates", []):
+            if record.get("status") == "failed":
+                return None
+            if record.get("legal") and not isinstance(record.get("metrics"), Mapping):
+                return None
             name = str(record["name"])
             record_path = run_dir / "candidate_records" / (name + ".json")
             if (not record_path.is_file()
@@ -804,8 +835,18 @@ def reusable_stage3_group(
                 plan = _read_json(plan_path)
                 if plan_json_sha256(plan) != record.get("plan_hash"):
                     return None
+                view = derive_multicore_plan(_read_json(graph_path), plan)
+                validate_task_order(view)
+                if canonical_plan_signature(plan) != record.get(
+                        "canonical_signature"):
+                    return None
                 if subgraph_core_assignment(plan) != subgraph_core_assignment(
                         fixed.plan):
+                    return None
+                diagnostics_path = run_dir / "diagnostics" / (name + ".json")
+                if (not diagnostics_path.is_file()
+                        or sha256_file(diagnostics_path) != record.get(
+                            "diagnostics_file_sha256")):
                     return None
             if record.get("status") == "evaluated":
                 result_path = run_dir / "official_results" / (name + ".json")

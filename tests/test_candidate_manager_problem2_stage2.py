@@ -309,6 +309,13 @@ class Problem2Stage2CandidateManagerTests(unittest.TestCase):
                 [record["name"] for record in result.manifest["candidates"]],
                 ["original", "map_locality"],
             )
+            winner_record = next(
+                record for record in result.manifest["candidates"]
+                if record["name"] == result.manifest["winner"]["name"])
+            self.assertEqual(
+                result.manifest["winner"]["plan_hash"],
+                winner_record["plan_hash"],
+            )
             mapped = result.manifest["candidates"][1]
             if mapped["status"] == "evaluated":
                 entry = json.loads((

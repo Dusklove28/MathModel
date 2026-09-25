@@ -1,7 +1,7 @@
 artifacts 各文件夹说明
 =====================
 
-更新时间：2026-09-25 01:13:21 +08:00
+更新时间：2026-09-25 14:31:39 +08:00
 统计口径：容量为当前工作区的近似值；目录内容变化后容量也会变化。
 
 服务器磁盘空间快照
@@ -232,6 +232,24 @@ sda6 已有问题一产物
    地位：只用于快速复跑。相同最终命令已验证 2/2 组严格续跑、当次新增官方评估为 0。
    上传建议：无需上传；Gate B 使用新的独立缓存目录，不与它混用。
 
+24. problem2_stage2_mapping_gate_b（约 59.39 MiB，607 个文件）
+   分类：【开发实验/正式诊断证据】
+   用途：阶段 2 三例 Gate B，覆盖 case_001、case_050、case_100 的 2/4/5 核与五类非 single 切图；历史组结果保持冻结，`reporting_v2/` 使用阶段 1 实际赢家重算 case-core 回退口径。
+   地位：45/45 组合法、0 失败；用于冻结唯一映射策略 `map_locality`。旧 case-core 汇总不得替代修正后的 `reporting_v2` 口径。
+   上传建议：体积适中，建议保留完整 output；外部 cache 不必上传。
+
+25. problem2_stage2_mapping_stratified12_locality（约 322.19 MiB，1,526 个文件）
+   分类：【正式开发集证据】
+   用途：阶段 2 预注册 12 例、2～5 核、五类切图的 `map_locality` 配对实验，共 240 组。
+   地位：240/240 组完成、240 个候选合法、0 失败；实际新增官方评估 70 次、缓存命中 6 次、等价去重 164 次。36 个未见 case-core 中有 8 个降低 Makespan，但全局回退仍不可删除。
+   上传建议：建议完整保留；论文分析主要依赖顶层 CSV/JSON 和组清单，外部 cache 只用于重跑。
+
+26. problem2_stage3_ordering_gate_a（约 44.00 MiB，46 个文件）
+   分类：【质检/负结果消融】
+   用途：固定阶段 2 切图与 `map_locality` 核映射，只比较原顺序、`order_release` 和 `order_critical` 的三组 Gate A。
+   地位：3/3 组、6/6 逻辑候选合法、2 次去重、4 次官方评估、0 失败；只有 case_058/k4 在固定映射内小幅改善，最终 case-core 改善为 0，已按预注册规则停止排序扩展。
+   上传建议：体积小，建议完整保留作为排序消融与停止判据证据；无需同步 sda6 上的外部 cache。
+
 artifacts 顶层文件（不是文件夹）
 -------------------------------
 
@@ -244,14 +262,16 @@ artifacts 顶层文件（不是文件夹）
 3. problem1_inherited_fallback_c4140.zip（约 206 MiB）
    problem1_inherited_fallback_c4140 的压缩迁移包。跨机器优先传此文件，不必传 3.38 GiB 展开目录。
 
-计划生成但当前尚不存在的目录
-----------------------------
+服务器 sda6 上的问题二外部缓存
+--------------------------------
 
-1. problem2_stage2_mapping_gate_b
-   三例纵向 Gate B 输出：case_001、case_050、case_100 × 2/4/5 核 × 五类非 single 切图；每组保留原映射并最多评估三个新映射。预计 45 组、135 个逻辑新映射，实际官方评估数可能因去重而更少。
+以下路径由各次 `run_identity.json` 记录，均位于 `/media/dell/data/yn/`。它们只用于断点续跑和加速，不是唯一正式证据，也不需要复制到 Git：
 
-2. /media/dell/data/yn/problem2_stage2_mapping_cache_gate_b
-   Gate B 的独立内容寻址缓存，放在 sda6。不得与阶段 1 cache、Gate A cache或问题一 cache 共用目录。
+  problem2_stage2_mapping_cache_gate_b
+  problem2_stage2_mapping_cache_stratified12_locality
+  problem2_stage3_ordering_cache_gate_a
+
+三者必须继续与阶段 1 cache、问题一 cache 及彼此隔离。当前没有新的服务器 `df -h` 快照，因此本文件顶部 39G/32G 可用空间仍是 2026-09-25 00:07:15 的历史记录，不能当作此刻余量；启动后续大实验前应重新检查。
 
 问题二当前最小保留集合
 ----------------------
@@ -292,4 +312,21 @@ artifacts 顶层文件（不是文件夹）
   problem2_stage2_mapping_gate_a_final/paired_mapping_results.csv
   problem2_stage2_mapping_gate_a_final/case_core_results.csv
   problem2_stage2_mapping_gate_a_final/failures.csv
+
+  problem2_stage2_mapping_gate_b/reporting_v2/
+  problem2_stage2_mapping_stratified12_locality/run_identity.json
+  problem2_stage2_mapping_stratified12_locality/summary.json
+  problem2_stage2_mapping_stratified12_locality/candidate_results.csv
+  problem2_stage2_mapping_stratified12_locality/paired_mapping_results.csv
+  problem2_stage2_mapping_stratified12_locality/case_core_results.csv
+  problem2_stage2_mapping_stratified12_locality/failures.csv
+
+阶段 3 当前最小证据：
+  problem2_stage3_ordering_gate_a/run_identity.json
+  problem2_stage3_ordering_gate_a/summary.json
+  problem2_stage3_ordering_gate_a/cache_key_summary.json
+  problem2_stage3_ordering_gate_a/candidate_results.csv
+  problem2_stage3_ordering_gate_a/paired_ordering_results.csv
+  problem2_stage3_ordering_gate_a/invocation_history.json
+  problem2_stage3_ordering_gate_a/failures.csv
 

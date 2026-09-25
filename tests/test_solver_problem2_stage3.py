@@ -65,10 +65,10 @@ class Problem2Stage3OrderingSolverTests(unittest.TestCase):
             first["release"][0]["core_schedules"], fixed["core_schedules"])
 
     def test_policy_budget_and_assignment_validation(self):
-        with self.assertRaisesRegex(Exception, "at most two"):
+        with self.assertRaisesRegex(Exception, "non-empty and unique"):
             generate_scene_b_order_candidates(
                 _branch_graph(), _fixed_plan(),
-                policies=("release", "critical", "release"))
+                policies=("release", "release"))
         with self.assertRaisesRegex(Exception, "multiple cores"):
             subgraph_core_assignment({
                 "node_to_subgraph": {},
