@@ -1,0 +1,19 @@
+问题一：场景 A 结果图与表格
+
+正式图（同名 SVG 与 PNG）：
+  fig1_problem1_average_speedup：100 例在 1～5 核的平均逐例加速比，含继承回退前对照。
+  fig2_problem1_case_speedup_distribution：2～5 核逐例加速比分布，箱线、均值和全部用例点。
+  fig3_problem1_inherited_fallback_improvements：36 个继承回退严格改善组合的 Makespan 与新增搬运变化。
+灰度预览在 qa/grayscale/，不计为新的逻辑图。
+
+论文正文优先用 fig1 与 fig2；fig3 可作方法有效性或附录图。问题一现有正式论文图只有这 3 张，本次没有凭空补造原始数据图、过程图或流程图。
+
+tables/ 中的主表：
+  problem1_inherited_fallback_aggregate.csv：每核 100 例的官方测量汇总，5 行。
+  problem1_inherited_fallback_results.csv：100 例×1～5 核的最终逐例结果，500 行。
+  problem1_inherited_fallback_appendix.csv：回退前、投影与官方重评后的逐例对照，500 行。
+  fig1_average_speedup.csv、fig2_case_speedup_distribution.csv、fig3_fallback_improvements.csv：三图对应的绘图表。
+  appendix_problem1_long.csv、appendix_problem1_wide.csv：论文附录长表与宽表。
+  problem1_inherited_fallback_summary.json：原结果摘要。
+
+来源：artifacts/problem1_paper_figures/figures/、data/，以及 artifacts/problem1_inherited_fallback_c4140/。复制前后内容未改。最终结果表 500/500 行标记 officially_measured=True。加速比是同一 case 的场景 A 单核 Makespan 除以对应核数 Makespan；不能直接代入场景 B 或 L2 结论。
