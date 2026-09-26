@@ -1,16 +1,19 @@
 # 2026 年华为杯 A 题论文工作区
 
-本目录存放 2026 年华为杯 A 题的**三问论文审阅稿**及写作依据。当前可编辑主稿是 `draft/2026华为杯A题完整论文V2.docx`；V1 仍是独立历史快照。V2 已完成文稿质检，但封面队号与姓名、真实 AI 使用披露和可运行 Python 程序附件尚待参赛队补齐，**不是可直接提交的终稿**。参赛队仍须人工核对、改写并按当届官方要求导出最终 PDF。
+本目录存放 2026 年华为杯 A 题的**三问论文审阅稿**及写作依据。当前附录压缩版是 `draft/2026华为杯A题完整论文V3-精简附录.docx`；V1/V2 均保留为独立历史快照。V3 仍有封面队号与姓名、真实 AI 使用披露和可运行 Python 程序附件待参赛队补齐，**不是可直接提交的终稿**。参赛队仍须人工核对、改写并按当届官方要求导出最终 PDF。
 
 ## 本轮写作交接
 
 | 材料 | 用途与边界 |
 |---|---|
-| [`draft/2026华为杯A题完整论文V2.docx`](draft/2026华为杯A题完整论文V2.docx) | 三问完整 Word 审阅稿；应在队友之间作为唯一可编辑主稿串行交接。 |
-| [`draft/修改说明.md`](draft/修改说明.md) | V1→V2 的页码、原问题、改动理由及提交前待办。 |
+| [`draft/2026华为杯A题完整论文V3-精简附录.docx`](draft/2026华为杯A题完整论文V3-精简附录.docx) | 当前三问完整 Word 审阅稿；九张必交逐例表仍在附录，诊断性数据改由已有 CSV 保存。队友之间应串行交接。 |
+| [`draft/V3附录压缩说明.md`](draft/V3附录压缩说明.md) | V2→V3 的保留/移出表格映射、页数变化、数据核验与提交边界。 |
+| [`draft/2026华为杯A题完整论文V2.docx`](draft/2026华为杯A题完整论文V2.docx) | 压缩前的独立快照；[`draft/修改说明.md`](draft/修改说明.md)记录 V1→V2 的改写。 |
 | [`notes/V2修改清单与逐条审查.md`](notes/V2修改清单与逐条审查.md) | 对外部修改建议逐项采纳/拒绝的依据、主张—证据映射和核查结果；不属于论文正文。 |
 | [`scripts/revise_full_paper_v2.py`](scripts/revise_full_paper_v2.py) | 从已冻结 V1 和问题三官方逐例 CSV 重建 V2 的变更记录；仅供溯源。它需要本机安装 `math-modeling` DOCX 技能工具，跨设备编辑请直接使用 DOCX，不应无条件重跑此脚本覆盖队友的新改稿。 |
 | [`scripts/audit_full_paper_v2.py`](scripts/audit_full_paper_v2.py) | 只读核对 15 张附录表的 7,500 个数值格、图表编号和正文工程词；运行命令见下。 |
+| [`scripts/compress_full_paper_v3_appendix.py`](scripts/compress_full_paper_v3_appendix.py) | V2→V3 的可复核附录压缩步骤；拒绝覆盖已存在的 V3。 |
+| [`scripts/audit_full_paper_v3_appendix.py`](scripts/audit_full_paper_v3_appendix.py) | 只读核对 V3 九张必交附录表的 4,500 个数值格。 |
 
 论文中的数据与实现对应关系：
 
@@ -25,10 +28,10 @@
 从仓库根目录运行只读数据核对：
 
 ```powershell
-python code/paper/scripts/audit_full_paper_v2.py
+python code/paper/scripts/audit_full_paper_v3_appendix.py
 ```
 
-共同写作时，先同步最新 `main`，只由一位队员编辑该 DOCX 并完成交接；下一位再继续。若要保留可回退版本，请另存 V3 或新提交，不要覆写 V1。程序源码索引不等于题目要求的**可复现 Python 程序附件**；最终附件需另行打包、解压验证并由参赛队上传确认。
+共同写作时，先同步最新 `main`，只由一位队员编辑当前 V3 并完成交接；下一位再继续。若继续修订，请另存 V4 或新提交，不要覆写 V1/V2。程序源码索引不等于题目要求的**可复现 Python 程序附件**；最终附件需另行打包、解压验证并由参赛队上传确认。
 
 ## 历史问题一阶段稿
 
@@ -36,7 +39,7 @@ python code/paper/scripts/audit_full_paper_v2.py
 
 | 目录 | 内容 |
 |---|---|
-| [`draft/`](draft/) | 完整 V1/V2 与历史问题一 Word 章节草稿；当前协作主稿为 V2。 |
+| [`draft/`](draft/) | 完整 V1/V2/V3 与历史问题一 Word 章节草稿；当前协作主稿为 V3。 |
 | [`notes/`](notes/) | 问题一证据大纲、论文目录草案、四篇 2025 年 A 题优秀论文的方法对照矩阵。 |
 | [`templates/`](templates/) | 当届官方 Word 模板与格式规范；`官方模板转换.docx` 是为生成阶段稿制作的副本。正式汇编以原始官方模板和规范为准。 |
 | [`references/2025_A/`](references/2025_A/) | 方法对照中阅读的四篇 2025 年 A 题优秀论文。 |
