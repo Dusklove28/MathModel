@@ -1,12 +1,42 @@
 # 2026 年华为杯 A 题论文工作区
 
-本目录存放**问题一阶段稿**及其写作依据。问题二、三尚未并入此稿；完整论文的摘要、结论与全题终检需在后续汇编时完成。
+本目录存放 2026 年华为杯 A 题的**三问论文审阅稿**及写作依据。当前可编辑主稿是 `draft/2026华为杯A题完整论文V2.docx`；V1 仍是独立历史快照。V2 已完成文稿质检，但封面队号与姓名、真实 AI 使用披露和可运行 Python 程序附件尚待参赛队补齐，**不是可直接提交的终稿**。参赛队仍须人工核对、改写并按当届官方要求导出最终 PDF。
+
+## 本轮写作交接
+
+| 材料 | 用途与边界 |
+|---|---|
+| [`draft/2026华为杯A题完整论文V2.docx`](draft/2026华为杯A题完整论文V2.docx) | 三问完整 Word 审阅稿；应在队友之间作为唯一可编辑主稿串行交接。 |
+| [`draft/修改说明.md`](draft/修改说明.md) | V1→V2 的页码、原问题、改动理由及提交前待办。 |
+| [`notes/V2修改清单与逐条审查.md`](notes/V2修改清单与逐条审查.md) | 对外部修改建议逐项采纳/拒绝的依据、主张—证据映射和核查结果；不属于论文正文。 |
+| [`scripts/revise_full_paper_v2.py`](scripts/revise_full_paper_v2.py) | 从已冻结 V1 和问题三官方逐例 CSV 重建 V2 的变更记录；仅供溯源。它需要本机安装 `math-modeling` DOCX 技能工具，跨设备编辑请直接使用 DOCX，不应无条件重跑此脚本覆盖队友的新改稿。 |
+| [`scripts/audit_full_paper_v2.py`](scripts/audit_full_paper_v2.py) | 只读核对 15 张附录表的 7,500 个数值格、图表编号和正文工程词；运行命令见下。 |
+
+论文中的数据与实现对应关系：
+
+| 问题 | 冻结逐例证据 | 求解器与官方口径 |
+|---|---|---|
+| 一 | [`figures/q1/tables/appendix_problem1_wide.csv`](../../figures/q1/tables/appendix_problem1_wide.csv) | [`solver_problem1.py`](../../solver_problem1.py)、[`candidate_manager_problem1.py`](../../candidate_manager_problem1.py)；官方场景 A 评估器 [`code/multicore_cut_evaluate_problem_1.py`](../multicore_cut_evaluate_problem_1.py)。 |
+| 二 | [`figures/q2/tables/selected_results.csv`](../../figures/q2/tables/selected_results.csv) | [`solver_problem2.py`](../../solver_problem2.py)、[`candidate_manager_problem2_final.py`](../../candidate_manager_problem2_final.py)；官方场景 B 评估器 [`code/multicore_cut_evaluate_problem_2.py`](../multicore_cut_evaluate_problem_2.py)。 |
+| 三 | [`figures/q3/tables/case_core_2x2.csv`](../../figures/q3/tables/case_core_2x2.csv) | [`solver_problem3.py`](../../solver_problem3.py)、[`solver_problem3_mapping.py`](../../solver_problem3_mapping.py)；官方 L2 评估器 [`code/multicore_cut_evaluate_problem_3.py`](../multicore_cut_evaluate_problem_3.py)。 |
+
+三问的正式图、过程图和绘图数据统一在仓库根目录 [`figures/q1`](../../figures/q1/)、[`figures/q2`](../../figures/q2/)、[`figures/q3`](../../figures/q3/)；各目录的 `目录说明.txt` 标明口径和来源。题目原文在仓库根目录 [`通用神经网络处理器下的多核调度问题.docx`](../../通用神经网络处理器下的多核调度问题.docx)。2026 官方格式、模板、上传说明和 AI 规则在本目录的 `templates/` 与 `references/official_2026/`。根目录另存的图稿副本、`paper_2026/official_refs/` 和 `draft/qa/` 为本机工作文件，不是本轮协作的另一套权威来源。
+
+从仓库根目录运行只读数据核对：
+
+```powershell
+python code/paper/scripts/audit_full_paper_v2.py
+```
+
+共同写作时，先同步最新 `main`，只由一位队员编辑该 DOCX 并完成交接；下一位再继续。若要保留可回退版本，请另存 V3 或新提交，不要覆写 V1。程序源码索引不等于题目要求的**可复现 Python 程序附件**；最终附件需另行打包、解压验证并由参赛队上传确认。
+
+## 历史问题一阶段稿
 
 ## 文件位置
 
 | 目录 | 内容 |
 |---|---|
-| [`draft/`](draft/) | 问题一 Word 章节草稿和 PDF 审阅版；Word 是可编辑主稿。 |
+| [`draft/`](draft/) | 完整 V1/V2 与历史问题一 Word 章节草稿；当前协作主稿为 V2。 |
 | [`notes/`](notes/) | 问题一证据大纲、论文目录草案、四篇 2025 年 A 题优秀论文的方法对照矩阵。 |
 | [`templates/`](templates/) | 当届官方 Word 模板与格式规范；`官方模板转换.docx` 是为生成阶段稿制作的副本。正式汇编以原始官方模板和规范为准。 |
 | [`references/2025_A/`](references/2025_A/) | 方法对照中阅读的四篇 2025 年 A 题优秀论文。 |
